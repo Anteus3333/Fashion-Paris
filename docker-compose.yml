@@ -1,0 +1,51 @@
+# Stack Docker — Fashion Paris (Dossier Projet)
+# Prérequis : arrêter Laragon (ports 80 / 3306) si conflit.
+# Ports 8081 / 3307 pour cohabiter avec Vite et Gourmand (8080 / 3306).
+# Démarrage : docker compose up -d --build
+#
+# Pas de service Node : front HTML/CSS/JS vanilla.
+
+services:
+  web:
+    build: .
+    container_name: fashion_paris_web
+    ports:
+      - "8081:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: fashion_paris
+      DB_USER: fashion
+      DB_PASSWORD: fashion
+    volumes:
+      - .:/var/www/html
+      - vendor_data:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    build: ./docker/mysql
+    container_name: fashion_paris_db
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: fashion_paris
+      MYSQL_USER: fashion
+      MYSQL_PASSWORD: fashion
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/donnees_test.sql:/docker-entrypoint-initdb.d/02-donnees.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  vendor_data:

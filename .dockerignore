@@ -1,0 +1,14 @@
+.git
+.gitignore
+docs
+logs/*
+!logs/.htaccess
+vendor
+node_modules
+.idea
+.vscode
+*.md
+!README.md
+config/*.local.php
+.cursor
+agent-transcripts

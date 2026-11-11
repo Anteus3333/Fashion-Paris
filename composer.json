@@ -1,0 +1,14 @@
+{
+    "name": "studi/fashion-paris",
+    "description": "Dossier Projet — Fashion Paris (e-commerce mode)",
+    "require": {
+        "php": ">=8.1",
+        "ext-mongodb": "*",
+        "mongodb/mongodb": "^1.19"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
