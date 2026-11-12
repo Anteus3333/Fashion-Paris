@@ -1,0 +1,20 @@
+---
+description: Pushes Git fréquents par feature (éviter le piège ECF)
+alwaysApply: true
+---
+
+# Git / features — Fashion Paris
+
+Le dossier projet sera jugé aussi sur l’historique Git. **Ne pas** reproduire Studi_ECF (peu de features / gros monolithes rares).
+
+## Règles
+
+- Une **branche par feature** : `feature/<nom-court>` (ex. `feature/upload-images`, `feature/blog`, `feature/rate-limit-login`).
+- **Commits petits et réguliers** dès qu’une brique tient debout (pas un seul commit en fin de journée pour tout).
+- **Push la branche** dès qu’il y a des commits utiles (`git push -u origin HEAD` au premier push).
+- Préférer une PR (même solo) vers `main` plutôt qu’un gros dump direct — historique lisible à l’oral.
+- Ne pusher `main` qu’avec accord explicite si la branche protège / si l’utilisateur ne l’a pas demandé ; sinon feature branch + PR.
+
+## Contre-exemple à éviter
+
+Travailler longtemps en local sur `main` puis un seul gros push « tout le site ».
