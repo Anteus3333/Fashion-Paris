@@ -4,8 +4,13 @@
 require_once __DIR__ . '/../Services/SmtpMailer.php';
 require_once __DIR__ . '/../Services/Csrf.php';
 require_once __DIR__ . '/../Services/TurnstileService.php';
+require_once __DIR__ . '/../Models/TentativeConnexionModel.php';
 
 class ContactController {
+    private const RATE_EMAIL = '__contact_form__';
+    private const RATE_MAX_IP = 3;
+    private const RATE_MAX_GLOBAL = 15;
+    private const RATE_FENETRE_MIN = 60;
 
     public function index() {
         $titrePage = 'Contact — Fashion Paris';
@@ -16,14 +21,17 @@ class ContactController {
         $turnstile = new TurnstileService();
         $turnstileActif = $turnstile->estActif();
         $turnstileSiteKey = $turnstile->siteKey();
+        $tentatives = new TentativeConnexionModel();
+        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($old as $champ => $_) {
                 $old[$champ] = trim((string) ($_POST[$champ] ?? ''));
             }
 
-            // Honeypot anti-bot
+            // Honeypot anti-bot : succès feint + compte dans le rate limit
             if (trim((string) ($_POST['website'] ?? '')) !== '') {
+                $tentatives->enregistrer(self::RATE_EMAIL, $ip);
                 $succes = true;
                 $old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => ''];
                 require __DIR__ . '/../Views/contact.php';
@@ -34,7 +42,13 @@ class ContactController {
                 $erreurs[] = 'Session expirée, veuillez renvoyer le formulaire.';
             }
 
-            $ip = $_SERVER['REMOTE_ADDR'] ?? null;
+            if ($tentatives->compterExact(self::RATE_EMAIL, $ip, self::RATE_FENETRE_MIN) >= self::RATE_MAX_IP) {
+                $erreurs[] = 'Trop de messages envoyés depuis cette connexion. Merci de patienter '
+                    . self::RATE_FENETRE_MIN . ' minutes avant de réessayer.';
+            } elseif ($tentatives->compterMarqueur(self::RATE_EMAIL, self::RATE_FENETRE_MIN) >= self::RATE_MAX_GLOBAL) {
+                $erreurs[] = 'Le formulaire de contact est temporairement saturé. Merci de réessayer plus tard.';
+            }
+
             $verif = $turnstile->verifier($_POST['cf-turnstile-response'] ?? null, $ip);
             if (!$verif['ok']) {
                 $erreurs[] = $verif['erreur'] ?? 'Vérification anti-spam échouée.';
@@ -76,6 +90,7 @@ class ContactController {
                 $mailer->send($old['email'], 'Votre message a bien été reçu — Fashion Paris', $corpsClient);
 
                 if ($okBoutique || $mailer->estConfigure() === false) {
+                    $tentatives->enregistrer(self::RATE_EMAIL, $ip);
                     $succes = true;
                     $old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => ''];
                     if (!$mailer->estConfigure()) {
