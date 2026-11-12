@@ -37,6 +37,14 @@ ob_start();
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="5" required><?= htmlspecialchars($old['message']) ?></textarea>
 
+        <?php if (!empty($turnstileActif)): ?>
+            <div class="champ-turnstile">
+                <div class="cf-turnstile"
+                     data-sitekey="<?= htmlspecialchars($turnstileSiteKey) ?>"
+                     data-theme="light"></div>
+            </div>
+        <?php endif; ?>
+
         <button type="submit" class="btn btn-primary">Envoyer</button>
     </form>
 </section>

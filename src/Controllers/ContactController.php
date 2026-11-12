@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../Services/SmtpMailer.php';
 require_once __DIR__ . '/../Services/Csrf.php';
+require_once __DIR__ . '/../Services/TurnstileService.php';
 
 class ContactController {
 
@@ -12,6 +13,9 @@ class ContactController {
         $succes = false;
         $old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => ''];
         $mailer = new SmtpMailer();
+        $turnstile = new TurnstileService();
+        $turnstileActif = $turnstile->estActif();
+        $turnstileSiteKey = $turnstile->siteKey();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($old as $champ => $_) {
@@ -29,6 +33,13 @@ class ContactController {
             if (!Csrf::verifier()) {
                 $erreurs[] = 'Session expirée, veuillez renvoyer le formulaire.';
             }
+
+            $ip = $_SERVER['REMOTE_ADDR'] ?? null;
+            $verif = $turnstile->verifier($_POST['cf-turnstile-response'] ?? null, $ip);
+            if (!$verif['ok']) {
+                $erreurs[] = $verif['erreur'] ?? 'Vérification anti-spam échouée.';
+            }
+
             if ($old['nom'] === '') {
                 $erreurs[] = 'Le nom est obligatoire.';
             }
@@ -65,7 +76,6 @@ class ContactController {
                 $mailer->send($old['email'], 'Votre message a bien été reçu — Fashion Paris', $corpsClient);
 
                 if ($okBoutique || $mailer->estConfigure() === false) {
-                    // Même sans SMTP (archive logs), on confirme à l'UI pour ne pas bloquer le parcours démo
                     $succes = true;
                     $old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => ''];
                     if (!$mailer->estConfigure()) {
@@ -75,6 +85,10 @@ class ContactController {
                     $erreurs[] = 'L\'envoi a échoué. Réessayez plus tard ou écrivez à contact@anteusweb.com.';
                 }
             }
+        }
+
+        if ($turnstileActif) {
+            $scriptsFooter = '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
         }
 
         require __DIR__ . '/../Views/contact.php';

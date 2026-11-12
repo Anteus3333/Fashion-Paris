@@ -75,6 +75,16 @@ Fashion/
 L’extrait PHP du PDF sujet est un **anti-modèle** : SQL concaténé, mots de passe en clair, XSS, pas de CSRF.  
 Ici : **PDO préparé**, `password_hash` / `password_verify`, `htmlspecialchars`, `Csrf`, `AuthGuard`, transaction stock à la commande.
 
+## Cloudflare Turnstile (anti-spam)
+
+Sur le formulaire `/contact` (comme Vite & Gourmand).
+
+1. Copier `config/turnstile.local.example.php` → `turnstile.local.php`
+2. En local : **mêmes clés** que le traiteur (`localhost`)
+3. En prod Infomaniak : clés du widget autorisé pour `fashion.anteusweb.com`
+
+Sans fichier local, Turnstile est désactivé (formulaires utilisables quand même).
+
 ## E-mails (SMTP Infomaniak)
 
 Expéditeur : `contact@anteusweb.com` (local + Infomaniak).
