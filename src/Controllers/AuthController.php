@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../Models/UtilisateurModel.php';
 require_once __DIR__ . '/../Services/Csrf.php';
+require_once __DIR__ . '/../Services/SmtpMailer.php';
 
 class AuthController {
     private UtilisateurModel $utilisateurModel;
@@ -100,6 +101,7 @@ class AuthController {
 
             if (empty($erreurs)) {
                 $id = $this->utilisateurModel->create($old + ['password' => $password]);
+                (new SmtpMailer())->envoyerBienvenue($old['email'], $old['prenom']);
                 $_SESSION['utilisateur'] = [
                     'id'     => $id,
                     'email'  => $old['email'],

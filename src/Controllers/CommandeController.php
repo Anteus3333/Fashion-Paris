@@ -7,6 +7,7 @@ require_once __DIR__ . '/../Services/PanierService.php';
 require_once __DIR__ . '/../Models/CommandeModel.php';
 require_once __DIR__ . '/../Models/ProduitModel.php';
 require_once __DIR__ . '/../Models/UtilisateurModel.php';
+require_once __DIR__ . '/../Services/SmtpMailer.php';
 
 class CommandeController {
 
@@ -98,7 +99,14 @@ class CommandeController {
                     ], $lignesSql);
 
                     PanierService::vider();
-                    $_SESSION['flash_succes'] = 'Commande ' . $numero . ' enregistrée. Paiement simulé — suivi disponible dans Mon compte.';
+
+                    $commandeCreee = $commandeModel->getByNumero($numero);
+                    $lignesMail = $commandeModel->getLignes($numero);
+                    if ($commandeCreee && $utilisateur) {
+                        (new SmtpMailer())->envoyerConfirmationCommande($commandeCreee, $lignesMail, $utilisateur);
+                    }
+
+                    $_SESSION['flash_succes'] = 'Commande ' . $numero . ' enregistrée. Un e-mail de confirmation vous a été envoyé (si SMTP configuré).';
                     header('Location: ' . BASE_URL . '/mon-compte/commande/' . rawurlencode($numero));
                     exit;
                 } catch (Throwable $e) {

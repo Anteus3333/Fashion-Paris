@@ -10,6 +10,8 @@ config/*.local.*.php
 # Logs locaux
 logs/*
 !logs/.htaccess
+!logs/mails/
+!logs/mails/.htaccess
 
 # Docs brouillons locaux
 docs/**

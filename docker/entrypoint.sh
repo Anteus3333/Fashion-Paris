@@ -8,7 +8,7 @@ if [ ! -f vendor/autoload.php ]; then
   composer install --no-interaction --prefer-dist --ignore-platform-req=ext-mongodb
 fi
 
-mkdir -p logs
+mkdir -p logs/mails
 chown -R www-data:www-data logs 2>/dev/null || true
 
 exec apache2-foreground

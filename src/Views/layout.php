@@ -27,6 +27,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="<?= BASE_URL ?>/">Accueil</a></li>
                 <li><a href="<?= BASE_URL ?>/catalogue">Catalogue</a></li>
+                <li><a href="<?= BASE_URL ?>/contact">Contact</a></li>
                 <?php $nbPanier = PanierService::nombreArticles(); ?>
                 <li>
                     <a href="<?= BASE_URL ?>/panier">
