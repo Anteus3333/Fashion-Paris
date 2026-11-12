@@ -30,9 +30,13 @@ class SqlDatabase {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
-            // Pas d'echo ici : les Repositories renvoient vide / null si $conn est null.
-            // Brancher un log fichiers si besoin (dossier logs/).
-            error_log('Fashion Paris BDD : ' . $exception->getMessage());
+            // Pas d'echo public : les Repositories renvoient vide / null si $conn est null.
+            $line = date('c') . ' Fashion Paris BDD : ' . $exception->getMessage() . PHP_EOL;
+            error_log(rtrim($line));
+            $logDir = __DIR__ . '/../../logs';
+            if (is_dir($logDir) && is_writable($logDir)) {
+                @file_put_contents($logDir . '/bdd.log', $line, FILE_APPEND | LOCK_EX);
+            }
         }
 
         return $this->conn;
