@@ -22,6 +22,9 @@ scripts/**
 !scripts/.htaccess
 !scripts/sync_stats_mongo.php
 
+# Copie locale vendor pour déploiement FTP (ne pas versionner)
+/vendor-deploy/
+
 # OS / IDE
 .DS_Store
 Thumbs.db
