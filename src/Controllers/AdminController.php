@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../Services/AuthGuard.php';
 require_once __DIR__ . '/../Services/Csrf.php';
+require_once __DIR__ . '/../Services/ImageUploadService.php';
 require_once __DIR__ . '/../Models/ProduitModel.php';
 require_once __DIR__ . '/../Models/CategorieModel.php';
 require_once __DIR__ . '/../Models/CommandeModel.php';
@@ -83,6 +84,12 @@ class AdminController {
                 $erreurs[] = 'Ce slug existe déjà.';
             }
 
+            $uploader = new ImageUploadService();
+            $upload = $uploader->telechargerProduit($_FILES['image'] ?? null, false);
+            if (!$upload['ok']) {
+                $erreurs[] = $upload['erreur'] ?? 'Upload image impossible.';
+            }
+
             if (empty($erreurs)) {
                 $payload = [
                     'categorie_id'  => (int) $old['categorie_id'],
@@ -95,8 +102,15 @@ class AdminController {
                     'actif'         => (int) $old['actif'],
                     'mis_en_avant'  => (int) $old['mis_en_avant'],
                 ];
+                if ($upload['relatif']) {
+                    $payload['image'] = $upload['relatif'];
+                }
                 if ($id) {
                     $model->update($id, $payload);
+                    if ($upload['relatif']) {
+                        $ancien = $model->remplacerImagePrincipale($id, $upload['relatif'], $old['nom']);
+                        $uploader->supprimerSiUpload($ancien);
+                    }
                     $_SESSION['flash_succes'] = 'Produit mis à jour.';
                 } else {
                     $model->create($payload);
@@ -104,6 +118,10 @@ class AdminController {
                 }
                 header('Location: ' . BASE_URL . '/admin/produits');
                 exit;
+            }
+
+            if (!empty($upload['relatif'])) {
+                $uploader->supprimerSiUpload($upload['relatif']);
             }
         }
 

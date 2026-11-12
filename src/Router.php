@@ -10,6 +10,7 @@ require_once __DIR__ . '/Controllers/CompteController.php';
 require_once __DIR__ . '/Controllers/AdminController.php';
 require_once __DIR__ . '/Controllers/LegalController.php';
 require_once __DIR__ . '/Controllers/NewsletterController.php';
+require_once __DIR__ . '/Controllers/ContactController.php';
 
 class Router {
 
@@ -79,6 +80,10 @@ class Router {
                     header('Location: ' . BASE_URL . '/');
                     exit;
                 }
+                break;
+
+            case 'contact':
+                (new ContactController())->index();
                 break;
 
             case 'mon-compte':

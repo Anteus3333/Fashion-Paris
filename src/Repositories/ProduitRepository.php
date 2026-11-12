@@ -126,15 +126,60 @@ class ProduitRepository {
         ]);
         $id = (int) $this->conn->lastInsertId();
 
+        $chemin = trim((string) ($data['image'] ?? ''));
+        if ($chemin === '') {
+            $chemin = 'produits/default.svg';
+        }
         $img = $this->conn->prepare(
             'INSERT INTO produit_image (produit_id, chemin, alt, ordre) VALUES (:pid, :chemin, :alt, 0)'
         );
         $img->execute([
             ':pid'    => $id,
-            ':chemin' => 'produits/default.svg',
+            ':chemin' => $chemin,
             ':alt'    => $data['nom'],
         ]);
         return $id;
+    }
+
+    /** Remplace l’image principale (ordre 0) ; retourne l’ancien chemin si présent. */
+    public function remplacerImagePrincipale(int $produitId, string $chemin, string $alt): ?string {
+        if (!$this->conn) {
+            return null;
+        }
+        $stmt = $this->conn->prepare(
+            'SELECT chemin FROM produit_image WHERE produit_id = :pid ORDER BY ordre ASC LIMIT 1'
+        );
+        $stmt->execute([':pid' => $produitId]);
+        $ancien = $stmt->fetchColumn();
+        $ancien = $ancien !== false ? (string) $ancien : null;
+
+        if ($ancien !== null) {
+            $upd = $this->conn->prepare(
+                'UPDATE produit_image SET chemin = :chemin, alt = :alt
+                 WHERE image_id = (
+                     SELECT image_id FROM (
+                         SELECT image_id FROM produit_image
+                         WHERE produit_id = :pid ORDER BY ordre ASC LIMIT 1
+                     ) AS t
+                 )'
+            );
+            $upd->execute([
+                ':chemin' => $chemin,
+                ':alt'    => $alt,
+                ':pid'    => $produitId,
+            ]);
+        } else {
+            $ins = $this->conn->prepare(
+                'INSERT INTO produit_image (produit_id, chemin, alt, ordre) VALUES (:pid, :chemin, :alt, 0)'
+            );
+            $ins->execute([
+                ':pid'    => $produitId,
+                ':chemin' => $chemin,
+                ':alt'    => $alt,
+            ]);
+        }
+
+        return $ancien;
     }
 
     public function update(int $id, array $data): bool {

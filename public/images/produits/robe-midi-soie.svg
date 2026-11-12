@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Robe midi soie">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c4a4b0"/>
+      <stop offset="100%" stop-color="#8b2942"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#g)"/>
+  <path d="M150 70 L200 110 L250 70 L280 160 L250 160 L270 420 L130 420 L150 160 L120 160 Z" fill="#f7f2ec" opacity="0.9"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#f7f2ec">Robe midi</text>
+</svg>

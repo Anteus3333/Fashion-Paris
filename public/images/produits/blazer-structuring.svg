@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Blazer structuring">
+  <rect width="400" height="500" fill="#2c3340"/>
+  <path d="M120 90 L200 140 L280 90 L300 420 L100 420 Z" fill="#4a5568"/>
+  <path d="M200 140 L200 420" stroke="#1a1520" stroke-width="3"/>
+  <path d="M120 90 L200 140 L280 90" fill="none" stroke="#d9c8b8" stroke-width="2"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#efe6dc">Blazer</text>
+</svg>

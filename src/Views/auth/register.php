@@ -37,7 +37,8 @@ ob_start();
         <input type="text" id="ville" name="ville" required value="<?= htmlspecialchars($old['ville']) ?>">
 
         <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required autocomplete="new-password">
+        <input type="password" id="password" name="password" required minlength="10" autocomplete="new-password">
+        <p class="muted">Au moins 10 caractères, avec majuscule, minuscule, chiffre et caractère spécial.</p>
 
         <label for="confirmation">Confirmation</label>
         <input type="password" id="confirmation" name="confirmation" required autocomplete="new-password">

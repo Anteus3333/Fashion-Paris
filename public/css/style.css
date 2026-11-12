@@ -387,3 +387,8 @@ main { min-height: 60vh; }
 .inline-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
 .breadcrumb { color: var(--muted); }
 .newsletter .search-row { margin-top: .75rem; }
+
+.champ-turnstile {
+  margin: .35rem 0 .5rem;
+  min-height: 65px;
+}

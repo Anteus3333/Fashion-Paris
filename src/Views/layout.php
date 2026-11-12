@@ -27,6 +27,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="<?= BASE_URL ?>/">Accueil</a></li>
                 <li><a href="<?= BASE_URL ?>/catalogue">Catalogue</a></li>
+                <li><a href="<?= BASE_URL ?>/contact">Contact</a></li>
                 <?php $nbPanier = PanierService::nombreArticles(); ?>
                 <li>
                     <a href="<?= BASE_URL ?>/panier">
@@ -82,5 +83,6 @@
 
     <?php $jsVersion = @filemtime(__DIR__ . '/../../public/js/main.js') ?: time(); ?>
     <script src="<?= BASE_URL ?>/js/main.js?v=<?= $jsVersion ?>" defer></script>
+    <?= $scriptsFooter ?? '' ?>
 </body>
 </html>

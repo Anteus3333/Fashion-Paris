@@ -46,6 +46,10 @@ class ProduitModel {
         return $this->repository->update($id, $data);
     }
 
+    public function remplacerImagePrincipale(int $produitId, string $chemin, string $alt): ?string {
+        return $this->repository->remplacerImagePrincipale($produitId, $chemin, $alt);
+    }
+
     public function slugExiste(string $slug, ?int $exclureId = null): bool {
         return $this->repository->slugExiste($slug, $exclureId);
     }
