@@ -9,8 +9,14 @@ ob_start();
             <?php foreach ($erreurs as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?>
         </ul>
     <?php endif; ?>
-    <form method="post" class="auth-form">
+    <form method="post" class="auth-form" enctype="multipart/form-data">
         <?= Csrf::champ() ?>
+        <?php if (!empty($produit['image'])): ?>
+            <p class="muted">Image actuelle</p>
+            <img src="<?= AssetHelper::imageUrl($produit['image']) ?>" alt="" class="admin-thumb" width="120" height="150">
+        <?php endif; ?>
+        <label for="image">Photo produit (JPEG, PNG ou WebP — max 5 Mo)</label>
+        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
         <label for="nom">Nom</label>
         <input type="text" id="nom" name="nom" required value="<?= htmlspecialchars($old['nom']) ?>">
         <label for="slug">Slug (URL)</label>
