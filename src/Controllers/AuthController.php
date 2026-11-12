@@ -140,17 +140,20 @@ class AuthController {
     /** @return string[] */
     private function validerMotDePasse(string $password): array {
         $erreurs = [];
-        if (strlen($password) < 8) {
-            $erreurs[] = 'Le mot de passe doit contenir au moins 8 caractères.';
+        if (strlen($password) < 10) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins 10 caractères.';
         }
         if (!preg_match('/[A-Z]/', $password)) {
-            $erreurs[] = 'Le mot de passe doit contenir une majuscule.';
+            $erreurs[] = 'Le mot de passe doit contenir au moins une majuscule.';
         }
         if (!preg_match('/[a-z]/', $password)) {
-            $erreurs[] = 'Le mot de passe doit contenir une minuscule.';
+            $erreurs[] = 'Le mot de passe doit contenir au moins une minuscule.';
         }
-        if (!preg_match('/\d/', $password)) {
-            $erreurs[] = 'Le mot de passe doit contenir un chiffre.';
+        if (!preg_match('/[0-9]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins un chiffre.';
+        }
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins un caractère spécial.';
         }
         return $erreurs;
     }
