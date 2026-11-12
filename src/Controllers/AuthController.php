@@ -26,6 +26,7 @@ class AuthController {
             } else {
                 $user = $this->utilisateurModel->findByEmail($oldEmail);
                 if ($user && (int) $user['actif'] === 1 && password_verify($password, $user['password'])) {
+                    session_regenerate_id(true);
                     $_SESSION['utilisateur'] = [
                         'id'     => (int) $user['utilisateur_id'],
                         'email'  => $user['email'],
@@ -102,6 +103,7 @@ class AuthController {
             if (empty($erreurs)) {
                 $id = $this->utilisateurModel->create($old + ['password' => $password]);
                 (new SmtpMailer())->envoyerBienvenue($old['email'], $old['prenom']);
+                session_regenerate_id(true);
                 $_SESSION['utilisateur'] = [
                     'id'     => $id,
                     'email'  => $old['email'],
