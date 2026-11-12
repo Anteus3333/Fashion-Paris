@@ -14,6 +14,8 @@ logs/*
 # Docs brouillons locaux
 docs/**
 !docs/.htaccess
+# Notes / captures hors versionnement (explicite)
+docs/NoComit/
 
 # Scripts : sync Mongo + protection HTTP
 scripts/**
