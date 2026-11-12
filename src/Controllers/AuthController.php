@@ -2,6 +2,7 @@
 // src/Controllers/AuthController.php
 
 require_once __DIR__ . '/../Models/UtilisateurModel.php';
+require_once __DIR__ . '/../Models/TentativeConnexionModel.php';
 require_once __DIR__ . '/../Services/Csrf.php';
 require_once __DIR__ . '/../Services/SmtpMailer.php';
 
@@ -20,12 +21,18 @@ class AuthController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $oldEmail = trim((string) ($_POST['email'] ?? ''));
             $password = (string) ($_POST['password'] ?? '');
+            $tentatives = new TentativeConnexionModel();
+            $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
 
             if (!Csrf::verifier()) {
                 $erreur = 'Session expirée. Rechargez la page.';
+            } elseif ($tentatives->compterRecentes($oldEmail, $ip) >= TentativeConnexionModel::MAX_TENTATIVES) {
+                $erreur = 'Trop de tentatives de connexion. Merci de patienter '
+                    . TentativeConnexionModel::FENETRE_MINUTES . ' minutes avant de réessayer.';
             } else {
                 $user = $this->utilisateurModel->findByEmail($oldEmail);
                 if ($user && (int) $user['actif'] === 1 && password_verify($password, $user['password'])) {
+                    $tentatives->purger($oldEmail);
                     session_regenerate_id(true);
                     $_SESSION['utilisateur'] = [
                         'id'     => (int) $user['utilisateur_id'],
@@ -41,6 +48,7 @@ class AuthController {
                     header('Location: ' . BASE_URL . $redirect);
                     exit;
                 }
+                $tentatives->enregistrer($oldEmail !== '' ? $oldEmail : '__login__', $ip);
                 $erreur = 'Identifiants incorrects.';
             }
         }
