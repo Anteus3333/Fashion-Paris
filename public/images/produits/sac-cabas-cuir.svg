@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Sac cabas cuir">
+  <rect width="400" height="500" fill="#e8ddd2"/>
+  <path d="M110 160 H290 V400 H110 Z" fill="#6b3e2e"/>
+  <path d="M140 160 C140 100 260 100 260 160" fill="none" stroke="#3d241c" stroke-width="14" stroke-linecap="round"/>
+  <rect x="180" y="250" width="40" height="28" rx="4" fill="#c4a484"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5c5566">Cabas cuir</text>
+</svg>

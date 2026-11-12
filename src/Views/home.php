@@ -5,7 +5,7 @@ ob_start();
     <div class="hero-copy">
         <p class="brand-mark">Fashion Paris</p>
         <h1>La mode parisienne, livrée chez vous</h1>
-        <p class="lede">Catalogue, panier et compte client — e-commerce sécurisé pour le dossier projet.</p>
+        <p class="lede">Catalogue, panier et compte client — une boutique en ligne soignée, de Paris à votre porte.</p>
         <div class="hero-actions">
             <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Voir le catalogue', 'btn btn-primary') ?>
             <?= ViewHelper::btnNav(BASE_URL . '/login', 'Se connecter', 'btn btn-ghost') ?>
@@ -15,9 +15,9 @@ ob_start();
 
 <section class="section">
     <h2>Sélection du moment</h2>
-    <p class="section-intro">Produits mis en avant (données MySQL via Model → Repository).</p>
+    <p class="section-intro">Pièces mises en avant cette saison.</p>
     <?php if (empty($produitsVedette)): ?>
-        <p class="empty-state">Aucun produit en vedette pour le moment. Lancez Docker pour charger les données de test.</p>
+        <p class="empty-state">Aucun produit en vedette pour le moment.</p>
     <?php else: ?>
         <ul class="product-grid">
             <?php foreach ($produitsVedette as $p): ?>

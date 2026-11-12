@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Chemise oxford">
+  <rect width="400" height="500" fill="#dce6ef"/>
+  <path d="M130 80 L200 130 L270 80 L290 400 L110 400 Z" fill="#f7fafc"/>
+  <path d="M200 130 L200 400" stroke="#b8c5d4" stroke-width="2"/>
+  <circle cx="200" cy="180" r="4" fill="#8b2942"/>
+  <circle cx="200" cy="220" r="4" fill="#8b2942"/>
+  <circle cx="200" cy="260" r="4" fill="#8b2942"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#5c5566">Chemise</text>
+</svg>

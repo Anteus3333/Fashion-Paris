@@ -25,7 +25,7 @@ INSERT INTO `produit` (`produit_id`, `categorie_id`, `nom`, `slug`, `description
 (4, 3, 'Sac cabas cuir', 'sac-cabas-cuir', 'Cabas en cuir pleine fleur, doublure coton.', 320.00, 5, 'FP-A-001', 1, 1);
 
 INSERT INTO `produit_image` (`produit_id`, `chemin`, `alt`, `ordre`) VALUES
-(1, 'produits/default.svg', 'Robe midi soie', 0),
-(2, 'produits/default.svg', 'Blazer structuring', 0),
-(3, 'produits/default.svg', 'Chemise oxford', 0),
-(4, 'produits/default.svg', 'Sac cabas cuir', 0);
+(1, 'produits/robe-midi-soie.svg', 'Robe midi soie', 0),
+(2, 'produits/blazer-structuring.svg', 'Blazer structuring', 0),
+(3, 'produits/chemise-oxford.svg', 'Chemise oxford', 0),
+(4, 'produits/sac-cabas-cuir.svg', 'Sac cabas cuir', 0);
