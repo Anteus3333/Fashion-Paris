@@ -33,6 +33,7 @@ Reset BDD : `docker compose down -v` puis `docker compose up -d --build`
 | Rôle | E-mail | Mot de passe |
 |------|--------|--------------|
 | Admin | `admin@fashionparis.fr` | `Password1!` |
+| Personnel | `personnel@fashionparis.fr` | `Password1!` |
 | Client | `client@fashionparis.fr` | `Password1!` |
 
 ## Structure (alignée ECF)

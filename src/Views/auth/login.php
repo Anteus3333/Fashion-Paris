@@ -17,7 +17,7 @@ ob_start();
 
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
-    <p class="muted">Comptes de test (Docker) : <code>admin@fashionparis.fr</code> / <code>client@fashionparis.fr</code> — mot de passe <code>Password1!</code></p>
+    <p class="muted">Comptes de test (Docker) : <code>admin@fashionparis.fr</code> / <code>personnel@fashionparis.fr</code> / <code>client@fashionparis.fr</code> — mot de passe <code>Password1!</code></p>
     <p><a href="<?= BASE_URL ?>/inscription">Créer un compte</a></p>
 </section>
 <?php

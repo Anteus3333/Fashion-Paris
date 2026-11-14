@@ -28,4 +28,9 @@ class AuthGuard {
     public static function rolesAdmin(): array {
         return ['administrateur'];
     }
+
+    /** Personnel boutique + admin (gestion des commandes). */
+    public static function rolesPersonnel(): array {
+        return ['personnel', 'administrateur'];
+    }
 }

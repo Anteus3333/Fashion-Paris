@@ -7,11 +7,13 @@ SET @pwd = '$2y$10$IIO6gazxesXrkEt8AjTMZu06ZzjstaYNV5Ir4HHFi4CjR7KhOT1Pm';
 
 INSERT INTO `utilisateur` (`utilisateur_id`, `email`, `password`, `prenom`, `nom`, `telephone`, `adresse_postale`, `code_postal`, `ville`, `actif`, `email_verifie`) VALUES
 (1, 'admin@fashionparis.fr', @pwd, 'Alice', 'Admin', '0600000001', '10 Rue de la Paix', '75002', 'Paris', 1, 1),
-(2, 'client@fashionparis.fr', @pwd, 'Camille', 'Client', '0600000002', '25 Avenue Montaigne', '75008', 'Paris', 1, 1);
+(2, 'client@fashionparis.fr', @pwd, 'Camille', 'Client', '0600000002', '25 Avenue Montaigne', '75008', 'Paris', 1, 1),
+(3, 'personnel@fashionparis.fr', @pwd, 'Paul', 'Personnel', '0600000003', '5 Rue du Faubourg', '75009', 'Paris', 1, 1);
 
 INSERT INTO `role` (`libelle`, `utilisateur_id`) VALUES
 ('administrateur', 1),
-('utilisateur', 2);
+('utilisateur', 2),
+('personnel', 3);
 
 INSERT INTO `categorie` (`categorie_id`, `libelle`, `slug`, `description`, `ordre`, `actif`) VALUES
 (1, 'Femme', 'femme', 'Collection femme', 1, 1),

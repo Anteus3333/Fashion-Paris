@@ -8,6 +8,7 @@ require_once __DIR__ . '/Controllers/PanierController.php';
 require_once __DIR__ . '/Controllers/CommandeController.php';
 require_once __DIR__ . '/Controllers/CompteController.php';
 require_once __DIR__ . '/Controllers/AdminController.php';
+require_once __DIR__ . '/Controllers/PersonnelController.php';
 require_once __DIR__ . '/Controllers/LegalController.php';
 require_once __DIR__ . '/Controllers/NewsletterController.php';
 require_once __DIR__ . '/Controllers/ContactController.php';
@@ -93,6 +94,14 @@ class Router {
                     (new CompteController())->commandeDetail($param2);
                 } else {
                     (new CompteController())->index();
+                }
+                break;
+
+            case 'espace-personnel':
+                if ($param === 'commande' && $param2) {
+                    (new PersonnelController())->commandeDetail($param2);
+                } else {
+                    (new PersonnelController())->index();
                 }
                 break;
 

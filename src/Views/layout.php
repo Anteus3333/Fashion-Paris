@@ -38,6 +38,8 @@
                     <?php $roleNav = $_SESSION['utilisateur']['role'] ?? 'utilisateur'; ?>
                     <?php if ($roleNav === 'administrateur'): ?>
                         <li><a href="<?= BASE_URL ?>/admin">Administration</a></li>
+                    <?php elseif ($roleNav === 'personnel'): ?>
+                        <li><a href="<?= BASE_URL ?>/espace-personnel">Espace personnel</a></li>
                     <?php endif; ?>
                     <li><a href="<?= BASE_URL ?>/mon-compte">Mon compte</a></li>
                     <li class="nav-bonjour" aria-label="Utilisateur connecté">

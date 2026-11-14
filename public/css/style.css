@@ -258,6 +258,8 @@ main { min-height: 60vh; }
 .search-form { margin: 1rem 0 1.25rem; }
 .search-form label { display: block; margin-bottom: .35rem; font-weight: 600; }
 .search-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.commandes-search { margin: 1rem 0 1.25rem; }
+.commandes-search input[type="search"] { flex: 1; min-width: 12rem; }
 .search-row input {
   flex: 1 1 200px;
   padding: .65rem .75rem;
