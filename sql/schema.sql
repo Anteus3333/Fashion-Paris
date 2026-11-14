@@ -1,11 +1,14 @@
--- schema.sql — Fashion Paris (e-commerce)
--- Encodage client (évite accents cassés à l'import)
+-- schema.sql — Fashion Paris (e-commerce) — source de vérité BDD
+-- Import Docker / réinstall complète : exécuter puis donnees_test.sql
+-- Prod Infomaniak déjà peuplée : préférer mise_a_jour_infomaniak.sql
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
+-- Ordre inverse des dépendances (+ avis legacy si ancienne install)
+DROP TABLE IF EXISTS `avis`;
 DROP TABLE IF EXISTS `tentative_connexion`;
 DROP TABLE IF EXISTS `newsletter`;
 DROP TABLE IF EXISTS `suivi_commande`;
@@ -14,11 +17,12 @@ DROP TABLE IF EXISTS `commande`;
 DROP TABLE IF EXISTS `produit_image`;
 DROP TABLE IF EXISTS `produit`;
 DROP TABLE IF EXISTS `categorie`;
+DROP TABLE IF EXISTS `horaire`;
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `utilisateur`;
 
 -- -----------------------------------------------------
--- Utilisateurs & rôles
+-- Utilisateurs, rôles, sécurité auth
 -- -----------------------------------------------------
 CREATE TABLE `utilisateur` (
   `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
@@ -170,6 +174,9 @@ CREATE TABLE `newsletter` (
   UNIQUE INDEX `idx_newsletter_email` (`email`)
 ) ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Horaires boutique (footer / contact / admin)
+-- -----------------------------------------------------
 CREATE TABLE `horaire` (
   `horaire_id` INT NOT NULL AUTO_INCREMENT,
   `jour` VARCHAR(50) NOT NULL,
