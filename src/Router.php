@@ -75,6 +75,18 @@ class Router {
                 (new AuthController())->logout();
                 break;
 
+            case 'mot-de-passe-oublie':
+                (new AuthController())->forgotPassword();
+                break;
+
+            case 'reinitialisation':
+                (new AuthController())->resetPassword();
+                break;
+
+            case 'confirmation-email':
+                (new AuthController())->confirmerEmail();
+                break;
+
             case 'newsletter':
                 if ($param === 'inscrire') {
                     (new NewsletterController())->inscrire();

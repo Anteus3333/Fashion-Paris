@@ -39,15 +39,19 @@ class UtilisateurRepository {
         return $row['libelle'] ?? null;
     }
 
-    /** Crée le compte + rôle utilisateur. Retourne l'id. */
-    public function create(array $data): int {
+    /**
+     * Crée le compte client + rôle utilisateur (non vérifié).
+     * @return array{id: int, token: string}
+     */
+    public function create(array $data): array {
+        $token = bin2hex(random_bytes(32));
         $stmt = $this->conn->prepare("
             INSERT INTO utilisateur (
                 email, password, prenom, nom, telephone, adresse_postale, code_postal, ville,
-                email_verifie, actif
+                email_verifie, email_token, email_token_expire, actif
             ) VALUES (
                 :email, :password, :prenom, :nom, :telephone, :adresse_postale, :code_postal, :ville,
-                1, 1
+                0, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 1
             )
         ");
         $stmt->execute([
@@ -59,13 +63,110 @@ class UtilisateurRepository {
             ':adresse_postale' => $data['adresse_postale'],
             ':code_postal'     => $data['code_postal'] ?? '',
             ':ville'           => $data['ville'] ?? '',
+            ':token'           => $token,
         ]);
         $id = (int) $this->conn->lastInsertId();
 
         $role = $this->conn->prepare('INSERT INTO role (libelle, utilisateur_id) VALUES (:libelle, :id)');
         $role->execute([':libelle' => 'utilisateur', ':id' => $id]);
 
-        return $id;
+        return ['id' => $id, 'token' => $token];
+    }
+
+    public function findByValidEmailToken(string $token): ?array {
+        if (!$this->conn) {
+            return null;
+        }
+        $stmt = $this->conn->prepare("
+            SELECT * FROM utilisateur
+            WHERE email_token = :token
+              AND email_token_expire > NOW()
+              AND email_verifie = 0
+        ");
+        $stmt->execute([':token' => $token]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function confirmerEmail(int $utilisateurId): void {
+        $stmt = $this->conn->prepare("
+            UPDATE utilisateur
+            SET email_verifie = 1, email_token = NULL, email_token_expire = NULL
+            WHERE utilisateur_id = :id
+        ");
+        $stmt->execute([':id' => $utilisateurId]);
+    }
+
+    public function estEmailVerifie(array $utilisateur): bool {
+        if (!array_key_exists('email_verifie', $utilisateur)) {
+            return true;
+        }
+        return (int) $utilisateur['email_verifie'] === 1;
+    }
+
+    /** Réinscription sur compte pas encore confirmé : maj infos + nouveau jeton. */
+    public function reactiverInscriptionNonVerifiee(int $utilisateurId, array $data): ?string {
+        if ($this->getRole($utilisateurId) !== 'utilisateur') {
+            return null;
+        }
+        $token = bin2hex(random_bytes(32));
+        $stmt = $this->conn->prepare("
+            UPDATE utilisateur SET
+                prenom = :prenom,
+                nom = :nom,
+                telephone = :telephone,
+                adresse_postale = :adresse_postale,
+                code_postal = :code_postal,
+                ville = :ville,
+                password = :password,
+                email_token = :token,
+                email_token_expire = DATE_ADD(NOW(), INTERVAL 24 HOUR)
+            WHERE utilisateur_id = :id AND email_verifie = 0
+        ");
+        $stmt->execute([
+            ':prenom'          => $data['prenom'],
+            ':nom'             => $data['nom'],
+            ':telephone'       => $data['telephone'],
+            ':adresse_postale' => $data['adresse_postale'],
+            ':code_postal'     => $data['code_postal'] ?? '',
+            ':ville'           => $data['ville'] ?? '',
+            ':password'        => password_hash($data['password'], PASSWORD_DEFAULT),
+            ':token'           => $token,
+            ':id'              => $utilisateurId,
+        ]);
+        return $stmt->rowCount() > 0 ? $token : null;
+    }
+
+    public function saveResetToken(int $utilisateurId, string $token): void {
+        $stmt = $this->conn->prepare("
+            UPDATE utilisateur
+            SET reset_token = :token, reset_expire = DATE_ADD(NOW(), INTERVAL 1 HOUR)
+            WHERE utilisateur_id = :id
+        ");
+        $stmt->execute([':token' => $token, ':id' => $utilisateurId]);
+    }
+
+    public function findByValidResetToken(string $token): ?array {
+        if (!$this->conn) {
+            return null;
+        }
+        $stmt = $this->conn->prepare("
+            SELECT * FROM utilisateur
+            WHERE reset_token = :token AND reset_expire > NOW()
+        ");
+        $stmt->execute([':token' => $token]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function updatePassword(int $utilisateurId, string $nouveauPassword): void {
+        $stmt = $this->conn->prepare("
+            UPDATE utilisateur
+            SET password = :password, reset_token = NULL, reset_expire = NULL
+            WHERE utilisateur_id = :id
+        ");
+        $stmt->execute([
+            ':password' => password_hash($nouveauPassword, PASSWORD_DEFAULT),
+            ':id'       => $utilisateurId,
+        ]);
     }
 
     public function updateProfil(int $utilisateurId, array $data): void {

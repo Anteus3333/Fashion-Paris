@@ -229,17 +229,74 @@ class SmtpMailer {
         );
     }
 
-    /** Accueil après inscription. */
+    /** Accueil après confirmation d’e-mail. */
     public function envoyerBienvenue(string $email, string $prenom): bool {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
         $p = htmlspecialchars(trim($prenom));
         $html = '<p>Bonjour' . ($p !== '' ? ' ' . $p : '') . ',</p>'
-            . '<p>Bienvenue chez Fashion Paris. Votre compte est prêt.</p>'
-            . '<p>' . UrlHelper::ancre('/catalogue', 'Découvrir le catalogue') . '</p>'
+            . '<p>Bienvenue chez Fashion Paris. Votre compte est actif.</p>'
+            . '<p>' . UrlHelper::ancre('/login', 'Se connecter') . ' · '
+            . UrlHelper::ancre('/catalogue', 'Découvrir le catalogue') . '</p>'
             . '<p>L\'équipe Fashion Paris</p>';
 
         return $this->send($email, 'Bienvenue chez Fashion Paris', $html, null, true);
     }
+
+    /** Lien de confirmation après inscription (valable 24 h). */
+    public function envoyerConfirmationInscription(string $email, string $prenom, string $token): bool {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        $chemin = '/confirmation-email?token=' . urlencode($token);
+        $lien = UrlHelper::absolue($chemin);
+        $p = htmlspecialchars(trim($prenom));
+        $html = '<p>Bonjour' . ($p !== '' ? ' ' . $p : '') . ',</p>'
+            . '<p>Merci de vous être inscrit chez Fashion Paris.</p>'
+            . '<p>Pour activer votre compte, ' . UrlHelper::ancre($chemin, 'confirmez votre adresse e-mail')
+            . ' (lien valable 24 heures).</p>'
+            . '<p>Si le lien ne fonctionne pas, copiez cette adresse :<br>'
+            . htmlspecialchars($lien) . '</p>'
+            . '<p>L\'équipe Fashion Paris</p>';
+
+        return $this->send($email, 'Confirmez votre adresse e-mail — Fashion Paris', $html, null, true);
+    }
+
+    /** Lien de réinitialisation mot de passe (valable 1 h). */
+    public function envoyerResetMotDePasse(array $utilisateur, string $token): bool {
+        $email = trim((string) ($utilisateur['email'] ?? ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        $chemin = '/reinitialisation?token=' . urlencode($token);
+        $lien = UrlHelper::absolue($chemin);
+        $prenom = htmlspecialchars(trim((string) ($utilisateur['prenom'] ?? '')));
+        $html = '<p>Bonjour' . ($prenom !== '' ? ' ' . $prenom : '') . ',</p>'
+            . '<p>Vous avez demandé à réinitialiser votre mot de passe.</p>'
+            . '<p>' . UrlHelper::ancre($chemin, 'Choisir un nouveau mot de passe')
+            . ' (lien valable 1 heure).</p>'
+            . '<p>Si le bouton ne fonctionne pas :<br>' . htmlspecialchars($lien) . '</p>'
+            . '<p>Si vous n\'êtes pas à l\'origine de cette demande, ignorez ce message.</p>'
+            . '<p>L\'équipe Fashion Paris</p>';
+
+        return $this->send($email, 'Réinitialisation de votre mot de passe — Fashion Paris', $html, null, true);
+    }
+
+    /** Alerte après changement de mot de passe. */
+    public function envoyerAlerteMotDePasseModifie(array $utilisateur): bool {
+        $email = trim((string) ($utilisateur['email'] ?? ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        $prenom = htmlspecialchars(trim((string) ($utilisateur['prenom'] ?? '')));
+        $html = '<p>Bonjour' . ($prenom !== '' ? ' ' . $prenom : '') . ',</p>'
+            . '<p>Votre mot de passe Fashion Paris a bien été modifié.</p>'
+            . '<p>Si vous n\'êtes pas à l\'origine de ce changement, contactez-nous immédiatement.</p>'
+            . '<p>' . UrlHelper::ancre('/login', 'Se connecter') . '</p>'
+            . '<p>L\'équipe Fashion Paris</p>';
+
+        return $this->send($email, 'Mot de passe modifié — Fashion Paris', $html, null, true);
+    }
 }
+

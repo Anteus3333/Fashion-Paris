@@ -22,8 +22,37 @@ class UtilisateurModel {
         return $this->repository->getRole($utilisateurId);
     }
 
-    public function create(array $data): int {
+    /** @return array{id: int, token: string} */
+    public function create(array $data): array {
         return $this->repository->create($data);
+    }
+
+    public function findByValidEmailToken(string $token): ?array {
+        return $this->repository->findByValidEmailToken($token);
+    }
+
+    public function confirmerEmail(int $utilisateurId): void {
+        $this->repository->confirmerEmail($utilisateurId);
+    }
+
+    public function estEmailVerifie(array $utilisateur): bool {
+        return $this->repository->estEmailVerifie($utilisateur);
+    }
+
+    public function reactiverInscriptionNonVerifiee(int $utilisateurId, array $data): ?string {
+        return $this->repository->reactiverInscriptionNonVerifiee($utilisateurId, $data);
+    }
+
+    public function saveResetToken(int $utilisateurId, string $token): void {
+        $this->repository->saveResetToken($utilisateurId, $token);
+    }
+
+    public function findByValidResetToken(string $token): ?array {
+        return $this->repository->findByValidResetToken($token);
+    }
+
+    public function updatePassword(int $utilisateurId, string $nouveauPassword): void {
+        $this->repository->updatePassword($utilisateurId, $nouveauPassword);
     }
 
     public function updateProfil(int $utilisateurId, array $data): void {

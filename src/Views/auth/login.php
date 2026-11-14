@@ -17,8 +17,11 @@ ob_start();
 
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
+    <p class="auth-liens">
+        <a href="<?= BASE_URL ?>/mot-de-passe-oublie">Mot de passe oublié ?</a><br>
+        Pas encore de compte ? <a href="<?= BASE_URL ?>/inscription">Créer un compte</a>
+    </p>
     <p class="muted">Comptes de test (Docker) : <code>admin@fashionparis.fr</code> / <code>personnel@fashionparis.fr</code> / <code>client@fashionparis.fr</code> — mot de passe <code>Password1!</code></p>
-    <p><a href="<?= BASE_URL ?>/inscription">Créer un compte</a></p>
 </section>
 <?php
 $contenu = ob_get_clean();

@@ -1,10 +1,11 @@
 <?php
-// src/Controllers/AuthController.php
+// src/Controllers/AuthController.php — login, inscription, reset mdp, confirmation e-mail
 
 require_once __DIR__ . '/../Models/UtilisateurModel.php';
 require_once __DIR__ . '/../Models/TentativeConnexionModel.php';
 require_once __DIR__ . '/../Services/Csrf.php';
 require_once __DIR__ . '/../Services/SmtpMailer.php';
+require_once __DIR__ . '/../Services/UrlHelper.php';
 
 class AuthController {
     private UtilisateurModel $utilisateurModel;
@@ -32,24 +33,29 @@ class AuthController {
             } else {
                 $user = $this->utilisateurModel->findByEmail($oldEmail);
                 if ($user && (int) $user['actif'] === 1 && password_verify($password, $user['password'])) {
-                    $tentatives->purger($oldEmail);
-                    session_regenerate_id(true);
-                    $_SESSION['utilisateur'] = [
-                        'id'     => (int) $user['utilisateur_id'],
-                        'email'  => $user['email'],
-                        'prenom' => $user['prenom'],
-                        'nom'    => $user['nom'],
-                        'role'   => $this->utilisateurModel->getRole((int) $user['utilisateur_id']) ?? 'utilisateur',
-                    ];
-                    $redirect = (string) ($_GET['redirect'] ?? '/');
-                    if ($redirect === '' || $redirect[0] !== '/') {
-                        $redirect = '/';
+                    if (!$this->utilisateurModel->estEmailVerifie($user)) {
+                        $erreur = 'Compte non activé. Vérifiez votre boîte mail pour confirmer votre adresse.';
+                    } else {
+                        $tentatives->purger($oldEmail);
+                        session_regenerate_id(true);
+                        $_SESSION['utilisateur'] = [
+                            'id'     => (int) $user['utilisateur_id'],
+                            'email'  => $user['email'],
+                            'prenom' => $user['prenom'],
+                            'nom'    => $user['nom'],
+                            'role'   => $this->utilisateurModel->getRole((int) $user['utilisateur_id']) ?? 'utilisateur',
+                        ];
+                        $redirect = (string) ($_GET['redirect'] ?? ($_POST['redirect'] ?? '/'));
+                        if ($redirect === '' || $redirect[0] !== '/') {
+                            $redirect = '/';
+                        }
+                        header('Location: ' . BASE_URL . $redirect);
+                        exit;
                     }
-                    header('Location: ' . BASE_URL . $redirect);
-                    exit;
+                } else {
+                    $tentatives->enregistrer($oldEmail !== '' ? $oldEmail : '__login__', $ip);
+                    $erreur = 'Identifiants incorrects.';
                 }
-                $tentatives->enregistrer($oldEmail !== '' ? $oldEmail : '__login__', $ip);
-                $erreur = 'Identifiants incorrects.';
             }
         }
 
@@ -104,23 +110,31 @@ class AuthController {
             if ($password !== $confirmation) {
                 $erreurs[] = 'La confirmation ne correspond pas au mot de passe.';
             }
-            if (empty($erreurs) && $this->utilisateurModel->findByEmail($old['email'])) {
+
+            $existant = empty($erreurs) ? $this->utilisateurModel->findByEmail($old['email']) : null;
+            if ($existant) {
+                if ((int) ($existant['email_verifie'] ?? 1) === 0
+                    && $this->utilisateurModel->getRole((int) $existant['utilisateur_id']) === 'utilisateur'
+                ) {
+                    $token = $this->utilisateurModel->reactiverInscriptionNonVerifiee(
+                        (int) $existant['utilisateur_id'],
+                        $old + ['password' => $password]
+                    );
+                    if ($token) {
+                        $this->envoyerMailConfirmation($old['email'], $old['prenom'], $token);
+                        $_SESSION['flash_succes'] = 'Un nouveau lien de confirmation vient de vous être envoyé. Vérifiez votre boîte mail.';
+                        header('Location: ' . BASE_URL . '/login');
+                        exit;
+                    }
+                }
                 $erreurs[] = 'Un compte existe déjà avec cette adresse e-mail.';
             }
 
             if (empty($erreurs)) {
-                $id = $this->utilisateurModel->create($old + ['password' => $password]);
-                (new SmtpMailer())->envoyerBienvenue($old['email'], $old['prenom']);
-                session_regenerate_id(true);
-                $_SESSION['utilisateur'] = [
-                    'id'     => $id,
-                    'email'  => $old['email'],
-                    'prenom' => $old['prenom'],
-                    'nom'    => $old['nom'],
-                    'role'   => 'utilisateur',
-                ];
-                $_SESSION['flash_succes'] = 'Compte créé. Bienvenue chez Fashion Paris !';
-                header('Location: ' . BASE_URL . '/mon-compte');
+                $compte = $this->utilisateurModel->create($old + ['password' => $password]);
+                $this->envoyerMailConfirmation($old['email'], $old['prenom'], $compte['token']);
+                $_SESSION['flash_succes'] = 'Compte créé. Confirmez votre adresse e-mail via le lien reçu (valable 24 h) avant de vous connecter.';
+                header('Location: ' . BASE_URL . '/login');
                 exit;
             }
         }
@@ -135,6 +149,93 @@ class AuthController {
         }
         header('Location: ' . BASE_URL . '/');
         exit;
+    }
+
+    public function forgotPassword(): void {
+        $titrePage = 'Mot de passe oublié — Fashion Paris';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Csrf::verifier()) {
+                $_SESSION['flash_erreur'] = 'Session expirée. Merci de réessayer.';
+                header('Location: ' . BASE_URL . '/mot-de-passe-oublie');
+                exit;
+            }
+
+            $email = trim((string) ($_POST['email'] ?? ''));
+            $utilisateur = $email !== '' ? $this->utilisateurModel->findByEmail($email) : null;
+
+            if ($utilisateur) {
+                $token = bin2hex(random_bytes(32));
+                $this->utilisateurModel->saveResetToken((int) $utilisateur['utilisateur_id'], $token);
+                (new SmtpMailer())->envoyerResetMotDePasse($utilisateur, $token);
+            }
+
+            $_SESSION['flash_succes'] = 'Si un compte existe avec cette adresse, un mail de réinitialisation vient de lui être envoyé.';
+            header('Location: ' . BASE_URL . '/login');
+            exit;
+        }
+
+        require __DIR__ . '/../Views/auth/mdp_oublie.php';
+    }
+
+    public function resetPassword(): void {
+        $titrePage = 'Nouveau mot de passe — Fashion Paris';
+        $erreurs = [];
+
+        $token = (string) ($_POST['token'] ?? $_GET['token'] ?? '');
+        $utilisateur = $token !== '' ? $this->utilisateurModel->findByValidResetToken($token) : null;
+
+        if (!$utilisateur) {
+            $_SESSION['flash_erreur'] = 'Ce lien de réinitialisation est invalide ou a expiré. Merci de refaire une demande.';
+            header('Location: ' . BASE_URL . '/mot-de-passe-oublie');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $password = (string) ($_POST['password'] ?? '');
+            $confirmation = (string) ($_POST['confirmation'] ?? '');
+
+            if (!Csrf::verifier()) {
+                $erreurs[] = 'Session expirée. Merci de réessayer.';
+            }
+            $erreurs = array_merge($erreurs, $this->validerMotDePasse($password));
+            if ($password !== $confirmation) {
+                $erreurs[] = 'La confirmation ne correspond pas au mot de passe.';
+            }
+
+            if (empty($erreurs)) {
+                $this->utilisateurModel->updatePassword((int) $utilisateur['utilisateur_id'], $password);
+                $mailOk = (new SmtpMailer())->envoyerAlerteMotDePasseModifie($utilisateur);
+                $_SESSION['flash_succes'] = $mailOk
+                    ? 'Votre mot de passe a bien été modifié. Un e-mail de confirmation vous a été envoyé. Vous pouvez vous connecter.'
+                    : 'Votre mot de passe a bien été modifié. Vous pouvez vous connecter.';
+                header('Location: ' . BASE_URL . '/login');
+                exit;
+            }
+        }
+
+        require __DIR__ . '/../Views/auth/reset_mdp.php';
+    }
+
+    public function confirmerEmail(): void {
+        $token = trim((string) ($_GET['token'] ?? ''));
+        $utilisateur = $token !== '' ? $this->utilisateurModel->findByValidEmailToken($token) : null;
+
+        if (!$utilisateur) {
+            $_SESSION['flash_erreur'] = 'Ce lien de confirmation est invalide ou a expiré.';
+            header('Location: ' . BASE_URL . '/login');
+            exit;
+        }
+
+        $this->utilisateurModel->confirmerEmail((int) $utilisateur['utilisateur_id']);
+        (new SmtpMailer())->envoyerBienvenue($utilisateur['email'], $utilisateur['prenom'] ?? '');
+        $_SESSION['flash_succes'] = 'Adresse e-mail confirmée ! Votre compte est actif, vous pouvez vous connecter.';
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+
+    private function envoyerMailConfirmation(string $email, string $prenom, string $token): void {
+        (new SmtpMailer())->envoyerConfirmationInscription($email, $prenom, $token);
     }
 
     /** @return string[] */
