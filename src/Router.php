@@ -122,8 +122,16 @@ class Router {
                 (new LegalController())->mentions();
                 break;
 
+            case 'cgv':
+                (new LegalController())->cgv();
+                break;
+
             case 'accessibilite':
                 (new LegalController())->accessibilite();
+                break;
+
+            case 'politique-confidentialite':
+                (new LegalController())->politiqueConfidentialite();
                 break;
 
             default:

@@ -80,6 +80,8 @@
         <p>&copy; <?= date('Y') ?> Fashion Paris</p>
         <nav aria-label="Liens légaux">
             <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
+            <a href="<?= BASE_URL ?>/politique-confidentialite">Confidentialité</a>
+            <a href="<?= BASE_URL ?>/cgv">CGV</a>
             <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
         </nav>
     </footer>
