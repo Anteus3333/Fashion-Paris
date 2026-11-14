@@ -623,6 +623,7 @@ main { min-height: 60vh; }
 .cart-totals { margin: 1rem 0 1.5rem; }
 .cart-total { font-size: 1.15rem; }
 
+.admin-nav a.is-active { text-decoration: underline; }
 .admin-nav {
   display: flex;
   flex-wrap: wrap;

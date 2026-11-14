@@ -4,6 +4,7 @@ ob_start();
 <section class="section page-narrow">
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
     <h1>Modération des avis</h1>
+    <?php require __DIR__ . '/_nav.php'; ?>
     <?php if (empty($avis)): ?>
         <p class="muted">Aucun avis en attente.</p>
     <?php else: ?>

@@ -4,6 +4,7 @@ ob_start();
 <section class="section page-narrow">
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
     <h1>Clients</h1>
+    <?php require __DIR__ . '/_nav.php'; ?>
     <table class="data-table">
         <thead>
             <tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>Ville</th></tr>

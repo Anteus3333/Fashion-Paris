@@ -4,6 +4,7 @@ ob_start();
 <section class="section page-narrow">
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
     <h1>Statistiques MongoDB</h1>
+    <?php require __DIR__ . '/_nav.php'; ?>
     <?php if (!$mongoOk): ?>
         <p class="form-error">MongoDB non configuré. Copiez <code>config/mongodb.local.example.php</code> vers <code>mongodb.local.php</code> avec votre URI Atlas.</p>
         <p class="muted">Les stats MySQL du tableau de bord restent disponibles sans Mongo.</p>

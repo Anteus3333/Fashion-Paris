@@ -5,7 +5,14 @@ $commandesListUrl = $commandesListUrl ?? ($gestionBase ?? BASE_URL);
 <section class="section page-narrow">
     <p class="breadcrumb"><a href="<?= htmlspecialchars($commandesListUrl) ?>">Commandes</a></p>
     <h1><?= htmlspecialchars($commande['numero_commande']) ?></h1>
+    <?php
+    $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
+    if ($isAdminEspace) {
+        require __DIR__ . '/../admin/_nav.php';
+    }
+    ?>
     <?php if (!empty($erreurs)): ?>
+
         <ul class="form-error"><?php foreach ($erreurs as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul>
     <?php endif; ?>
     <p>

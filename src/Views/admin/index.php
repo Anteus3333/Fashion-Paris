@@ -3,13 +3,7 @@ ob_start();
 ?>
 <section class="section page-narrow">
     <h1>Administration</h1>
-    <nav class="admin-nav" aria-label="Admin">
-        <a href="<?= BASE_URL ?>/admin/produits">Produits</a>
-        <a href="<?= BASE_URL ?>/admin/commandes">Commandes</a>
-        <a href="<?= BASE_URL ?>/admin/clients">Clients</a>
-        <a href="<?= BASE_URL ?>/admin/avis">Avis</a>
-        <a href="<?= BASE_URL ?>/admin/stats">Stats Mongo</a>
-    </nav>
+    <?php require __DIR__ . '/_nav.php'; ?>
 
     <ul class="stats-grid">
         <li><strong><?= (int) $stats['nb_produits'] ?></strong><span>Produits actifs</span></li>

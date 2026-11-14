@@ -8,6 +8,7 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
     <?php if ($isAdminEspace): ?>
         <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
         <h1>Commandes</h1>
+        <?php require __DIR__ . '/../admin/_nav.php'; ?>
     <?php else: ?>
         <h1><?= htmlspecialchars($titreEspace) ?> — Commandes</h1>
         <p class="section-intro">Traitez les commandes clients (préparation, expédition, livraison).</p>

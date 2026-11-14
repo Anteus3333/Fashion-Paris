@@ -4,6 +4,7 @@ ob_start();
 <section class="section page-narrow">
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
     <h1>Produits</h1>
+    <?php require __DIR__ . '/_nav.php'; ?>
     <p><?= ViewHelper::btnNav(BASE_URL . '/admin/produit/nouveau', 'Ajouter un produit', 'btn btn-primary') ?></p>
     <table class="data-table">
         <thead>
