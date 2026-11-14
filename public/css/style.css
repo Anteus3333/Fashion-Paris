@@ -581,82 +581,123 @@ main { min-height: 60vh; }
 .form-error { color: var(--err); }
 
 .site-footer {
-  border-top: 1px solid var(--line);
-  padding: 2rem 1.25rem 2.25rem;
-  color: var(--muted);
-  font-size: .92rem;
-  background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(248,244,239,.9));
+  margin-top: 0;
+  padding: 2.75rem 1.25rem 2.5rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: .95rem;
+  background:
+    radial-gradient(620px 240px at 15% 0%, rgba(139, 41, 66, 0.45), transparent 55%),
+    #1c1714;
 }
 .site-footer-inner {
-  max-width: 920px;
+  max-width: 760px;
   margin: 0 auto;
   display: grid;
-  gap: 1.5rem 2.5rem;
+  gap: 1.75rem 2rem;
   text-align: center;
+  justify-items: center;
 }
 @media (min-width: 720px) {
   .site-footer-inner {
+    max-width: 880px;
     grid-template-columns: 1fr 1fr;
     text-align: left;
     align-items: start;
+    justify-items: stretch;
   }
   .footer-infos { text-align: right; }
   .footer-links { justify-content: flex-end; }
 }
 .footer-heading {
-  margin: 0 0 .5rem;
+  margin: 0 0 .55rem;
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #e8c9a0;
 }
 .footer-horaires p,
-.footer-infos p { margin: .2rem 0; }
+.footer-infos p { margin: .25rem 0; line-height: 1.5; }
 .footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: .35rem;
   justify-content: center;
-  margin-top: .75rem;
+  margin-top: .9rem;
 }
-.footer-copy { margin-top: .85rem; font-size: .85rem; }
-.site-footer a { color: var(--accent); }
+.footer-copy {
+  margin-top: 1rem;
+  font-size: .85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+.site-footer a {
+  color: #e8c9a0;
+  text-decoration: none;
+}
+.site-footer a:hover { text-decoration: underline; }
 
 .avis-clients {
-  padding: 2.5rem 1.25rem 1.5rem;
+  padding: 3.25rem 1.25rem 3.5rem;
+  text-align: center;
+  background:
+    radial-gradient(520px 220px at 50% 0%, rgba(139, 41, 66, 0.08), transparent 65%),
+    var(--paper);
+}
+.avis-clients-inner {
   max-width: 1100px;
   margin: 0 auto;
-  text-align: center;
 }
 .avis-clients h2 {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-size: clamp(1.85rem, 3.2vw, 2.5rem);
   color: var(--accent);
 }
 .avis-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.35rem;
   grid-template-columns: 1fr;
 }
 @media (min-width: 760px) {
   .avis-grid { grid-template-columns: repeat(3, 1fr); }
 }
 .avis-card {
-  background: rgba(255,255,255,.7);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 1.15rem 1rem 1.25rem;
+  background: #fff;
+  border: none;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 1.5rem 1.25rem 1.35rem;
   text-align: center;
+  box-shadow: 0 10px 28px rgba(28, 23, 20, 0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-.avis-card .note { margin: 0 0 .65rem; font-weight: 600; color: var(--ink); }
+.avis-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(28, 23, 20, 0.12);
+}
+.avis-card .note {
+  margin: 0 0 .65rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+}
 .avis-card .commentaire {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   font-style: italic;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.55;
+  min-height: 3.2em;
 }
-.avis-card .auteur { margin: 0; text-align: right; color: var(--ink); font-size: .92rem; }
+.avis-card .auteur {
+  margin: 0;
+  text-align: right;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: .95rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .avis-card { transition: none; }
+  .avis-card:hover { transform: none; }
+}
 
 .personnel-nav {
   display: flex;
