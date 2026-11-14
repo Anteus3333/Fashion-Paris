@@ -223,7 +223,7 @@ main { min-height: 60vh; }
 .home-hero .lede {
   margin: 0 auto 1.6rem;
   color: rgba(255, 255, 255, 0.9);
-  max-width: 36ch;
+  max-width: 44ch;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   animation: heroRise .9s ease-out .24s both;
 }
@@ -234,12 +234,13 @@ main { min-height: 60vh; }
 }
 
 .btn-hero-ghost {
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.92);
   color: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 }
 .btn-hero-ghost:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
   border-color: #fff;
 }
@@ -315,45 +316,6 @@ main { min-height: 60vh; }
   line-height: 1.15;
 }
 .home-section-head .section-intro { margin-bottom: 0; }
-.home-section-head--row {
-  max-width: none;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-}
-
-.home-maison {
-  padding: 4rem 1.25rem;
-  background:
-    linear-gradient(135deg, #2a2030 0%, var(--ink) 55%, #3a1524 100%);
-  color: #fff;
-}
-.home-maison-inner {
-  max-width: 40rem;
-  margin: 0 auto;
-  text-align: center;
-}
-.home-maison .brand-mark {
-  color: #f3d5dc;
-  letter-spacing: .24em;
-}
-.home-maison h2 {
-  margin: 0 0 1rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
-  line-height: 1.12;
-  color: #fff;
-}
-.home-maison p {
-  margin: 0 auto 1.5rem;
-  max-width: 38ch;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 1.05rem;
-}
-
 .home-collections {
   padding: 2.75rem 1.25rem .5rem;
   max-width: 1200px;

@@ -6,23 +6,11 @@ $bannerUrl = AssetHelper::imageUrl('hero-fashion-paris.jpg');
     <div class="hero-copy">
         <p class="brand-mark">Fashion Paris</p>
         <h1>La mode parisienne, livrée chez vous</h1>
-        <p class="lede">Catalogue, panier et compte client — une boutique en ligne soignée, de Paris à votre porte.</p>
+        <p class="lede">Une boutique en ligne soignée, de Paris à votre porte. Coupes nettes, matières soignées, pièces qui traversent la saison : Fashion Paris concentre l'essentiel.</p>
         <div class="hero-actions">
-            <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Voir le catalogue', 'btn btn-primary') ?>
+            <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Explorer le catalogue', 'btn btn-primary') ?>
             <?= ViewHelper::btnNav(BASE_URL . '/login', 'Se connecter', 'btn btn-hero-ghost') ?>
         </div>
-    </div>
-</section>
-
-<section class="home-maison" aria-labelledby="maison-titre">
-    <div class="home-maison-inner">
-        <p class="brand-mark">La maison</p>
-        <h2 id="maison-titre">Une sélection courte, pensée comme une boutique du Marais</h2>
-        <p>
-            Coupes nettes, matières soignées, pièces qui traversent la saison.
-            Fashion Paris concentre l’essentiel : choisir, panier, compte client — sans bruit inutile.
-        </p>
-        <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Explorer le catalogue', 'btn btn-primary') ?>
     </div>
 </section>
 
@@ -47,12 +35,9 @@ $bannerUrl = AssetHelper::imageUrl('hero-fashion-paris.jpg');
 <?php endif; ?>
 
 <section class="section home-featured" aria-labelledby="vedettes-titre">
-    <div class="home-section-head home-section-head--row">
-        <div>
-            <h2 id="vedettes-titre">Sélection du moment</h2>
-            <p class="section-intro">Pièces mises en avant cette saison.</p>
-        </div>
-        <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Tout voir', 'btn btn-ghost') ?>
+    <div class="home-section-head">
+        <h2 id="vedettes-titre">Sélection du moment</h2>
+        <p class="section-intro">Pièces mises en avant cette saison.</p>
     </div>
     <?php if (empty($produitsVedette)): ?>
         <p class="empty-state">Aucun produit en vedette pour le moment.</p>
