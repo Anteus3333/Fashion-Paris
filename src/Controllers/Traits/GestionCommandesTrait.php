@@ -41,7 +41,7 @@ trait GestionCommandesTrait {
         $gestionBase = $this->gestionBaseUrl();
         $commandesListUrl = $this->gestionCommandesListUrl();
         $titreEspace = $this->gestionTitreEspace();
-        require __DIR__ . '/../../Views/gestion/commandes.php';
+        require __DIR__ . '/../../Views/personnel/commandes.php';
     }
 
     /** Détail + changement de statut (POST CSRF). */
@@ -82,6 +82,6 @@ trait GestionCommandesTrait {
         $suivi = $model->getSuivi($numero);
         $client = (new UtilisateurModel())->findById((int) $commande['utilisateur_id']);
         $titrePage = 'Commande ' . $numero . ' — ' . $this->gestionTitreEspace();
-        require __DIR__ . '/../../Views/gestion/commande-detail.php';
+        require __DIR__ . '/../../Views/personnel/commande-detail.php';
     }
 }
