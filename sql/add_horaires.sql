@@ -1,4 +1,4 @@
--- Table + seed horaires (Infomaniak / Docker déjà initialisé)
+-- Table + seed horaires boutique (Infomaniak / Docker déjà initialisé)
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `horaire` (
@@ -17,7 +17,12 @@ FROM (
   SELECT 'Mercredi', '10:00', '19:00' UNION ALL
   SELECT 'Jeudi', '10:00', '19:00' UNION ALL
   SELECT 'Vendredi', '10:00', '19:00' UNION ALL
-  SELECT 'Samedi', '10:00', '19:00' UNION ALL
-  SELECT 'Dimanche', '12:00', '18:00'
+  SELECT 'Samedi', '10:00', '18:00'
 ) AS v
 WHERE NOT EXISTS (SELECT 1 FROM horaire LIMIT 1);
+
+-- Alignement boutique (lun–ven / samedi) si ancienne seed présente
+UPDATE horaire SET heure_ouverture = '10:00', heure_fermeture = '19:00'
+WHERE jour IN ('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi');
+UPDATE horaire SET heure_ouverture = '10:00', heure_fermeture = '18:00' WHERE jour = 'Samedi';
+DELETE FROM horaire WHERE jour = 'Dimanche';

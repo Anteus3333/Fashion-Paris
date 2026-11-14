@@ -106,12 +106,14 @@
                     <a href="mailto:<?= htmlspecialchars($boutique['email']) ?>"><?= htmlspecialchars($boutique['email']) ?></a>
                     · <?= htmlspecialchars($boutique['telephone']) ?>
                 </p>
+            </div>
+            <div class="footer-legal">
                 <nav class="footer-links" aria-label="Liens légaux">
                     <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
                     <span aria-hidden="true"> · </span>
                     <a href="<?= BASE_URL ?>/politique-confidentialite">Confidentialité</a>
                     <span aria-hidden="true"> · </span>
-                    <a href="<?= BASE_URL ?>/cgv">Conditions générales de vente</a>
+                    <a href="<?= BASE_URL ?>/cgv">CGV</a>
                     <span aria-hidden="true"> · </span>
                     <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
                 </nav>

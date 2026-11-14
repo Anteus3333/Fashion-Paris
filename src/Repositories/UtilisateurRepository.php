@@ -298,16 +298,14 @@ class UtilisateurRepository {
         return $stmt->rowCount() > 0;
     }
 
-    /** Suppression définitive — refuse si commandes ou avis liés. */
+    /** Suppression définitive — refuse si commandes liées. */
     public function supprimerPersonnel(int $utilisateurId): bool {
         if (!$this->estPersonnel($utilisateurId)) {
             return false;
         }
         $stmtCmd = $this->conn->prepare('SELECT COUNT(*) FROM commande WHERE utilisateur_id = :id');
         $stmtCmd->execute([':id' => $utilisateurId]);
-        $stmtAvis = $this->conn->prepare('SELECT COUNT(*) FROM avis WHERE utilisateur_id = :id');
-        $stmtAvis->execute([':id' => $utilisateurId]);
-        if ((int) $stmtCmd->fetchColumn() > 0 || (int) $stmtAvis->fetchColumn() > 0) {
+        if ((int) $stmtCmd->fetchColumn() > 0) {
             return false;
         }
         try {

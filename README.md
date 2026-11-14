@@ -61,7 +61,7 @@ Fashion/
 |-----|------|
 | `/` | Accueil + vedettes + newsletter |
 | `/catalogue` · `/catalogue/{cat}` · `/catalogue/recherche` | Catalogue |
-| `/produit/{slug}` | Fiche produit + avis |
+| `/produit/{slug}` | Fiche produit |
 | `/panier` · `/panier/ajouter|modifier|retirer` | Panier session |
 | `/commande` | Checkout (AuthGuard + décrément stock) |
 | `/login` · `/inscription` | Auth (CSRF + hash bcrypt) |
@@ -69,7 +69,7 @@ Fashion/
 | `/admin` | Dashboard stats MySQL |
 | `/admin/produits` · `/admin/produit/...` | CRUD produits / stocks |
 | `/admin/commandes` · `/admin/commande/{n}` | Gestion & suivi commandes |
-| `/admin/clients` · `/admin/avis` · `/admin/stats` | Clients, modération, Mongo |
+| `/admin/clients` · `/admin/stats` | Clients, Mongo |
 
 ## Sécurité (contre-exemple du sujet)
 

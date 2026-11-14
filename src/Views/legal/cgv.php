@@ -60,20 +60,14 @@ ob_start();
             <a href="<?= BASE_URL ?>/contact">la page Contact</a>.
         </p>
 
-        <h2>8. Avis clients</h2>
-        <p>
-            Après une commande, le Client peut déposer un avis (note et commentaire) sur la fiche produit.
-            Les avis peuvent être modérés avant publication.
-        </p>
-
-        <h2>9. Responsabilité</h2>
+        <h2>8. Responsabilité</h2>
         <p>
             Fashion Paris est responsable dans les conditions prévues par la loi.
             Les informations produit sont fournies de bonne foi ; le Client reste responsable
             du choix et de l’usage des articles commandés.
         </p>
 
-        <h2>10. Litiges</h2>
+        <h2>9. Litiges</h2>
         <p>
             En cas de litige, une solution amiable sera recherchée en priorité
             (<a href="mailto:contact@anteusweb.com">contact@anteusweb.com</a>).

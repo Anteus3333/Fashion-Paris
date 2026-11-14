@@ -3,9 +3,6 @@
 
 require_once __DIR__ . '/../Models/ProduitModel.php';
 require_once __DIR__ . '/../Models/CategorieModel.php';
-require_once __DIR__ . '/../Models/AvisModel.php';
-require_once __DIR__ . '/../Services/Csrf.php';
-require_once __DIR__ . '/../Services/AuthGuard.php';
 
 class CatalogueController {
 
@@ -43,37 +40,6 @@ class CatalogueController {
             exit;
         }
 
-        $avisModel = new AvisModel();
-        $erreursAvis = [];
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'avis') {
-            AuthGuard::exigerConnexion('/produit/' . $slug);
-            if (!Csrf::verifier()) {
-                $erreursAvis[] = 'Session expirée.';
-            } else {
-                $note = (int) ($_POST['note'] ?? 0);
-                $commentaire = trim((string) ($_POST['commentaire'] ?? ''));
-                if ($note < 1 || $note > 5) {
-                    $erreursAvis[] = 'Note entre 1 et 5.';
-                }
-                if ($commentaire === '') {
-                    $erreursAvis[] = 'Commentaire obligatoire.';
-                }
-                if (empty($erreursAvis)) {
-                    $avisModel->creer([
-                        'produit_id'     => (int) $produit['produit_id'],
-                        'utilisateur_id' => (int) $_SESSION['utilisateur']['id'],
-                        'note'           => $note,
-                        'commentaire'    => $commentaire,
-                    ]);
-                    $_SESSION['flash_succes'] = 'Avis envoyé — en attente de modération.';
-                    header('Location: ' . BASE_URL . '/produit/' . rawurlencode($slug));
-                    exit;
-                }
-            }
-        }
-
-        $listeAvis = $avisModel->getValidesParProduit((int) $produit['produit_id']);
         $titrePage = $produit['nom'] . ' — Fashion Paris';
         require __DIR__ . '/../Views/produit-detail.php';
     }

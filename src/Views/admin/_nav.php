@@ -12,7 +12,6 @@ $isPersonnel = ($page === 'personnel') || ($page === 'personnels');
     <a href="<?= BASE_URL ?>/admin/produits" class="<?= $isProduits ? 'is-active' : '' ?>">Produits</a>
     <a href="<?= BASE_URL ?>/admin/commandes" class="<?= $isCommandes ? 'is-active' : '' ?>">Commandes</a>
     <a href="<?= BASE_URL ?>/admin/clients" class="<?= $page === 'clients' ? 'is-active' : '' ?>">Clients</a>
-    <a href="<?= BASE_URL ?>/admin/avis" class="<?= $page === 'avis' ? 'is-active' : '' ?>">Avis</a>
     <a href="<?= BASE_URL ?>/admin/personnel" class="<?= $isPersonnel ? 'is-active' : '' ?>">Personnel</a>
     <a href="<?= BASE_URL ?>/admin/horaires" class="<?= $page === 'horaires' ? 'is-active' : '' ?>">Horaires</a>
     <a href="<?= BASE_URL ?>/admin/stats" class="<?= $page === 'stats' ? 'is-active' : '' ?>">Stats Mongo</a>

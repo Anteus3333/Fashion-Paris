@@ -9,8 +9,8 @@ require_once __DIR__ . '/../Models/CategorieModel.php';
 require_once __DIR__ . '/../Models/CommandeModel.php';
 require_once __DIR__ . '/../Models/UtilisateurModel.php';
 require_once __DIR__ . '/../Models/MysqlStatsModel.php';
-require_once __DIR__ . '/../Models/AvisModel.php';
 require_once __DIR__ . '/../Models/MongoStatsModel.php';
+
 require_once __DIR__ . '/../Models/HoraireModel.php';
 require_once __DIR__ . '/Traits/GestionCommandesTrait.php';
 
@@ -138,31 +138,6 @@ class AdminController {
         $titrePage = 'Clients — Admin';
         $clients = (new UtilisateurModel())->getClients();
         require __DIR__ . '/../Views/admin/clients.php';
-    }
-
-    public function avis() {
-        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
-        $model = new AvisModel();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Csrf::verifier()) {
-                $_SESSION['flash_erreur'] = 'Session expirée.';
-            } else {
-                $id = (int) ($_POST['avis_id'] ?? 0);
-                $action = (string) ($_POST['action'] ?? '');
-                if ($model->moderer($id, $action)) {
-                    $_SESSION['flash_succes'] = 'Avis mis à jour.';
-                } else {
-                    $_SESSION['flash_erreur'] = 'Action impossible.';
-                }
-            }
-            header('Location: ' . BASE_URL . '/admin/avis');
-            exit;
-        }
-
-        $titrePage = 'Avis — Admin';
-        $avis = $model->getEnAttente();
-        require __DIR__ . '/../Views/admin/avis.php';
     }
 
     public function stats() {

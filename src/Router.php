@@ -116,14 +116,6 @@ class Router {
                     $personnel->commandes();
                 } elseif ($param === 'commande' && $param2) {
                     $personnel->commandeDetail($param2);
-                } elseif ($param === 'avis') {
-                    if ($param2 && ctype_digit((string) $param2) && $param3 === 'valider') {
-                        $personnel->avisValider((int) $param2);
-                    } elseif ($param2 && ctype_digit((string) $param2) && $param3 === 'refuser') {
-                        $personnel->avisRefuser((int) $param2);
-                    } else {
-                        $personnel->avis();
-                    }
                 } else {
                     $personnel->index();
                 }
@@ -142,8 +134,6 @@ class Router {
                     (new AdminController())->commandeDetail($param2);
                 } elseif ($param === 'clients') {
                     (new AdminController())->clients();
-                } elseif ($param === 'avis') {
-                    (new AdminController())->avis();
                 } elseif ($param === 'personnel') {
                     $admin = new AdminController();
                     if ($param2 === 'nouveau') {

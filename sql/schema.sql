@@ -8,7 +8,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 
 DROP TABLE IF EXISTS `tentative_connexion`;
 DROP TABLE IF EXISTS `newsletter`;
-DROP TABLE IF EXISTS `avis`;
 DROP TABLE IF EXISTS `suivi_commande`;
 DROP TABLE IF EXISTS `commande_ligne`;
 DROP TABLE IF EXISTS `commande`;
@@ -160,26 +159,8 @@ CREATE TABLE `suivi_commande` (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Avis & newsletter
+-- Newsletter
 -- -----------------------------------------------------
-CREATE TABLE `avis` (
-  `avis_id` INT NOT NULL AUTO_INCREMENT,
-  `produit_id` INT NOT NULL,
-  `utilisateur_id` INT NOT NULL,
-  `note` TINYINT NOT NULL,
-  `commentaire` TEXT NULL,
-  `statut` VARCHAR(50) NOT NULL DEFAULT 'en_attente',
-  `date_avis` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`avis_id`),
-  INDEX `fk_avis_produit_idx` (`produit_id`),
-  INDEX `fk_avis_utilisateur_idx` (`utilisateur_id`),
-  CONSTRAINT `fk_avis_produit`
-    FOREIGN KEY (`produit_id`) REFERENCES `produit` (`produit_id`)
-    ON DELETE CASCADE,
-  CONSTRAINT `fk_avis_utilisateur`
-    FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateur` (`utilisateur_id`)
-) ENGINE = InnoDB;
-
 CREATE TABLE `newsletter` (
   `newsletter_id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(100) NOT NULL,

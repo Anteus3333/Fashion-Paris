@@ -27,7 +27,6 @@ ob_start();
             <li><strong>Commande</strong> : articles, montants, adresse de livraison, statut et historique de suivi</li>
             <li><strong>Contact</strong> : nom, adresse e-mail, sujet et contenu du message</li>
             <li><strong>Newsletter</strong> : adresse e-mail d’inscription</li>
-            <li><strong>Avis</strong> : note et commentaire liés à un produit / une commande</li>
             <li><strong>Technique</strong> : données de session (connexion, panier, jeton CSRF), jeton Cloudflare Turnstile le cas échéant, et adresse IP pour la limitation des tentatives de connexion et des formulaires</li>
         </ul>
 
