@@ -45,6 +45,47 @@ class MysqlStatsRepository {
         ];
     }
 
+    /**
+     * Séries mensuelles (12 derniers mois) pour Chart.js.
+     * @return array{labels: string[], commandes: int[], ca: float[]}
+     */
+    public function seriesMensuelles(int $nbMois = 12): array {
+        $vide = ['labels' => [], 'commandes' => [], 'ca' => []];
+        if (!$this->conn) {
+            return $vide;
+        }
+        $nbMois = max(1, min(24, $nbMois));
+        $stmt = $this->conn->query("
+            SELECT DATE_FORMAT(date_commande, '%Y-%m') AS mois,
+                   COUNT(*) AS nb,
+                   COALESCE(SUM(montant_total), 0) AS ca
+            FROM commande
+            WHERE statut <> 'annulee'
+              AND date_commande >= DATE_SUB(CURDATE(), INTERVAL {$nbMois} MONTH)
+            GROUP BY DATE_FORMAT(date_commande, '%Y-%m')
+            ORDER BY mois ASC
+        ");
+        $rows = $stmt->fetchAll() ?: [];
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['mois']] = $r;
+        }
+
+        $labels = [];
+        $commandes = [];
+        $ca = [];
+        $cursor = new DateTime('first day of this month');
+        $cursor->modify('-' . ($nbMois - 1) . ' months');
+        for ($i = 0; $i < $nbMois; $i++) {
+            $key = $cursor->format('Y-m');
+            $labels[] = $cursor->format('m/Y');
+            $commandes[] = isset($map[$key]) ? (int) $map[$key]['nb'] : 0;
+            $ca[] = isset($map[$key]) ? round((float) $map[$key]['ca'], 2) : 0.0;
+            $cursor->modify('+1 month');
+        }
+        return ['labels' => $labels, 'commandes' => $commandes, 'ca' => $ca];
+    }
+
     /** Jeu de documents prêts pour sync Mongo (1 doc = 1 commande). */
     public function commandesPourSync(): array {
         if (!$this->conn) {

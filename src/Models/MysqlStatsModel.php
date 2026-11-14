@@ -15,4 +15,8 @@ class MysqlStatsModel {
     public function commandesPourSync(): array {
         return $this->repository->commandesPourSync();
     }
+
+    public function seriesMensuelles(int $nbMois = 12): array {
+        return $this->repository->seriesMensuelles($nbMois);
+    }
 }

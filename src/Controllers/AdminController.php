@@ -17,7 +17,9 @@ class AdminController {
     public function index() {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
         $titrePage = 'Administration — Fashion Paris';
-        $stats = (new MysqlStatsModel())->resume();
+        $statsModel = new MysqlStatsModel();
+        $stats = $statsModel->resume();
+        $series = $statsModel->seriesMensuelles(12);
         $commandesRecentes = (new CommandeModel())->getAll();
         $commandesRecentes = array_slice($commandesRecentes, 0, 5);
         $config = require __DIR__ . '/../../config/commandeconfig.php';
