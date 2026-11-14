@@ -11,6 +11,7 @@ require_once __DIR__ . '/../Models/UtilisateurModel.php';
 require_once __DIR__ . '/../Models/MysqlStatsModel.php';
 require_once __DIR__ . '/../Models/AvisModel.php';
 require_once __DIR__ . '/../Models/MongoStatsModel.php';
+require_once __DIR__ . '/../Models/HoraireModel.php';
 require_once __DIR__ . '/Traits/GestionCommandesTrait.php';
 
 class AdminController {
@@ -194,6 +195,35 @@ class AdminController {
 
         $titrePage = 'Stats Mongo — Admin';
         require __DIR__ . '/../Views/admin/stats.php';
+    }
+
+    public function horaires(): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        $model = new HoraireModel();
+        $horaires = $model->getAll();
+        $erreurs = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Csrf::verifier()) {
+                $erreurs[] = 'Session expirée.';
+            } else {
+                $lignes = [];
+                foreach ($_POST['horaire_id'] ?? [] as $i => $hid) {
+                    $lignes[] = [
+                        'horaire_id'      => (int) $hid,
+                        'heure_ouverture' => trim((string) ($_POST['heure_ouverture'][$i] ?? '')),
+                        'heure_fermeture' => trim((string) ($_POST['heure_fermeture'][$i] ?? '')),
+                    ];
+                }
+                $model->enregistrer($lignes);
+                $_SESSION['flash_succes'] = 'Horaires mis à jour (pied de page et page Contact).';
+                header('Location: ' . BASE_URL . '/admin/horaires');
+                exit;
+            }
+        }
+
+        $titrePage = 'Horaires — Admin';
+        require __DIR__ . '/../Views/admin/horaires.php';
     }
 
     public function personnels(): void {

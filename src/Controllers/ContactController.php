@@ -5,6 +5,7 @@ require_once __DIR__ . '/../Services/SmtpMailer.php';
 require_once __DIR__ . '/../Services/Csrf.php';
 require_once __DIR__ . '/../Services/TurnstileService.php';
 require_once __DIR__ . '/../Models/TentativeConnexionModel.php';
+require_once __DIR__ . '/../Models/HoraireModel.php';
 
 class ContactController {
     private const RATE_EMAIL = '__contact_form__';
@@ -23,6 +24,8 @@ class ContactController {
         $turnstileSiteKey = $turnstile->siteKey();
         $tentatives = new TentativeConnexionModel();
         $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        $resumeHorairesFooter = (new HoraireModel())->getResumeFooter();
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($old as $champ => $_) {

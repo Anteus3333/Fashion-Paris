@@ -189,6 +189,14 @@ CREATE TABLE `newsletter` (
   UNIQUE INDEX `idx_newsletter_email` (`email`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE `horaire` (
+  `horaire_id` INT NOT NULL AUTO_INCREMENT,
+  `jour` VARCHAR(50) NOT NULL,
+  `heure_ouverture` VARCHAR(50) NOT NULL,
+  `heure_fermeture` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`horaire_id`)
+) ENGINE = InnoDB;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

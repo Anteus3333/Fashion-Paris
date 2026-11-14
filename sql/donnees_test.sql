@@ -31,3 +31,14 @@ INSERT INTO `produit_image` (`produit_id`, `chemin`, `alt`, `ordre`) VALUES
 (2, 'produits/blazer-structuring.jpg', 'Blazer structuring', 0),
 (3, 'produits/chemise-oxford.jpg', 'Chemise oxford', 0),
 (4, 'produits/sac-cabas-cuir.jpg', 'Sac cabas cuir', 0);
+
+-- Horaires boutique / SAV (footer + contact)
+INSERT INTO `horaire` (`jour`, `heure_ouverture`, `heure_fermeture`) VALUES
+('Lundi', '10:00', '19:00'),
+('Mardi', '10:00', '19:00'),
+('Mercredi', '10:00', '19:00'),
+('Jeudi', '10:00', '19:00'),
+('Vendredi', '10:00', '19:00'),
+('Samedi', '10:00', '19:00'),
+('Dimanche', '12:00', '18:00');
+

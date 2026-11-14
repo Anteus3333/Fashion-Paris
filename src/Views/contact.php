@@ -5,7 +5,17 @@ ob_start();
     <h1>Contact</h1>
     <p class="muted">Une question ? Écrivez-nous — réponse via <strong>contact@anteusweb.com</strong>.</p>
 
+    <?php if (!empty($resumeHorairesFooter)): ?>
+        <aside class="contact-horaires" aria-label="Horaires d’ouverture">
+            <h2>Horaires boutique</h2>
+            <?php foreach ($resumeHorairesFooter as $ligneHoraire): ?>
+                <p><?= htmlspecialchars($ligneHoraire) ?></p>
+            <?php endforeach; ?>
+        </aside>
+    <?php endif; ?>
+
     <?php if (!empty($succes)): ?>
+
         <p class="flash-banner flash-banner-succes" role="status">Merci, votre message a bien été envoyé.</p>
     <?php endif; ?>
 

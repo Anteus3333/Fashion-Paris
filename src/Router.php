@@ -139,6 +139,8 @@ class Router {
                     } else {
                         $admin->personnels();
                     }
+                } elseif ($param === 'horaires') {
+                    (new AdminController())->horaires();
                 } elseif ($param === 'stats') {
                     (new AdminController())->stats();
                 } else {

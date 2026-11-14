@@ -582,17 +582,36 @@ main { min-height: 60vh; }
 
 .site-footer {
   border-top: 1px solid var(--line);
-  padding: 1.25rem;
+  padding: 1.5rem 1.25rem;
   display: flex;
   flex-wrap: wrap;
-  gap: .75rem 1.5rem;
+  gap: 1.25rem 2rem;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   color: var(--muted);
   font-size: .92rem;
 }
-.site-footer nav { display: flex; gap: 1rem; }
+.footer-heading {
+  margin: 0 0 .4rem;
+  font-size: .95rem;
+  color: var(--ink);
+}
+.footer-horaires p { margin: .15rem 0; }
+.footer-meta nav { display: flex; gap: 1rem; flex-wrap: wrap; }
 .site-footer a { color: var(--muted); }
+.contact-horaires {
+  margin: 0 0 1.25rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.contact-horaires h2 { margin: 0 0 .4rem; font-size: 1.05rem; }
+.contact-horaires p { margin: .15rem 0; color: var(--muted); }
+.admin-horaire-row {
+  border: 1px solid var(--line);
+  padding: .75rem 1rem 1rem;
+  margin: 0 0 .85rem;
+}
+.admin-horaire-row legend { padding: 0 .35rem; font-weight: 600; }
 
 .sr-only {
   position: absolute;

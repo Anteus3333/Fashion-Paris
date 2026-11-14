@@ -79,11 +79,25 @@
     </main>
 
     <footer role="contentinfo" class="site-footer">
-        <p>&copy; <?= date('Y') ?> Fashion Paris</p>
-        <nav aria-label="Liens légaux">
-            <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
-            <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
-        </nav>
+        <?php
+        if (!isset($resumeHorairesFooter)) {
+            require_once __DIR__ . '/../Models/HoraireModel.php';
+            $resumeHorairesFooter = (new HoraireModel())->getResumeFooter();
+        }
+        ?>
+        <div class="footer-horaires">
+            <h2 class="footer-heading">Nos horaires</h2>
+            <?php foreach ((array) $resumeHorairesFooter as $ligneHoraire): ?>
+                <p><?= htmlspecialchars($ligneHoraire) ?></p>
+            <?php endforeach; ?>
+        </div>
+        <div class="footer-meta">
+            <p>&copy; <?= date('Y') ?> Fashion Paris</p>
+            <nav aria-label="Liens légaux">
+                <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
+                <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
+            </nav>
+        </div>
     </footer>
 
     <?php
