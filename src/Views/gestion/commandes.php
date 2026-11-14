@@ -1,15 +1,22 @@
 <?php
 ob_start();
-$basePath = $basePath ?? (BASE_URL . '/espace-personnel');
+$commandesListUrl = $commandesListUrl ?? ($gestionBase ?? BASE_URL);
+$titreEspace = $titreEspace ?? 'Gestion';
+$isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
 ?>
 <section class="section page-narrow" id="commandes-listing">
-    <h1>Espace personnel — Commandes</h1>
-    <p class="section-intro">Traitez les commandes clients (préparation, expédition, livraison).</p>
+    <?php if ($isAdminEspace): ?>
+        <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
+        <h1>Commandes</h1>
+    <?php else: ?>
+        <h1><?= htmlspecialchars($titreEspace) ?> — Commandes</h1>
+        <p class="section-intro">Traitez les commandes clients (préparation, expédition, livraison).</p>
+    <?php endif; ?>
 
     <nav class="cat-nav" aria-label="Filtrer par statut">
-        <a href="<?= htmlspecialchars($basePath) ?>" class="<?= ($statut ?? '') === '' ? 'is-active' : '' ?>">Toutes</a>
+        <a href="<?= htmlspecialchars($commandesListUrl) ?>" class="<?= ($statut ?? '') === '' ? 'is-active' : '' ?>">Toutes</a>
         <?php foreach ($config['statuts'] as $code => $libelle): ?>
-            <a href="<?= htmlspecialchars($basePath) ?>?statut=<?= urlencode($code) ?>"
+            <a href="<?= htmlspecialchars($commandesListUrl) ?>?statut=<?= urlencode($code) ?>"
                class="<?= ($statut ?? '') === $code ? 'is-active' : '' ?>"><?= htmlspecialchars($libelle) ?></a>
         <?php endforeach; ?>
     </nav>
@@ -34,7 +41,7 @@ $basePath = $basePath ?? (BASE_URL . '/espace-personnel');
                         <?php $clientNom = trim(($c['prenom'] ?? '') . ' ' . ($c['nom'] ?? '')); ?>
                         <tr data-client="<?= htmlspecialchars($clientNom) ?>">
                             <td>
-                                <a href="<?= htmlspecialchars($basePath) ?>/commande/<?= htmlspecialchars($c['numero_commande']) ?>">
+                                <a href="<?= htmlspecialchars($gestionBase) ?>/commande/<?= htmlspecialchars($c['numero_commande']) ?>">
                                     <?= htmlspecialchars($c['numero_commande']) ?>
                                 </a>
                             </td>

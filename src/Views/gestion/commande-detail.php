@@ -1,9 +1,9 @@
 <?php
 ob_start();
-$basePath = $basePath ?? (BASE_URL . '/espace-personnel');
+$commandesListUrl = $commandesListUrl ?? ($gestionBase ?? BASE_URL);
 ?>
 <section class="section page-narrow">
-    <p class="breadcrumb"><a href="<?= htmlspecialchars($basePath) ?>">Commandes</a></p>
+    <p class="breadcrumb"><a href="<?= htmlspecialchars($commandesListUrl) ?>">Commandes</a></p>
     <h1><?= htmlspecialchars($commande['numero_commande']) ?></h1>
     <?php if (!empty($erreurs)): ?>
         <ul class="form-error"><?php foreach ($erreurs as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul>

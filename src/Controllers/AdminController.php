@@ -11,8 +11,10 @@ require_once __DIR__ . '/../Models/UtilisateurModel.php';
 require_once __DIR__ . '/../Models/MysqlStatsModel.php';
 require_once __DIR__ . '/../Models/AvisModel.php';
 require_once __DIR__ . '/../Models/MongoStatsModel.php';
+require_once __DIR__ . '/Traits/GestionCommandesTrait.php';
 
 class AdminController {
+    use GestionCommandesTrait;
 
     public function index() {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
@@ -130,55 +132,6 @@ class AdminController {
         require __DIR__ . '/../Views/admin/produit-form.php';
     }
 
-    public function commandes() {
-        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
-        $titrePage = 'Commandes — Admin';
-        $statut = trim((string) ($_GET['statut'] ?? ''));
-        $config = require __DIR__ . '/../../config/commandeconfig.php';
-        if ($statut !== '' && !isset($config['statuts'][$statut])) {
-            $statut = '';
-        }
-        $commandes = (new CommandeModel())->getAll($statut !== '' ? $statut : null);
-        require __DIR__ . '/../Views/admin/commandes.php';
-    }
-
-    public function commandeDetail(string $numero) {
-        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
-        $model = new CommandeModel();
-        $commande = $model->getByNumero($numero);
-        if (!$commande) {
-            $_SESSION['flash_erreur'] = 'Commande introuvable.';
-            header('Location: ' . BASE_URL . '/admin/commandes');
-            exit;
-        }
-        $config = require __DIR__ . '/../../config/commandeconfig.php';
-        $erreurs = [];
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Csrf::verifier()) {
-                $erreurs[] = 'Session expirée.';
-            } else {
-                $nouveau = trim((string) ($_POST['statut'] ?? ''));
-                $commentaire = trim((string) ($_POST['commentaire'] ?? ''));
-                if (!isset($config['statuts'][$nouveau])) {
-                    $erreurs[] = 'Statut invalide.';
-                } elseif ($model->updateStatut($numero, $nouveau, $commentaire !== '' ? $commentaire : null)) {
-                    $_SESSION['flash_succes'] = 'Statut mis à jour.';
-                    header('Location: ' . BASE_URL . '/admin/commande/' . rawurlencode($numero));
-                    exit;
-                } else {
-                    $erreurs[] = 'Impossible de mettre à jour.';
-                }
-            }
-        }
-
-        $lignes = $model->getLignes($numero);
-        $suivi = $model->getSuivi($numero);
-        $client = (new UtilisateurModel())->findById((int) $commande['utilisateur_id']);
-        $titrePage = 'Commande ' . $numero . ' — Admin';
-        require __DIR__ . '/../Views/admin/commande-detail.php';
-    }
-
     public function clients() {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
         $titrePage = 'Clients — Admin';
@@ -242,4 +195,21 @@ class AdminController {
         $titrePage = 'Stats Mongo — Admin';
         require __DIR__ . '/../Views/admin/stats.php';
     }
+
+    protected function gestionBasePath(): string {
+        return '/admin';
+    }
+
+    protected function gestionCommandesListPath(): string {
+        return '/commandes';
+    }
+
+    protected function gestionTitreEspace(): string {
+        return 'Admin';
+    }
+
+    protected function exigerGestionAcces(): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+    }
 }
+
