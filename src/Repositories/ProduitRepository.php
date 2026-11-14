@@ -95,6 +95,43 @@ class ProduitRepository {
         return $stmt->fetchAll();
     }
 
+    /** Filtres catalogue (AJAX) : catégorie, recherche, prix min/max. */
+    public function findFiltres(?int $categorieId, string $q = '', ?float $prixMin = null, ?float $prixMax = null): array {
+        if (!$this->conn) {
+            return [];
+        }
+        $sql = 'SELECT p.*, c.libelle AS categorie_libelle,
+                       (SELECT chemin FROM produit_image pi WHERE pi.produit_id = p.produit_id ORDER BY ordre ASC LIMIT 1) AS image
+                FROM produit p
+                JOIN categorie c ON c.categorie_id = p.categorie_id
+                WHERE p.actif = 1';
+        $params = [];
+        if ($categorieId !== null) {
+            $sql .= ' AND p.categorie_id = :cat';
+            $params[':cat'] = $categorieId;
+        }
+        $q = trim($q);
+        if ($q !== '') {
+            $like = '%' . $q . '%';
+            $sql .= ' AND (p.nom LIKE :q OR p.description LIKE :q2 OR c.libelle LIKE :q3)';
+            $params[':q'] = $like;
+            $params[':q2'] = $like;
+            $params[':q3'] = $like;
+        }
+        if ($prixMin !== null) {
+            $sql .= ' AND p.prix >= :pmin';
+            $params[':pmin'] = $prixMin;
+        }
+        if ($prixMax !== null) {
+            $sql .= ' AND p.prix <= :pmax';
+            $params[':pmax'] = $prixMax;
+        }
+        $sql .= ' ORDER BY p.nom ASC';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll() ?: [];
+    }
+
     public function findAllAdmin(): array {
         if (!$this->conn) {
             return [];

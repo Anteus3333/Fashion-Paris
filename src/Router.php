@@ -118,6 +118,16 @@ class Router {
                 }
                 break;
 
+            case 'api':
+                if ($param === 'catalogue') {
+                    (new CatalogueController())->filterApi();
+                } else {
+                    http_response_code(404);
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode(['success' => false, 'erreur' => 'API introuvable']);
+                }
+                break;
+
             case 'mentions-legales':
                 (new LegalController())->mentions();
                 break;

@@ -34,6 +34,10 @@ class ProduitModel {
         return $this->repository->search($q);
     }
 
+    public function filtrer(?int $categorieId, string $q = '', ?float $prixMin = null, ?float $prixMax = null): array {
+        return $this->repository->findFiltres($categorieId, $q, $prixMin, $prixMax);
+    }
+
     public function getAllAdmin(): array {
         return $this->repository->findAllAdmin();
     }
