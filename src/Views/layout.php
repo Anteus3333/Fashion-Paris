@@ -81,8 +81,12 @@
         </nav>
     </footer>
 
-    <?php $jsVersion = @filemtime(__DIR__ . '/../../public/js/main.js') ?: time(); ?>
-    <script src="<?= BASE_URL ?>/js/main.js?v=<?= $jsVersion ?>" defer></script>
+    <?php
+    $jsMain = @filemtime(__DIR__ . '/../../public/js/main.js') ?: time();
+    $jsPickers = @filemtime(__DIR__ . '/../../public/js/pickers.js') ?: time();
+    ?>
+    <script src="<?= BASE_URL ?>/js/main.js?v=<?= $jsMain ?>" defer></script>
+    <script src="<?= BASE_URL ?>/js/pickers.js?v=<?= $jsPickers ?>" defer></script>
     <?= $scriptsFooter ?? '' ?>
 </body>
 </html>
