@@ -58,4 +58,53 @@ class AvisRepository {
         $stmt->execute([':statut' => $statut, ':id' => $avisId]);
         return $stmt->rowCount() > 0;
     }
+
+    /** Avis publiés pour l’accueil (3 derniers). */
+    public function getAvisValidesAccueil(int $limit = 3): array {
+        if (!$this->conn) {
+            return [];
+        }
+        $limit = max(1, min(12, $limit));
+        $stmt = $this->conn->query("
+            SELECT a.note, a.commentaire, u.prenom
+            FROM avis a
+            JOIN utilisateur u ON u.utilisateur_id = a.utilisateur_id
+            WHERE a.statut = 'valide'
+            ORDER BY a.avis_id DESC
+            LIMIT {$limit}
+        ");
+        return $stmt->fetchAll() ?: [];
+    }
+
+    /** Liste modération (filtre statut optionnel). */
+    public function getAll(?string $statut = null): array {
+        if (!$this->conn) {
+            return [];
+        }
+        $sql = "
+            SELECT a.*, u.prenom, u.nom, u.email, p.nom AS produit_nom, p.slug AS produit_slug
+            FROM avis a
+            JOIN utilisateur u ON u.utilisateur_id = a.utilisateur_id
+            JOIN produit p ON p.produit_id = a.produit_id
+        ";
+        $params = [];
+        if ($statut !== null && $statut !== '' && $statut !== 'tous') {
+            $sql .= ' WHERE a.statut = :statut';
+            $params[':statut'] = $statut;
+        }
+        $sql .= ' ORDER BY a.date_avis DESC';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll() ?: [];
+    }
+
+    public function compterParStatut(string $statut): int {
+        if (!$this->conn) {
+            return 0;
+        }
+        $stmt = $this->conn->prepare('SELECT COUNT(*) FROM avis WHERE statut = :statut');
+        $stmt->execute([':statut' => $statut]);
+        return (int) $stmt->fetchColumn();
+    }
 }
+

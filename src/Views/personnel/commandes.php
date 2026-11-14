@@ -12,7 +12,9 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
     <?php else: ?>
         <h1><?= htmlspecialchars($titreEspace) ?> — Commandes</h1>
         <p class="section-intro">Traitez les commandes clients (préparation, expédition, livraison).</p>
+        <?php require __DIR__ . '/_nav.php'; ?>
     <?php endif; ?>
+
 
     <nav class="cat-nav" aria-label="Filtrer par statut">
         <a href="<?= htmlspecialchars($commandesListUrl) ?>" class="<?= ($statut ?? '') === '' ? 'is-active' : '' ?>">Toutes</a>

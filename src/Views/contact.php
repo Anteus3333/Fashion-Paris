@@ -3,7 +3,16 @@ ob_start();
 ?>
 <section class="section page-narrow">
     <h1>Contact</h1>
-    <p class="muted">Une question ? Écrivez-nous — réponse via <strong>contact@anteusweb.com</strong>.</p>
+    <?php $boutique = $boutique ?? require __DIR__ . '/../../config/boutique.php'; ?>
+    <p class="muted">
+        Une question ? Écrivez-nous — réponse via
+        <strong><?= htmlspecialchars($boutique['email']) ?></strong>.
+    </p>
+    <p class="muted">
+        <?= htmlspecialchars($boutique['adresse']) ?>,
+        <?= htmlspecialchars($boutique['code_postal']) ?> <?= htmlspecialchars($boutique['ville']) ?>
+        · <?= htmlspecialchars($boutique['telephone']) ?>
+    </p>
 
     <?php if (!empty($resumeHorairesFooter)): ?>
         <aside class="contact-horaires" aria-label="Horaires d’ouverture">
@@ -13,6 +22,7 @@ ob_start();
             <?php endforeach; ?>
         </aside>
     <?php endif; ?>
+
 
     <?php if (!empty($succes)): ?>
 

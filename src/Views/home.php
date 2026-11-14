@@ -56,6 +56,23 @@ $bannerUrl = AssetHelper::imageUrl('hero-fashion-paris.jpg');
     <?php endif; ?>
 </section>
 
+<section class="avis-clients" aria-labelledby="avis-clients-titre">
+    <h2 id="avis-clients-titre">Ce que pensent nos clients</h2>
+    <div class="avis-grid">
+        <?php if (!empty($listeAvis)): ?>
+            <?php foreach ($listeAvis as $avis): ?>
+                <article class="avis-card">
+                    <p class="note">Note : <?= (int) $avis['note'] ?> / 5</p>
+                    <p class="commentaire">"<?= htmlspecialchars($avis['commentaire'] ?? '') ?>"</p>
+                    <p class="auteur">— <?= htmlspecialchars(ViewHelper::formatPrenom($avis['prenom'] ?? '')) ?></p>
+                </article>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="muted">Aucun avis pour le moment.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
 <section class="home-newsletter" aria-labelledby="newsletter-titre">
     <div class="home-newsletter-inner">
         <h2 id="newsletter-titre">Newsletter</h2>

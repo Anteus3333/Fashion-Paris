@@ -42,3 +42,10 @@ INSERT INTO `horaire` (`jour`, `heure_ouverture`, `heure_fermeture`) VALUES
 ('Samedi', '10:00', '19:00'),
 ('Dimanche', '12:00', '18:00');
 
+-- Avis clients (accueil + modération)
+INSERT INTO `avis` (`produit_id`, `utilisateur_id`, `note`, `commentaire`, `statut`) VALUES
+(4, 2, 5, 'Parfait. Merci.', 'valide'),
+(2, 2, 5, 'Coupe impeccable, livraison rapide.', 'valide'),
+(1, 2, 5, 'Très belle pièce, qualité au rendez-vous.', 'valide'),
+(3, 2, 4, 'Bonne chemise, taille juste.', 'en_attente');
+

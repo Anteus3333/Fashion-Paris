@@ -9,8 +9,11 @@ $commandesListUrl = $commandesListUrl ?? ($gestionBase ?? BASE_URL);
     $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
     if ($isAdminEspace) {
         require __DIR__ . '/../admin/_nav.php';
+    } else {
+        require __DIR__ . '/_nav.php';
     }
     ?>
+
     <?php if (!empty($erreurs)): ?>
 
         <ul class="form-error"><?php foreach ($erreurs as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul>

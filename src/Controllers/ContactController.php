@@ -25,6 +25,8 @@ class ContactController {
         $tentatives = new TentativeConnexionModel();
         $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
         $resumeHorairesFooter = (new HoraireModel())->getResumeFooter();
+        $boutique = require __DIR__ . '/../../config/boutique.php';
+
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

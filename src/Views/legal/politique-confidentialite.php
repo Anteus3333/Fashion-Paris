@@ -11,9 +11,13 @@ ob_start();
         <h2>1. Responsable du traitement</h2>
         <p>
             Le responsable du traitement des données personnelles est :<br>
-            <strong>Fashion Paris</strong><br>
-            E-mail : <a href="mailto:contact@anteusweb.com">contact@anteusweb.com</a><br>
-            Site : <a href="https://fashion.anteusweb.com">fashion.anteusweb.com</a>
+            <?php $boutique = $boutique ?? require __DIR__ . '/../../../config/boutique.php'; ?>
+            <strong><?= htmlspecialchars($boutique['nom']) ?></strong><br>
+            <?= htmlspecialchars($boutique['adresse']) ?>,
+            <?= htmlspecialchars($boutique['code_postal']) ?> <?= htmlspecialchars($boutique['ville']) ?><br>
+
+            E-mail : <a href="mailto:<?= htmlspecialchars($boutique['email']) ?>"><?= htmlspecialchars($boutique['email']) ?></a><br>
+            Site : <a href="<?= htmlspecialchars($boutique['site']) ?>"><?= htmlspecialchars(preg_replace('#^https?://#', '', $boutique['site'])) ?></a>
         </p>
 
         <h2>2. Données collectées</h2>

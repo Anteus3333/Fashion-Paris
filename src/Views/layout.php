@@ -84,21 +84,39 @@
             require_once __DIR__ . '/../Models/HoraireModel.php';
             $resumeHorairesFooter = (new HoraireModel())->getResumeFooter();
         }
+        if (!isset($boutique)) {
+            $boutique = require __DIR__ . '/../../config/boutique.php';
+        }
         ?>
-        <div class="footer-horaires">
-            <h2 class="footer-heading">Nos horaires</h2>
-            <?php foreach ((array) $resumeHorairesFooter as $ligneHoraire): ?>
-                <p><?= htmlspecialchars($ligneHoraire) ?></p>
-            <?php endforeach; ?>
-        </div>
-        <div class="footer-meta">
-            <p>&copy; <?= date('Y') ?> Fashion Paris</p>
-            <nav aria-label="Liens légaux">
-                <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
-                <a href="<?= BASE_URL ?>/politique-confidentialite">Confidentialité</a>
-                <a href="<?= BASE_URL ?>/cgv">CGV</a>
-                <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
-            </nav>
+        <div class="site-footer-inner">
+            <div class="footer-horaires">
+                <h2 class="footer-heading">Nos horaires</h2>
+                <?php foreach ((array) $resumeHorairesFooter as $ligneHoraire): ?>
+                    <p><?= htmlspecialchars($ligneHoraire) ?></p>
+                <?php endforeach; ?>
+            </div>
+            <div class="footer-infos">
+                <p><?= htmlspecialchars($boutique['tagline']) ?></p>
+                <p>
+                    <?= htmlspecialchars($boutique['adresse']) ?>,
+                    <?= htmlspecialchars($boutique['code_postal']) ?>
+                    <?= htmlspecialchars($boutique['ville']) ?>
+                </p>
+                <p>
+                    <a href="mailto:<?= htmlspecialchars($boutique['email']) ?>"><?= htmlspecialchars($boutique['email']) ?></a>
+                    · <?= htmlspecialchars($boutique['telephone']) ?>
+                </p>
+                <nav class="footer-links" aria-label="Liens légaux">
+                    <a href="<?= BASE_URL ?>/mentions-legales">Mentions légales</a>
+                    <span aria-hidden="true"> · </span>
+                    <a href="<?= BASE_URL ?>/politique-confidentialite">Confidentialité</a>
+                    <span aria-hidden="true"> · </span>
+                    <a href="<?= BASE_URL ?>/cgv">Conditions générales de vente</a>
+                    <span aria-hidden="true"> · </span>
+                    <a href="<?= BASE_URL ?>/accessibilite">Accessibilité</a>
+                </nav>
+                <p class="footer-copy">&copy; <?= date('Y') ?> <?= htmlspecialchars($boutique['nom']) ?></p>
+            </div>
         </div>
     </footer>
 

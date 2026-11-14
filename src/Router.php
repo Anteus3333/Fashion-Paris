@@ -111,10 +111,21 @@ class Router {
                 break;
 
             case 'espace-personnel':
-                if ($param === 'commande' && $param2) {
-                    (new PersonnelController())->commandeDetail($param2);
+                $personnel = new PersonnelController();
+                if ($param === 'commandes') {
+                    $personnel->commandes();
+                } elseif ($param === 'commande' && $param2) {
+                    $personnel->commandeDetail($param2);
+                } elseif ($param === 'avis') {
+                    if ($param2 && ctype_digit((string) $param2) && $param3 === 'valider') {
+                        $personnel->avisValider((int) $param2);
+                    } elseif ($param2 && ctype_digit((string) $param2) && $param3 === 'refuser') {
+                        $personnel->avisRefuser((int) $param2);
+                    } else {
+                        $personnel->avis();
+                    }
                 } else {
-                    (new PersonnelController())->index();
+                    $personnel->index();
                 }
                 break;
 

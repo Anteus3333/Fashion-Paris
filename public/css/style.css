@@ -582,23 +582,110 @@ main { min-height: 60vh; }
 
 .site-footer {
   border-top: 1px solid var(--line);
-  padding: 1.5rem 1.25rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem 2rem;
-  justify-content: space-between;
-  align-items: flex-start;
+  padding: 2rem 1.25rem 2.25rem;
   color: var(--muted);
   font-size: .92rem;
+  background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(248,244,239,.9));
+}
+.site-footer-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem 2.5rem;
+  text-align: center;
+}
+@media (min-width: 720px) {
+  .site-footer-inner {
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+    align-items: start;
+  }
+  .footer-infos { text-align: right; }
+  .footer-links { justify-content: flex-end; }
 }
 .footer-heading {
-  margin: 0 0 .4rem;
-  font-size: .95rem;
-  color: var(--ink);
+  margin: 0 0 .5rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--accent);
 }
-.footer-horaires p { margin: .15rem 0; }
-.footer-meta nav { display: flex; gap: 1rem; flex-wrap: wrap; }
-.site-footer a { color: var(--muted); }
+.footer-horaires p,
+.footer-infos p { margin: .2rem 0; }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  justify-content: center;
+  margin-top: .75rem;
+}
+.footer-copy { margin-top: .85rem; font-size: .85rem; }
+.site-footer a { color: var(--accent); }
+
+.avis-clients {
+  padding: 2.5rem 1.25rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.avis-clients h2 {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  color: var(--accent);
+}
+.avis-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .avis-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.avis-card {
+  background: rgba(255,255,255,.7);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.15rem 1rem 1.25rem;
+  text-align: center;
+}
+.avis-card .note { margin: 0 0 .65rem; font-weight: 600; color: var(--ink); }
+.avis-card .commentaire {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.avis-card .auteur { margin: 0; text-align: right; color: var(--ink); font-size: .92rem; }
+
+.personnel-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem 1rem;
+  margin: .75rem 0 1.25rem;
+}
+.personnel-nav a { font-weight: 600; text-decoration: none; }
+.personnel-nav a.is-active { text-decoration: underline; }
+.personnel-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+  margin: 0 0 1.5rem;
+}
+.personnel-avis-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1rem; }
+.personnel-avis-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
+  background: rgba(255,255,255,.55);
+}
+.personnel-avis-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  margin-bottom: .5rem;
+}
+
 .contact-horaires {
   margin: 0 0 1.25rem;
   padding: .85rem 0;

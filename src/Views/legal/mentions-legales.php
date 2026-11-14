@@ -9,11 +9,15 @@ ob_start();
 <section class="legal-page">
     <article class="legal-content">
         <h2>Éditeur du site</h2>
+        <?php $boutique = require __DIR__ . '/../../../config/boutique.php'; ?>
         <p>
-            <strong>Fashion Paris</strong><br>
+            <strong><?= htmlspecialchars($boutique['nom']) ?></strong><br>
             Boutique en ligne de prêt-à-porter<br>
-            Site : <a href="https://fashion.anteusweb.com">fashion.anteusweb.com</a><br>
-            E-mail : <a href="mailto:contact@anteusweb.com">contact@anteusweb.com</a>
+            <?= htmlspecialchars($boutique['adresse']) ?><br>
+            <?= htmlspecialchars($boutique['code_postal']) ?> <?= htmlspecialchars($boutique['ville']) ?><br>
+            Téléphone : <?= htmlspecialchars($boutique['telephone']) ?><br>
+            Site : <a href="<?= htmlspecialchars($boutique['site']) ?>"><?= htmlspecialchars(preg_replace('#^https?://#', '', $boutique['site'])) ?></a><br>
+            E-mail : <a href="mailto:<?= htmlspecialchars($boutique['email']) ?>"><?= htmlspecialchars($boutique['email']) ?></a>
         </p>
 
         <h2>Directeur de la publication</h2>
