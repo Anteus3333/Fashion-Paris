@@ -10,7 +10,8 @@
   --ok: #1f6b4a;
   --err: #8b1e1e;
   --radius: 6px;
-  --font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
   --max: 1100px;
 }
 
@@ -147,6 +148,126 @@ main { min-height: 60vh; }
   max-width: var(--max);
   margin: 0 auto;
 }
+
+/* Bandeau accueil plein largeur (gabarit type traiteur) */
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  max-width: none;
+  margin: 0;
+  min-height: clamp(22rem, 62vh, 36rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4.5rem 1.25rem;
+  color: #fff;
+  background-color: var(--ink);
+  overflow: hidden;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--hero-image);
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  transform: scale(1.06);
+  animation: heroZoom 18s ease-out forwards;
+}
+
+.home-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(26, 21, 32, 0.55) 0%, rgba(26, 21, 32, 0.42) 45%, rgba(26, 21, 32, 0.68) 100%);
+}
+
+.home-hero .hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 38rem;
+  margin: 0 auto;
+  animation: heroRise .9s ease-out both;
+}
+
+.home-hero .brand-mark {
+  color: #f3d5dc;
+  letter-spacing: .28em;
+  font-size: .82rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  animation: heroRise .9s ease-out .08s both;
+}
+
+.home-hero h1 {
+  margin: 0 0 .85rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.35rem, 6vw, 3.75rem);
+  line-height: 1.08;
+  max-width: none;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  animation: heroRise .9s ease-out .16s both;
+}
+
+.home-hero .lede {
+  margin: 0 auto 1.6rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 36ch;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  animation: heroRise .9s ease-out .24s both;
+}
+
+.home-hero .hero-actions {
+  justify-content: center;
+  animation: heroRise .9s ease-out .32s both;
+}
+
+.btn-hero-ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+.btn-hero-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: #fff;
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(1.1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero::before,
+  .home-hero .hero-copy,
+  .home-hero .brand-mark,
+  .home-hero h1,
+  .home-hero .lede,
+  .home-hero .hero-actions {
+    animation: none;
+  }
+  .home-hero::before { transform: none; }
+}
+
 .brand-mark {
   margin: 0 0 .5rem;
   text-transform: uppercase;

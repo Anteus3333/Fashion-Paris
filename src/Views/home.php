@@ -1,14 +1,15 @@
 <?php
 ob_start();
+$bannerUrl = AssetHelper::imageUrl('hero-fashion-paris.jpg');
 ?>
-<section class="hero">
+<section class="hero home-hero" style="--hero-image: url('<?= htmlspecialchars($bannerUrl) ?>')">
     <div class="hero-copy">
         <p class="brand-mark">Fashion Paris</p>
         <h1>La mode parisienne, livrée chez vous</h1>
         <p class="lede">Catalogue, panier et compte client — une boutique en ligne soignée, de Paris à votre porte.</p>
         <div class="hero-actions">
             <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Voir le catalogue', 'btn btn-primary') ?>
-            <?= ViewHelper::btnNav(BASE_URL . '/login', 'Se connecter', 'btn btn-ghost') ?>
+            <?= ViewHelper::btnNav(BASE_URL . '/login', 'Se connecter', 'btn btn-hero-ghost') ?>
         </div>
     </div>
 </section>
