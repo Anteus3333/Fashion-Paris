@@ -302,6 +302,197 @@ main { min-height: 60vh; }
 .section h2 { margin: 0 0 .35rem; }
 .section-intro { margin: 0 0 1.25rem; color: var(--muted); }
 
+/* Accueil — sections sous le hero */
+.home-section-head {
+  max-width: 40rem;
+  margin-bottom: 1.75rem;
+}
+.home-section-head h2 {
+  margin: 0 0 .4rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 3.5vw, 2.55rem);
+  line-height: 1.15;
+}
+.home-section-head .section-intro { margin-bottom: 0; }
+.home-section-head--row {
+  max-width: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.home-maison {
+  padding: 4rem 1.25rem;
+  background:
+    linear-gradient(135deg, #2a2030 0%, var(--ink) 55%, #3a1524 100%);
+  color: #fff;
+}
+.home-maison-inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+.home-maison .brand-mark {
+  color: #f3d5dc;
+  letter-spacing: .24em;
+}
+.home-maison h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.12;
+  color: #fff;
+}
+.home-maison p {
+  margin: 0 auto 1.5rem;
+  max-width: 38ch;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.05rem;
+}
+
+.home-collections {
+  padding: 3.5rem 1.25rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.home-collections-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 780px) {
+  .home-collections-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.15rem;
+  }
+}
+.home-collection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 14rem;
+  padding: 1.4rem 1.35rem;
+  text-decoration: none;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+  transition: transform .35s ease, filter .35s ease;
+}
+.home-collection:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.06);
+  color: #fff;
+}
+.home-collection--0 {
+  background:
+    linear-gradient(160deg, rgba(26, 21, 32, 0.15), rgba(26, 21, 32, 0.72)),
+    linear-gradient(135deg, #c4a4b0, var(--accent));
+}
+.home-collection--1 {
+  background:
+    linear-gradient(160deg, rgba(26, 21, 32, 0.2), rgba(26, 21, 32, 0.75)),
+    linear-gradient(135deg, #4a5568, #2c3340);
+}
+.home-collection--2 {
+  background:
+    linear-gradient(160deg, rgba(26, 21, 32, 0.12), rgba(26, 21, 32, 0.7)),
+    linear-gradient(135deg, #e8ddd2, #6b3e2e);
+}
+.home-collection-label {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+.home-collection-cta {
+  margin-top: .55rem;
+  font-size: .92rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  opacity: .9;
+}
+
+.home-featured {
+  max-width: 1200px;
+  padding-top: 3rem;
+  padding-bottom: 3.5rem;
+}
+.product-grid--featured {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+.product-card--featured {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.product-card--featured a {
+  padding: 0;
+}
+.product-card--featured img {
+  margin-bottom: .85rem;
+  aspect-ratio: 3/4;
+  transition: transform .45s ease;
+}
+.product-card--featured a:hover img {
+  transform: scale(1.02);
+}
+.product-card--featured h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.home-newsletter {
+  padding: 3.5rem 1.25rem 4rem;
+  background:
+    radial-gradient(700px 280px at 80% 0%, rgba(139, 41, 66, 0.28), transparent 60%),
+    var(--ink);
+  color: #fff;
+}
+.home-newsletter-inner {
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+}
+.home-newsletter h2 {
+  margin: 0 0 .4rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.85rem, 3.5vw, 2.4rem);
+  color: #fff;
+}
+.home-newsletter .section-intro {
+  color: rgba(255, 255, 255, 0.82);
+  margin-bottom: 1.35rem;
+}
+.home-newsletter-form {
+  justify-content: center;
+}
+.home-newsletter-form input {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-collection,
+  .product-card--featured img {
+    transition: none;
+  }
+  .home-collection:hover,
+  .product-card--featured a:hover img {
+    transform: none;
+  }
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
