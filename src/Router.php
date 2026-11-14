@@ -121,6 +121,8 @@ class Router {
             case 'api':
                 if ($param === 'catalogue') {
                     (new CatalogueController())->filterApi();
+                } elseif ($param === 'calcul-frais') {
+                    (new CommandeController())->calculFraisApi();
                 } else {
                     http_response_code(404);
                     header('Content-Type: application/json; charset=utf-8');
