@@ -128,21 +128,16 @@ class CommandeController {
     /** API JSON frais de livraison (AJAX checkout). */
     public function calculFraisApi(): void {
         header('Content-Type: application/json; charset=utf-8');
-        $config = require __DIR__ . '/../../config/commandeconfig.php';
         $sousTotal = isset($_GET['sous_total']) ? (float) $_GET['sous_total'] : 0.0;
-        if ($sousTotal < 0) {
-            $sousTotal = 0.0;
-        }
-        $frais = (new CommandeModel())->calculerFrais($sousTotal);
-        $seuil = (float) $config['seuil_franco'];
+        $detail = (new CommandeModel())->detailFrais($sousTotal);
         echo json_encode([
-            'success'     => true,
-            'sous_total'  => round($sousTotal, 2),
-            'frais'       => round($frais, 2),
-            'total'       => round($sousTotal + $frais, 2),
-            'franco'      => $frais <= 0 && $sousTotal > 0,
-            'seuil_franco'=> $seuil,
-            'reste_franco'=> $frais > 0 ? round(max(0, $seuil - $sousTotal), 2) : 0,
+            'success'      => true,
+            'sous_total'   => $detail['sous_total'],
+            'frais'        => $detail['frais'],
+            'total'        => $detail['total'],
+            'franco'       => $detail['franco'],
+            'seuil_franco' => $detail['seuil_franco'],
+            'reste_franco' => $detail['reste_franco'],
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }

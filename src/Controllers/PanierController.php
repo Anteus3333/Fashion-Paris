@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../Services/Csrf.php';
 require_once __DIR__ . '/../Services/PanierService.php';
+require_once __DIR__ . '/../Services/FraisLivraisonService.php';
 require_once __DIR__ . '/../Models/ProduitModel.php';
 
 class PanierController {
@@ -12,11 +13,9 @@ class PanierController {
         $detail = $this->construireDetail();
         $lignes = $detail['lignes'];
         $sousTotal = $detail['sous_total'];
-        $config = require __DIR__ . '/../../config/commandeconfig.php';
-        $frais = ($sousTotal >= (float) $config['seuil_franco'] || $sousTotal <= 0)
-            ? 0.0
-            : (float) $config['frais_livraison'];
-        $total = $sousTotal + $frais;
+        $tarif = (new FraisLivraisonService())->calculer($sousTotal);
+        $frais = $tarif['frais'];
+        $total = $tarif['total'];
         require __DIR__ . '/../Views/panier.php';
     }
 

@@ -2,12 +2,15 @@
 // src/Models/CommandeModel.php — règles métier commandes
 
 require_once __DIR__ . '/../Repositories/CommandeRepository.php';
+require_once __DIR__ . '/../Services/FraisLivraisonService.php';
 
 class CommandeModel {
     private CommandeRepository $repository;
+    private FraisLivraisonService $fraisService;
 
     public function __construct() {
         $this->repository = new CommandeRepository();
+        $this->fraisService = new FraisLivraisonService();
     }
 
     public function creer(array $commande, array $lignes): string {
@@ -43,10 +46,12 @@ class CommandeModel {
     }
 
     public function calculerFrais(float $sousTotal): float {
-        $config = require __DIR__ . '/../../config/commandeconfig.php';
-        if ($sousTotal <= 0 || $sousTotal >= (float) $config['seuil_franco']) {
-            return 0.0;
-        }
-        return (float) $config['frais_livraison'];
+        return $this->fraisService->montantFrais($sousTotal);
+    }
+
+    /** Détail franco / forfait (API checkout, panier). */
+    public function detailFrais(float $sousTotal): array {
+        return $this->fraisService->calculer($sousTotal);
     }
 }
+
