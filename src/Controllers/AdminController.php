@@ -196,6 +196,220 @@ class AdminController {
         require __DIR__ . '/../Views/admin/stats.php';
     }
 
+    public function personnels(): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        $personnels = (new UtilisateurModel())->getPersonnels();
+        $titrePage = 'Comptes personnel — Admin';
+        require __DIR__ . '/../Views/admin/personnels.php';
+    }
+
+    public function personnelCreer(): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        $model = new UtilisateurModel();
+        $erreurs = [];
+        $erreursPassword = [];
+        $erreurConfirmation = null;
+        $old = $this->champsPersonnelVides();
+        $modeEdition = false;
+        $personnelId = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $old = $this->lireChampsPersonnel();
+            $password = (string) ($_POST['password'] ?? '');
+            $confirmation = (string) ($_POST['confirmation'] ?? '');
+
+            if (!Csrf::verifier()) {
+                $erreurs[] = 'Session expirée.';
+            }
+            $erreurs = array_merge($erreurs, $this->validerChampsPersonnel($old));
+            $erreursPassword = $this->validerMotDePasse($password);
+            if ($password !== $confirmation) {
+                $erreurConfirmation = 'La confirmation ne correspond pas au mot de passe.';
+            }
+            if (empty($erreurs) && empty($erreursPassword) && $erreurConfirmation === null && $model->findByEmail($old['email'])) {
+                $erreurs[] = 'Un compte existe déjà avec cette adresse mail.';
+            }
+            if (empty($erreurs) && empty($erreursPassword) && $erreurConfirmation === null) {
+                $model->createPersonnel($old + ['password' => $password]);
+                $_SESSION['flash_succes'] = 'Compte personnel créé.';
+                header('Location: ' . BASE_URL . '/admin/personnel');
+                exit;
+            }
+        }
+
+        $titrePage = 'Nouveau compte personnel — Admin';
+        require __DIR__ . '/../Views/admin/personnel-form.php';
+    }
+
+    public function personnelModifier(int $id): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        $model = new UtilisateurModel();
+        if (!$model->estPersonnel($id)) {
+            $_SESSION['flash_erreur'] = 'Compte personnel introuvable.';
+            header('Location: ' . BASE_URL . '/admin/personnel');
+            exit;
+        }
+
+        $pers = $model->findById($id);
+        $erreurs = [];
+        $erreursPassword = [];
+        $erreurConfirmation = null;
+        $old = [
+            'prenom'          => $pers['prenom'] ?? '',
+            'nom'             => $pers['nom'] ?? '',
+            'email'           => $pers['email'] ?? '',
+            'telephone'       => $pers['telephone'] ?? '',
+            'adresse_postale' => $pers['adresse_postale'] ?? '',
+            'code_postal'     => $pers['code_postal'] ?? '',
+            'ville'           => $pers['ville'] ?? '',
+        ];
+        $modeEdition = true;
+        $personnelId = $id;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $old = $this->lireChampsPersonnel();
+            $password = (string) ($_POST['password'] ?? '');
+            $confirmation = (string) ($_POST['confirmation'] ?? '');
+
+            if (!Csrf::verifier()) {
+                $erreurs[] = 'Session expirée.';
+            }
+            $erreurs = array_merge($erreurs, $this->validerChampsPersonnel($old));
+            if ($password !== '' || $confirmation !== '') {
+                $erreursPassword = $this->validerMotDePasse($password);
+                if ($password !== $confirmation) {
+                    $erreurConfirmation = 'La confirmation ne correspond pas au mot de passe.';
+                }
+            }
+            if (empty($erreurs) && empty($erreursPassword) && $erreurConfirmation === null) {
+                $existant = $model->findByEmail($old['email']);
+                if ($existant && (int) $existant['utilisateur_id'] !== $id) {
+                    $erreurs[] = 'Un compte existe déjà avec cette adresse mail.';
+                }
+            }
+            if (empty($erreurs) && empty($erreursPassword) && $erreurConfirmation === null) {
+                $payload = $old;
+                if ($password !== '') {
+                    $payload['password'] = $password;
+                }
+                $model->updatePersonnel($id, $payload);
+                $_SESSION['flash_succes'] = 'Compte personnel mis à jour.';
+                header('Location: ' . BASE_URL . '/admin/personnel');
+                exit;
+            }
+        }
+
+        $titrePage = 'Modifier le compte personnel — Admin';
+        require __DIR__ . '/../Views/admin/personnel-form.php';
+    }
+
+    public function personnelSupprimer(int $id): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Csrf::verifier()) {
+            $_SESSION['flash_erreur'] = 'Action non autorisée.';
+            header('Location: ' . BASE_URL . '/admin/personnel');
+            exit;
+        }
+        $model = new UtilisateurModel();
+        if (!$model->estPersonnel($id)) {
+            $_SESSION['flash_erreur'] = 'Compte personnel introuvable.';
+        } elseif ($model->supprimerPersonnel($id)) {
+            $_SESSION['flash_succes'] = 'Compte personnel supprimé.';
+        } else {
+            $_SESSION['flash_erreur'] = 'Impossible de supprimer (données liées ou introuvable).';
+        }
+        header('Location: ' . BASE_URL . '/admin/personnel');
+        exit;
+    }
+
+    public function personnelDesactiver(int $id): void {
+        $this->actionPersonnelActif($id, false);
+    }
+
+    public function personnelActiver(int $id): void {
+        $this->actionPersonnelActif($id, true);
+    }
+
+    private function actionPersonnelActif(int $id, bool $actif): void {
+        AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Csrf::verifier()) {
+            $_SESSION['flash_erreur'] = 'Action non autorisée.';
+            header('Location: ' . BASE_URL . '/admin/personnel');
+            exit;
+        }
+        $model = new UtilisateurModel();
+        if (!$model->estPersonnel($id)) {
+            $_SESSION['flash_erreur'] = 'Compte personnel introuvable.';
+        } elseif ($model->setActifPersonnel($id, $actif)) {
+            $_SESSION['flash_succes'] = $actif ? 'Compte réactivé.' : 'Compte désactivé.';
+        } else {
+            $_SESSION['flash_erreur'] = 'Action impossible.';
+        }
+        header('Location: ' . BASE_URL . '/admin/personnel');
+        exit;
+    }
+
+    private function champsPersonnelVides(): array {
+        return [
+            'prenom' => '', 'nom' => '', 'email' => '', 'telephone' => '',
+            'adresse_postale' => '', 'code_postal' => '', 'ville' => '',
+        ];
+    }
+
+    private function lireChampsPersonnel(): array {
+        $old = $this->champsPersonnelVides();
+        foreach (array_keys($old) as $champ) {
+            $old[$champ] = trim((string) ($_POST[$champ] ?? ''));
+        }
+        return $old;
+    }
+
+    private function validerChampsPersonnel(array $old): array {
+        $erreurs = [];
+        if ($old['prenom'] === '') {
+            $erreurs[] = 'Le prénom est obligatoire.';
+        }
+        if ($old['nom'] === '') {
+            $erreurs[] = 'Le nom est obligatoire.';
+        }
+        if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
+            $erreurs[] = "L'adresse mail n'est pas valide.";
+        }
+        if ($old['adresse_postale'] === '') {
+            $erreurs[] = "L'adresse postale est obligatoire.";
+        }
+        if ($old['code_postal'] === '') {
+            $erreurs[] = 'Le code postal est obligatoire.';
+        } elseif (!preg_match('/^\d{5}$/', $old['code_postal'])) {
+            $erreurs[] = 'Le code postal doit contenir 5 chiffres.';
+        }
+        if ($old['ville'] === '') {
+            $erreurs[] = 'La ville est obligatoire.';
+        }
+        return $erreurs;
+    }
+
+    /** @return string[] */
+    private function validerMotDePasse(string $password): array {
+        $erreurs = [];
+        if (strlen($password) < 10) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins 10 caractères.';
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins une majuscule.';
+        }
+        if (!preg_match('/[a-z]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins une minuscule.';
+        }
+        if (!preg_match('/[0-9]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins un chiffre.';
+        }
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $erreurs[] = 'Le mot de passe doit contenir au moins un caractère spécial.';
+        }
+        return $erreurs;
+    }
+
     protected function gestionBasePath(): string {
         return '/admin';
     }

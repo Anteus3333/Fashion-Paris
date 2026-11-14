@@ -33,4 +33,29 @@ class UtilisateurModel {
     public function getClients(): array {
         return $this->repository->getClients();
     }
+
+    public function getPersonnels(): array {
+        return $this->repository->getPersonnels();
+    }
+
+    public function estPersonnel(int $utilisateurId): bool {
+        return $this->repository->estPersonnel($utilisateurId);
+    }
+
+    public function createPersonnel(array $data): int {
+        return $this->repository->createPersonnel($data);
+    }
+
+    public function updatePersonnel(int $utilisateurId, array $data): bool {
+        return $this->repository->updatePersonnel($utilisateurId, $data);
+    }
+
+    public function setActifPersonnel(int $utilisateurId, bool $actif): bool {
+        return $this->repository->setActifPersonnel($utilisateurId, $actif);
+    }
+
+    public function supprimerPersonnel(int $utilisateurId): bool {
+        return $this->repository->supprimerPersonnel($utilisateurId);
+    }
 }
+

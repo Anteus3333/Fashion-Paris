@@ -623,6 +623,8 @@ main { min-height: 60vh; }
 .cart-totals { margin: 1rem 0 1.5rem; }
 .cart-total { font-size: 1.15rem; }
 
+.admin-actions { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
+.admin-actions .inline-form { display: inline; margin: 0; }
 .admin-nav a.is-active { text-decoration: underline; }
 .admin-nav {
   display: flex;

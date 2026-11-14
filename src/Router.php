@@ -20,6 +20,7 @@ class Router {
         $route = $parts[0] ?? '';
         $param = $parts[1] ?? null;
         $param2 = $parts[2] ?? null;
+        $param3 = $parts[3] ?? null;
 
         switch ($route) {
             case '':
@@ -120,6 +121,24 @@ class Router {
                     (new AdminController())->clients();
                 } elseif ($param === 'avis') {
                     (new AdminController())->avis();
+                } elseif ($param === 'personnel') {
+                    $admin = new AdminController();
+                    if ($param2 === 'nouveau') {
+                        $admin->personnelCreer();
+                    } elseif ($param2 && ctype_digit((string) $param2)) {
+                        $id = (int) $param2;
+                        if ($param3 === 'desactiver') {
+                            $admin->personnelDesactiver($id);
+                        } elseif ($param3 === 'activer') {
+                            $admin->personnelActiver($id);
+                        } elseif ($param3 === 'supprimer') {
+                            $admin->personnelSupprimer($id);
+                        } else {
+                            $admin->personnelModifier($id);
+                        }
+                    } else {
+                        $admin->personnels();
+                    }
                 } elseif ($param === 'stats') {
                     (new AdminController())->stats();
                 } else {
