@@ -43,7 +43,8 @@ class PanierService {
         unset($_SESSION['panier']);
     }
 
+    /** Nombre de lignes produit distinctes (pas la quantité totale). */
     public static function nombreArticles(): int {
-        return array_sum(self::lignes());
+        return count(self::lignes());
     }
 }
