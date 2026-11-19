@@ -1,33 +1,53 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow catalogue-page">
-    <h1><?= $categorieActive ? htmlspecialchars($categorieActive['libelle']) : 'Catalogue' ?></h1>
+<section class="section catalogue-page">
+    <header class="catalogue-header">
+        <h1><?= $categorieActive ? htmlspecialchars($categorieActive['libelle']) : 'Catalogue' ?></h1>
+        <p class="catalogue-lead muted">Prêt-à-porter et accessoires — collection permanente Fashion Paris.</p>
+    </header>
 
     <form id="filter-form" class="catalogue-filters" data-base-url="<?= htmlspecialchars(BASE_URL) ?>" role="search">
-        <div class="search-row">
-            <label class="sr-only" for="q">Rechercher</label>
-            <input type="search" id="q" name="q" value="<?= htmlspecialchars($q ?? '') ?>" placeholder="Robe, blazer…">
-            <label class="sr-only" for="categorie">Catégorie</label>
-            <select id="categorie" name="categorie" class="form-select">
-                <option value="">Toutes les catégories</option>
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= htmlspecialchars($cat['slug']) ?>"
-                        <?= ($categorieActive['slug'] ?? '') === $cat['slug'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat['libelle']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <div class="catalogue-filters__grid">
+            <div class="catalogue-filters__field catalogue-filters__field--search">
+                <label for="q">Recherche</label>
+                <input type="search" id="q" name="q" value="<?= htmlspecialchars($q ?? '') ?>"
+                       placeholder="Robe, blazer, sac…" autocomplete="off">
+            </div>
+
+            <div class="catalogue-filters__field">
+                <label for="categorie">Catégorie</label>
+                <select id="categorie" name="categorie" class="form-select">
+                    <option value="">Toutes</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= htmlspecialchars($cat['slug']) ?>"
+                            <?= ($categorieActive['slug'] ?? '') === $cat['slug'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($cat['libelle']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="catalogue-filters__field catalogue-filters__field--prix">
+                <span class="catalogue-filters__label" id="prix-range-label">Budget (€)</span>
+                <div class="catalogue-filters__prix" role="group" aria-labelledby="prix-range-label">
+                    <label class="sr-only" for="prix_min">Prix minimum</label>
+                    <input type="number" id="prix_min" name="prix_min" min="0" step="1" placeholder="Min" inputmode="numeric">
+                    <span class="catalogue-filters__sep" aria-hidden="true">à</span>
+                    <label class="sr-only" for="prix_max">Prix maximum</label>
+                    <input type="number" id="prix_max" name="prix_max" min="0" step="1" placeholder="Max" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="catalogue-filters__actions">
+                <button type="button" id="apply-filters" class="btn btn-primary">Filtrer</button>
+                <button type="button" id="reset-filters" class="btn btn-ghost">Réinitialiser</button>
+            </div>
         </div>
-        <div class="search-row catalogue-prix">
-            <label for="prix_min">Prix min</label>
-            <input type="number" id="prix_min" name="prix_min" min="0" step="1" placeholder="0">
-            <label for="prix_max">Prix max</label>
-            <input type="number" id="prix_max" name="prix_max" min="0" step="1" placeholder="500">
-            <button type="button" id="apply-filters" class="btn btn-primary">Filtrer</button>
-            <button type="button" id="reset-filters" class="btn btn-ghost">Reset</button>
-        </div>
-        <p class="muted">Résultats : <strong id="catalogue-count"><?= count($produits ?? []) ?></strong></p>
+
+        <p class="catalogue-filters__count">
+            <span id="catalogue-count"><?= count($produits ?? []) ?></span> article<?= count($produits ?? []) > 1 ? 's' : '' ?>
+        </p>
     </form>
 
     <noscript>

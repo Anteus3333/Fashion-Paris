@@ -300,6 +300,97 @@ main { min-height: 60vh; }
   margin: 0 auto;
 }
 .page-narrow { max-width: 820px; }
+
+/* Catalogue — pleine largeur utile + filtres soignés */
+.catalogue-page {
+  max-width: var(--max);
+}
+.catalogue-header {
+  margin-bottom: 1.25rem;
+}
+.catalogue-header h1 { margin-bottom: .35rem; }
+.catalogue-lead {
+  margin: 0;
+  max-width: 36rem;
+}
+
+.catalogue-filters {
+  margin: 0 0 1.75rem;
+  padding: 1.1rem 1.15rem 1rem;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.catalogue-filters__grid {
+  display: grid;
+  gap: .85rem 1rem;
+  align-items: end;
+}
+@media (min-width: 720px) {
+  .catalogue-filters__grid {
+    grid-template-columns: minmax(12rem, 1.6fr) minmax(8rem, .9fr) minmax(10rem, 1fr) auto;
+  }
+}
+.catalogue-filters__field {
+  display: grid;
+  gap: .35rem;
+}
+.catalogue-filters__field label,
+.catalogue-filters__label {
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.catalogue-filters__field input[type="search"],
+.catalogue-filters__field input[type="number"],
+.catalogue-filters__field .form-select {
+  width: 100%;
+  margin: 0;
+  padding: .7rem .8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+}
+.catalogue-filters__field input:focus,
+.catalogue-filters__field .form-select:focus {
+  outline: 2px solid rgba(139, 41, 66, 0.28);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+.catalogue-filters__prix {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: .45rem;
+  align-items: center;
+}
+.catalogue-filters__sep {
+  color: var(--muted);
+  font-size: .9rem;
+}
+.catalogue-filters__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.catalogue-filters__actions .btn {
+  min-height: 2.65rem;
+}
+.catalogue-filters__count {
+  margin: .9rem 0 0;
+  padding-top: .75rem;
+  border-top: 1px solid var(--line);
+  font-size: .92rem;
+  color: var(--muted);
+}
+.catalogue-filters__count strong,
+.catalogue-filters__count #catalogue-count {
+  color: var(--ink);
+  font-weight: 700;
+}
 .section h2 { margin: 0 0 .35rem; }
 .section-intro { margin: 0 0 1.25rem; color: var(--muted); }
 
