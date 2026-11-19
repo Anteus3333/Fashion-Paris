@@ -539,6 +539,16 @@ main { min-height: 60vh; }
   color: #fff;
 }
 .btn-primary:hover { background: var(--accent-dark); color: #fff; }
+.btn-secondary {
+  background: rgba(139, 41, 66, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-secondary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
 .btn-ghost {
   background: transparent;
   border-color: var(--line);

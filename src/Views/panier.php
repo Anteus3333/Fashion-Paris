@@ -43,7 +43,7 @@ ob_start();
         </div>
 
         <div class="hero-actions">
-            <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Continuer ses achats', 'btn btn-ghost') ?>
+            <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Continuer ses achats', 'btn btn-secondary') ?>
             <?= ViewHelper::btnNav(BASE_URL . '/commande', 'Passer commande', 'btn btn-primary') ?>
         </div>
     <?php endif; ?>
