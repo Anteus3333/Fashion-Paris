@@ -21,7 +21,6 @@ ob_start();
         <a href="<?= BASE_URL ?>/mot-de-passe-oublie">Mot de passe oublié ?</a><br>
         Pas encore de compte ? <a href="<?= BASE_URL ?>/inscription">Créer un compte</a>
     </p>
-    <p class="muted">Comptes de test (Docker) : <code>admin@fashionparis.fr</code> / <code>personnel@fashionparis.fr</code> / <code>client@fashionparis.fr</code> — mot de passe <code>Password1!</code></p>
 </section>
 <?php
 $contenu = ob_get_clean();
