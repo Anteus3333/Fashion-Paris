@@ -28,24 +28,24 @@ WHERE NOT EXISTS (SELECT 1 FROM produit p WHERE p.slug = v.slug);
 INSERT INTO `produit_image` (`produit_id`, `chemin`, `alt`, `ordre`)
 SELECT p.produit_id, v.chemin, v.alt, 0
 FROM (
-  SELECT 'manteau-laine-camel' AS slug, 'produits/manteau-laine-camel.svg' AS chemin, 'Manteau laine camel' AS alt UNION ALL
-  SELECT 'pantalon-cigarette', 'produits/pantalon-cigarette.svg', 'Pantalon cigarette' UNION ALL
-  SELECT 'pull-cachemire', 'produits/pull-cachemire.svg', 'Pull cachemire' UNION ALL
-  SELECT 'jupe-plissee-midi', 'produits/jupe-plissee-midi.svg', 'Jupe plissée midi' UNION ALL
-  SELECT 'top-satine', 'produits/top-satine.svg', 'Top satiné' UNION ALL
-  SELECT 'trench-beige', 'produits/trench-beige.svg', 'Trench beige' UNION ALL
-  SELECT 'combinaison-fluide', 'produits/combinaison-fluide.svg', 'Combinaison fluide' UNION ALL
-  SELECT 'costume-deux-pieces', 'produits/costume-deux-pieces.svg', 'Costume deux pièces' UNION ALL
-  SELECT 'pull-col-roule', 'produits/pull-col-roule.svg', 'Pull col roulé' UNION ALL
-  SELECT 'pantalon-chino', 'produits/pantalon-chino.svg', 'Pantalon chino' UNION ALL
-  SELECT 'veste-bomber', 'produits/veste-bomber.svg', 'Veste bomber' UNION ALL
-  SELECT 'polo-pique', 'produits/polo-pique.svg', 'Polo piqué' UNION ALL
-  SELECT 'manteau-loden', 'produits/manteau-loden.svg', 'Manteau loden' UNION ALL
-  SELECT 'ceinture-cuir-fine', 'produits/ceinture-cuir-fine.svg', 'Ceinture cuir fine' UNION ALL
-  SELECT 'echarpe-merinos', 'produits/echarpe-merinos.svg', 'Écharpe mérinos' UNION ALL
-  SELECT 'pochette-soie', 'produits/pochette-soie.svg', 'Pochette soie' UNION ALL
-  SELECT 'lunettes-monture', 'produits/lunettes-monture.svg', 'Lunettes monture acétate' UNION ALL
-  SELECT 'bottines-chelsea', 'produits/bottines-chelsea.svg', 'Bottines chelsea'
+  SELECT 'manteau-laine-camel' AS slug, 'produits/manteau-laine-camel.jpg' AS chemin, 'Manteau laine camel' AS alt UNION ALL
+  SELECT 'pantalon-cigarette', 'produits/pantalon-cigarette.jpg', 'Pantalon cigarette' UNION ALL
+  SELECT 'pull-cachemire', 'produits/pull-cachemire.jpg', 'Pull cachemire' UNION ALL
+  SELECT 'jupe-plissee-midi', 'produits/jupe-plissee-midi.jpg', 'Jupe plissée midi' UNION ALL
+  SELECT 'top-satine', 'produits/top-satine.jpg', 'Top satiné' UNION ALL
+  SELECT 'trench-beige', 'produits/trench-beige.jpg', 'Trench beige' UNION ALL
+  SELECT 'combinaison-fluide', 'produits/combinaison-fluide.jpg', 'Combinaison fluide' UNION ALL
+  SELECT 'costume-deux-pieces', 'produits/costume-deux-pieces.jpg', 'Costume deux pièces' UNION ALL
+  SELECT 'pull-col-roule', 'produits/pull-col-roule.jpg', 'Pull col roulé' UNION ALL
+  SELECT 'pantalon-chino', 'produits/pantalon-chino.jpg', 'Pantalon chino' UNION ALL
+  SELECT 'veste-bomber', 'produits/veste-bomber.jpg', 'Veste bomber' UNION ALL
+  SELECT 'polo-pique', 'produits/polo-pique.jpg', 'Polo piqué' UNION ALL
+  SELECT 'manteau-loden', 'produits/manteau-loden.jpg', 'Manteau loden' UNION ALL
+  SELECT 'ceinture-cuir-fine', 'produits/ceinture-cuir-fine.jpg', 'Ceinture cuir fine' UNION ALL
+  SELECT 'echarpe-merinos', 'produits/echarpe-merinos.jpg', 'Écharpe mérinos' UNION ALL
+  SELECT 'pochette-soie', 'produits/pochette-soie.jpg', 'Pochette soie' UNION ALL
+  SELECT 'lunettes-monture', 'produits/lunettes-monture.jpg', 'Lunettes monture acétate' UNION ALL
+  SELECT 'bottines-chelsea', 'produits/bottines-chelsea.jpg', 'Bottines chelsea'
 ) AS v
 JOIN produit p ON p.slug = v.slug
 WHERE NOT EXISTS (SELECT 1 FROM produit_image pi WHERE pi.produit_id = p.produit_id);
