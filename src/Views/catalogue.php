@@ -12,7 +12,8 @@ ob_start();
             <div class="catalogue-filters__field catalogue-filters__field--search">
                 <label for="q">Recherche</label>
                 <input type="search" id="q" name="q" value="<?= htmlspecialchars($q ?? '') ?>"
-                       placeholder="Robe, blazer, sac…" autocomplete="off">
+                       placeholder="Robe, blazer, sac… (Entrée)"
+                       autocomplete="off" enterkeyhint="search">
             </div>
 
             <div class="catalogue-filters__field">
@@ -40,7 +41,7 @@ ob_start();
             </div>
 
             <div class="catalogue-filters__actions">
-                <button type="button" id="apply-filters" class="btn btn-primary">Filtrer</button>
+                <button type="submit" id="apply-filters" class="btn btn-primary">Filtrer</button>
                 <button type="button" id="reset-filters" class="btn btn-ghost">Réinitialiser</button>
             </div>
         </div>
