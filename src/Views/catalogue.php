@@ -12,7 +12,7 @@ ob_start();
             <div class="catalogue-filters__field catalogue-filters__field--search">
                 <label for="q">Recherche</label>
                 <input type="search" id="q" name="q" value="<?= htmlspecialchars($q ?? '') ?>"
-                       placeholder="Robe, blazer, sac… (Entrée)"
+                       placeholder="Robe, blazer, sac…"
                        autocomplete="off" enterkeyhint="search">
             </div>
 
