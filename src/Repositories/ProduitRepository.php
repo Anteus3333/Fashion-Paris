@@ -69,7 +69,8 @@ class ProduitRepository {
             return null;
         }
         $stmt = $this->conn->prepare(
-            'SELECT p.*, c.libelle AS categorie_libelle, c.slug AS categorie_slug
+            'SELECT p.*, c.libelle AS categorie_libelle, c.slug AS categorie_slug,
+                    (SELECT chemin FROM produit_image pi WHERE pi.produit_id = p.produit_id ORDER BY ordre ASC LIMIT 1) AS image
              FROM produit p
              JOIN categorie c ON c.categorie_id = p.categorie_id
              WHERE p.slug = :slug AND p.actif = 1'
