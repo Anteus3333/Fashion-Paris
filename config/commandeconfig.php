@@ -1,9 +1,11 @@
 <?php
-// Frais de livraison Fashion Paris (simplifié pour le dossier projet)
+// Livraison Fashion Paris — forfait fixe (dossier projet)
 
 return [
-    'frais_livraison'     => 5.90,
-    'seuil_franco'        => 150.00, // livraison offerte au-delà
+    'frais_livraison'     => 10.00,
+    'delai_livraison'     => '7 jours ouvrés',
+    // Plus de franco : forfait appliqué dès qu’il y a au moins un article
+    'seuil_franco'        => null,
     'statuts'             => [
         'en_attente'   => 'En attente',
         'confirmee'    => 'Confirmée',

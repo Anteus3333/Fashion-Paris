@@ -53,8 +53,10 @@ $etapeCourante = $etape;
                     <input type="text" id="ville_livraison" name="ville_livraison" required autocomplete="address-level2"
                            value="<?= htmlspecialchars($old['ville_livraison']) ?>">
 
-                    <label for="date_livraison">Date de livraison souhaitée (optionnel)</label>
-                    <?= ViewHelper::champDate('date_livraison', 'date_livraison', $old['date_livraison'] ?? '', false, date('Y-m-d')) ?>
+                    <p class="muted checkout-delai">
+                        Livraison forfaitaire <?= ViewHelper::prix((float) ($config['frais_livraison'] ?? 10)) ?>
+                        — délai estimé <?= htmlspecialchars((string) ($config['delai_livraison'] ?? '7 jours ouvrés')) ?>.
+                    </p>
 
                     <button type="submit" class="btn btn-primary">Continuer vers le paiement</button>
                 </form>
@@ -104,13 +106,11 @@ $etapeCourante = $etape;
                 <?php endforeach; ?>
             </ul>
             <div class="cart-totals" id="recap-content"
-                 data-sous-total="<?= htmlspecialchars((string) $sousTotal) ?>"
-                 data-seuil-franco="<?= htmlspecialchars((string) ($config['seuil_franco'] ?? 150)) ?>">
+                 data-sous-total="<?= htmlspecialchars((string) $sousTotal) ?>">
                 <p>Sous-total : <strong id="recap-sous-total"><?= ViewHelper::prix($sousTotal) ?></strong></p>
-                <p>Livraison : <strong id="recap-frais"><?= $frais <= 0 ? 'Offerte' : ViewHelper::prix($frais) ?></strong></p>
-                <p class="muted" id="recap-franco-hint" <?= $frais <= 0 ? 'hidden' : '' ?>>
-                    Plus que <span id="recap-reste-franco"><?= ViewHelper::prix(max(0, (float) ($config['seuil_franco'] ?? 150) - $sousTotal)) ?></span>
-                    pour la livraison offerte.
+                <p>Livraison (forfait) : <strong id="recap-frais"><?= ViewHelper::prix($frais) ?></strong></p>
+                <p class="muted" id="recap-delai">
+                    Délai estimé : <?= htmlspecialchars((string) ($config['delai_livraison'] ?? '7 jours ouvrés')) ?>.
                 </p>
                 <p class="cart-total">Total : <strong id="recap-total"><?= ViewHelper::prix($total) ?></strong></p>
             </div>

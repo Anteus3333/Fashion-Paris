@@ -40,9 +40,14 @@ ob_start();
             <?php endforeach; ?>
         </ul>
 
+        <?php
+        $configLivraison = $configLivraison ?? require __DIR__ . '/../../config/commandeconfig.php';
+        $delaiLivraison = (string) ($configLivraison['delai_livraison'] ?? '7 jours ouvrés');
+        ?>
         <div class="cart-totals">
             <p>Sous-total : <strong><?= ViewHelper::prix($sousTotal) ?></strong></p>
-            <p>Livraison : <strong><?= $frais <= 0 ? 'Offerte' : ViewHelper::prix($frais) ?></strong></p>
+            <p>Livraison (forfait) : <strong><?= ViewHelper::prix($frais) ?></strong></p>
+            <p class="muted">Délai estimé : <?= htmlspecialchars($delaiLivraison) ?>.</p>
             <p class="cart-total">Total : <strong><?= ViewHelper::prix($total) ?></strong></p>
         </div>
 

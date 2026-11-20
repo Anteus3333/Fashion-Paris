@@ -39,7 +39,6 @@ class CommandeController {
             'adresse_livraison'     => $brouillon['adresse_livraison'] ?? ($utilisateur['adresse_postale'] ?? ''),
             'code_postal_livraison' => $brouillon['code_postal_livraison'] ?? ($utilisateur['code_postal'] ?? ''),
             'ville_livraison'       => $brouillon['ville_livraison'] ?? ($utilisateur['ville'] ?? ''),
-            'date_livraison'        => $brouillon['date_livraison'] ?? '',
             'mode_paiement'         => $brouillon['mode_paiement'] ?? 'carte',
             'accepte_cgv'           => !empty($brouillon['accepte_cgv']),
         ];
@@ -61,7 +60,6 @@ class CommandeController {
                 $old['adresse_livraison'] = trim((string) ($_POST['adresse_livraison'] ?? ''));
                 $old['code_postal_livraison'] = trim((string) ($_POST['code_postal_livraison'] ?? ''));
                 $old['ville_livraison'] = trim((string) ($_POST['ville_livraison'] ?? ''));
-                $old['date_livraison'] = trim((string) ($_POST['date_livraison'] ?? ''));
 
                 $erreurs = array_merge($erreurs, $this->validerLivraison($old));
 
@@ -71,7 +69,6 @@ class CommandeController {
                         'adresse_livraison'     => $old['adresse_livraison'],
                         'code_postal_livraison' => $old['code_postal_livraison'],
                         'ville_livraison'       => $old['ville_livraison'],
-                        'date_livraison'        => $old['date_livraison'],
                     ]);
                     header('Location: ' . BASE_URL . '/commande?etape=paiement');
                     exit;
@@ -189,13 +186,12 @@ class CommandeController {
         $sousTotal = isset($_GET['sous_total']) ? (float) $_GET['sous_total'] : 0.0;
         $detail = (new CommandeModel())->detailFrais($sousTotal);
         echo json_encode([
-            'success'      => true,
-            'sous_total'   => $detail['sous_total'],
-            'frais'        => $detail['frais'],
-            'total'        => $detail['total'],
-            'franco'       => $detail['franco'],
-            'seuil_franco' => $detail['seuil_franco'],
-            'reste_franco' => $detail['reste_franco'],
+            'success'          => true,
+            'sous_total'       => $detail['sous_total'],
+            'frais'            => $detail['frais'],
+            'total'            => $detail['total'],
+            'franco'           => false,
+            'delai_livraison'  => $detail['delai_livraison'] ?? '7 jours ouvrés',
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }

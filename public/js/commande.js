@@ -1,4 +1,4 @@
-// Fashion Paris — checkout live (frais / franco) + anti double-submit
+// Fashion Paris — checkout (forfait livraison) + anti double-submit
 document.addEventListener('DOMContentLoaded', () => {
   const page = document.querySelector('.commande-page');
   const form = document.getElementById('commande-form');
@@ -20,17 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!data.success) return;
         const fraisEl = document.getElementById('recap-frais');
         const totalEl = document.getElementById('recap-total');
-        const hint = document.getElementById('recap-franco-hint');
-        const reste = document.getElementById('recap-reste-franco');
-        if (fraisEl) fraisEl.textContent = data.franco ? 'Offerte' : formatEuro(data.frais);
+        const delaiEl = document.getElementById('recap-delai');
+        if (fraisEl) fraisEl.textContent = formatEuro(data.frais);
         if (totalEl) totalEl.textContent = formatEuro(data.total);
-        if (hint) {
-          if (data.franco || data.frais <= 0) {
-            hint.hidden = true;
-          } else {
-            hint.hidden = false;
-            if (reste) reste.textContent = formatEuro(data.reste_franco);
-          }
+        if (delaiEl && data.delai_livraison) {
+          delaiEl.textContent = 'Délai estimé : ' + data.delai_livraison + '.';
         }
       })
       .catch((err) => console.error('Erreur calcul frais:', err));
