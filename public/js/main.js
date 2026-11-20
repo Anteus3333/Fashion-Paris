@@ -1,4 +1,4 @@
-// Fashion Paris — JS partagé (navigation, modales, confirm, abandon, mdp)
+// Fashion Paris — JS partagé (navigation, modales Fashion, confirm, abandon, mdp)
 document.addEventListener('DOMContentLoaded', () => {
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('nav-links');
@@ -37,20 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function formulaireSale() {
-    return !!document.querySelector(
-      'form[data-abandon-guard][data-abandon-dirty="1"], form[data-abandon-watch][data-abandon-dirty="1"]'
-    );
-  }
-
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-navigate]');
-    if (!btn) return;
-    if (formulaireSale()) return;
-    const url = btn.getAttribute('data-navigate');
-    if (url) window.location.href = url;
-  });
-
   function fermerModaleConfirm() {
     const overlay = document.getElementById('modal-confirm-site');
     if (overlay) overlay.remove();
@@ -62,55 +48,70 @@ document.addEventListener('DOMContentLoaded', () => {
     options = options || {};
     const isBlock = !!options.block;
     const titre = options.titre || (isBlock ? 'Information' : 'Confirmation');
+    const okLabel = options.okLabel || (isBlock ? 'OK' : 'Confirmer');
+    const cancelLabel = options.cancelLabel || 'Annuler';
 
     const overlay = document.createElement('div');
     overlay.id = 'modal-confirm-site';
     overlay.className = 'modal-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'modal-confirm-titre');
     overlay.innerHTML =
       '<div class="modal-dialog">' +
-      '<h2 class="modal-title">' + titre + '</h2>' +
+      '<h2 class="modal-title" id="modal-confirm-titre"></h2>' +
       '<p class="modal-message"></p>' +
       (options.alert ? '<p class="modal-alert"></p>' : '') +
       '<div class="modal-actions"></div>' +
       '</div>';
+    overlay.querySelector('.modal-title').textContent = titre;
     overlay.querySelector('.modal-message').textContent = message || '';
     if (options.alert) {
       overlay.querySelector('.modal-alert').textContent = options.alert;
     }
 
     const actions = overlay.querySelector('.modal-actions');
+    let focusEl = null;
+
     if (isBlock) {
       const ok = document.createElement('button');
       ok.type = 'button';
       ok.className = 'btn btn-primary';
-      ok.textContent = 'OK';
+      ok.textContent = okLabel;
       ok.addEventListener('click', () => {
         fermerModaleConfirm();
         if (typeof onConfirm === 'function') onConfirm();
       });
       actions.appendChild(ok);
+      focusEl = ok;
     } else {
       const cancel = document.createElement('button');
       cancel.type = 'button';
-      cancel.className = 'btn btn-ghost';
-      cancel.textContent = 'Annuler';
+      cancel.className = 'btn btn-secondary';
+      cancel.textContent = cancelLabel;
       cancel.addEventListener('click', fermerModaleConfirm);
+
       const ok = document.createElement('button');
       ok.type = 'button';
       ok.className = 'btn btn-primary';
-      ok.textContent = 'Confirmer';
+      ok.textContent = okLabel;
       ok.addEventListener('click', () => {
         fermerModaleConfirm();
         if (typeof onConfirm === 'function') onConfirm();
       });
+
       actions.appendChild(cancel);
       actions.appendChild(ok);
+      focusEl = options.focusCancel ? cancel : ok;
     }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) fermerModaleConfirm();
+    });
 
     document.body.appendChild(overlay);
     document.body.classList.add('modal-open');
+    if (focusEl) focusEl.focus();
 
     const onEsc = (e) => {
       if (e.key === 'Escape') {
@@ -140,7 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }, {
         block,
         alert: alertMsg || undefined,
-        titre: block ? 'Information' : 'Confirmation',
+        titre: form.getAttribute('data-confirm-titre') || (block ? 'Information' : 'Confirmation'),
+        okLabel: form.getAttribute('data-confirm-ok') || (block ? 'OK' : 'Confirmer'),
+        cancelLabel: form.getAttribute('data-confirm-cancel') || 'Annuler',
       });
     });
   });
@@ -172,21 +175,123 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('form[data-abandon-guard], form[data-abandon-watch]').forEach((form) => {
-    const markDirty = () => {
-      form.dataset.abandonDirty = '1';
-    };
-    form.addEventListener('input', markDirty);
-    form.addEventListener('change', markDirty);
-    form.addEventListener('submit', () => {
-      delete form.dataset.abandonDirty;
-    });
-  });
+  // ——— Garde d’abandon : modale Fashion pour la navigation interne ———
+  (function initAbandonGuard() {
+    const formGuards = Array.from(document.querySelectorAll('form[data-abandon-guard], form[data-abandon-watch]'));
+    if (!formGuards.length) return;
 
-  window.addEventListener('beforeunload', (e) => {
-    if (formulaireSale()) {
+    function snapshotForm(form) {
+      const data = new FormData(form);
+      const parts = [];
+      data.forEach((value, key) => {
+        parts.push(key + '=' + String(value));
+      });
+      return parts.sort().join('&');
+    }
+
+    function markDirty(form) {
+      form.dataset.abandonDirty = '1';
+    }
+
+    function markClean(form) {
+      delete form.dataset.abandonDirty;
+    }
+
+    function isFormDirty(form) {
+      return form.dataset.abandonDirty === '1';
+    }
+
+    function anyDirty() {
+      return formGuards.some(isFormDirty);
+    }
+
+    function dirtySource() {
+      return formGuards.find(isFormDirty) || null;
+    }
+
+    formGuards.forEach((form) => {
+      form.dataset.abandonSnapshot = snapshotForm(form);
+      const onChange = () => {
+        if (snapshotForm(form) !== form.dataset.abandonSnapshot) {
+          markDirty(form);
+        } else {
+          markClean(form);
+        }
+      };
+      form.addEventListener('input', onChange);
+      form.addEventListener('change', onChange);
+      form.addEventListener('submit', () => markClean(form));
+    });
+
+    function optionsForLeave() {
+      const source = dirtySource();
+      return {
+        titre: (source && source.getAttribute('data-abandon-titre')) || 'Quitter cette page ?',
+        okLabel: (source && source.getAttribute('data-abandon-ok')) || 'Quitter',
+        cancelLabel: (source && source.getAttribute('data-abandon-cancel')) || 'Rester',
+        focusCancel: true,
+      };
+    }
+
+    function messageForLeave() {
+      const source = dirtySource();
+      return (source && source.getAttribute('data-abandon-message'))
+        || 'Des modifications non enregistrées seront perdues. Voulez-vous vraiment quitter ?';
+    }
+
+    function confirmerDepart(url) {
+      ouvrirModaleConfirm(messageForLeave(), () => {
+        formGuards.forEach(markClean);
+        window.location.href = url;
+      }, optionsForLeave());
+    }
+
+    // F5 / fermeture d’onglet : alerte navigateur (non stylable, contrainte navigateur)
+    window.addEventListener('beforeunload', (e) => {
+      if (!anyDirty()) return;
       e.preventDefault();
       e.returnValue = '';
-    }
-  });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!anyDirty()) return;
+
+      const navBtn = e.target.closest('[data-navigate]');
+      if (navBtn) {
+        const url = navBtn.getAttribute('data-navigate') || '';
+        if (!url) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        confirmerDepart(url);
+        return;
+      }
+
+      const link = e.target.closest('a[href]');
+      if (!link) return;
+
+      const href = link.getAttribute('href') || '';
+      if (
+        href === ''
+        || href.startsWith('#')
+        || href.startsWith('javascript:')
+        || link.target === '_blank'
+        || link.hasAttribute('download')
+      ) {
+        return;
+      }
+
+      // Même URL (ancre seule)
+      try {
+        const dest = new URL(link.href, window.location.href);
+        if (dest.pathname === window.location.pathname && dest.search === window.location.search) {
+          return;
+        }
+      } catch (err) {
+        return;
+      }
+
+      e.preventDefault();
+      confirmerDepart(link.href);
+    }, true);
+  })();
 });

@@ -28,7 +28,12 @@ $etapeCourante = $etape;
         <div class="checkout-main">
             <?php if ($etape === 'livraison'): ?>
                 <p class="muted">Indiquez vos coordonnées de livraison (enregistrées sur votre profil pour les prochaines commandes).</p>
-                <form method="post" id="commande-form" class="auth-form checkout-form" data-abandon-guard novalidate>
+                <form method="post" id="commande-form" class="auth-form checkout-form" data-abandon-guard
+                      data-abandon-titre="Quitter la commande ?"
+                      data-abandon-message="Vos informations de livraison ne seront pas enregistrées si vous quittez maintenant."
+                      data-abandon-ok="Quitter"
+                      data-abandon-cancel="Rester"
+                      novalidate>
                     <?= Csrf::champ() ?>
                     <input type="hidden" name="action" value="livraison">
 
@@ -54,7 +59,12 @@ $etapeCourante = $etape;
                     <button type="submit" class="btn btn-primary">Continuer vers le paiement</button>
                 </form>
             <?php else: ?>
-                <form method="post" id="commande-form" class="auth-form checkout-form" data-abandon-guard novalidate>
+                <form method="post" id="commande-form" class="auth-form checkout-form" data-abandon-guard
+                      data-abandon-titre="Quitter le paiement ?"
+                      data-abandon-message="La commande n’a pas encore été confirmée. Voulez-vous vraiment quitter ?"
+                      data-abandon-ok="Quitter"
+                      data-abandon-cancel="Rester"
+                      novalidate>
                     <?= Csrf::champ() ?>
                     <input type="hidden" name="action" value="confirmer">
 
