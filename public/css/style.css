@@ -482,6 +482,7 @@ main { min-height: 60vh; }
 }
 .auth-page .btn-primary {
   width: 100%;
+  margin-top: 1rem;
 }
 
 /* Catalogue — pleine largeur utile + filtres soignés */

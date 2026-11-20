@@ -1,7 +1,7 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow">
+<section class="section page-narrow auth-page">
     <h1>Mon profil</h1>
     <?php if (!empty($erreurs)): ?>
         <ul class="form-error" role="alert">
@@ -24,7 +24,7 @@ ob_start();
         <input type="text" id="ville" name="ville" value="<?= htmlspecialchars($old['ville']) ?>">
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
-    <p><a href="<?= BASE_URL ?>/mon-compte">Retour</a></p>
+    <p class="auth-liens"><a href="<?= BASE_URL ?>/mon-compte">Retour</a></p>
 </section>
 <?php
 $contenu = ob_get_clean();
