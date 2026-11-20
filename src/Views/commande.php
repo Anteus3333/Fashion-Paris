@@ -35,19 +35,24 @@ $config = $config ?? require __DIR__ . '/../../config/commandeconfig.php';
     </div>
 
     <h2>Livraison &amp; paiement</h2>
+    <p class="muted">Indiquez vos coordonnées de livraison (enregistrées sur votre profil pour les prochaines commandes).</p>
     <form method="post" id="commande-form" class="auth-form" data-abandon-guard novalidate>
         <?= Csrf::champ() ?>
 
+        <label for="telephone">Téléphone</label>
+        <input type="tel" id="telephone" name="telephone" required autocomplete="tel"
+               value="<?= htmlspecialchars($old['telephone']) ?>">
+
         <label for="adresse_livraison">Adresse</label>
-        <input type="text" id="adresse_livraison" name="adresse_livraison" required
+        <input type="text" id="adresse_livraison" name="adresse_livraison" required autocomplete="street-address"
                value="<?= htmlspecialchars($old['adresse_livraison']) ?>">
 
         <label for="code_postal_livraison">Code postal</label>
         <input type="text" id="code_postal_livraison" name="code_postal_livraison" required pattern="\d{5}"
-               value="<?= htmlspecialchars($old['code_postal_livraison']) ?>">
+               autocomplete="postal-code" value="<?= htmlspecialchars($old['code_postal_livraison']) ?>">
 
         <label for="ville_livraison">Ville</label>
-        <input type="text" id="ville_livraison" name="ville_livraison" required
+        <input type="text" id="ville_livraison" name="ville_livraison" required autocomplete="address-level2"
                value="<?= htmlspecialchars($old['ville_livraison']) ?>">
 
         <label for="date_livraison">Date de livraison souhaitée (optionnel)</label>

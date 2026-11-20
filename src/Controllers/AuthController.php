@@ -66,13 +66,9 @@ class AuthController {
         $titrePage = 'Inscription — Fashion Paris';
         $erreurs = [];
         $old = [
-            'nom'             => '',
-            'prenom'          => '',
-            'telephone'       => '',
-            'email'           => '',
-            'adresse_postale' => '',
-            'code_postal'     => '',
-            'ville'           => '',
+            'nom'    => '',
+            'prenom' => '',
+            'email'  => '',
         ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -91,18 +87,6 @@ class AuthController {
             if ($old['prenom'] === '') {
                 $erreurs[] = 'Le prénom est obligatoire.';
             }
-            if ($old['telephone'] === '') {
-                $erreurs[] = 'Le téléphone est obligatoire.';
-            }
-            if ($old['adresse_postale'] === '') {
-                $erreurs[] = 'L\'adresse est obligatoire.';
-            }
-            if (!preg_match('/^\d{5}$/', $old['code_postal'])) {
-                $erreurs[] = 'Le code postal doit contenir 5 chiffres.';
-            }
-            if ($old['ville'] === '') {
-                $erreurs[] = 'La ville est obligatoire.';
-            }
             if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
                 $erreurs[] = 'Adresse e-mail invalide.';
             }
@@ -111,6 +95,15 @@ class AuthController {
                 $erreurs[] = 'La confirmation ne correspond pas au mot de passe.';
             }
 
+            // Coordonnées de livraison saisies au checkout, pas à l’inscription
+            $payload = $old + [
+                'password'        => $password,
+                'telephone'       => '',
+                'adresse_postale' => '',
+                'code_postal'     => '',
+                'ville'           => '',
+            ];
+
             $existant = empty($erreurs) ? $this->utilisateurModel->findByEmail($old['email']) : null;
             if ($existant) {
                 if ((int) ($existant['email_verifie'] ?? 1) === 0
@@ -118,7 +111,7 @@ class AuthController {
                 ) {
                     $token = $this->utilisateurModel->reactiverInscriptionNonVerifiee(
                         (int) $existant['utilisateur_id'],
-                        $old + ['password' => $password]
+                        $payload
                     );
                     if ($token) {
                         $this->envoyerMailConfirmation($old['email'], $old['prenom'], $token);
@@ -131,7 +124,7 @@ class AuthController {
             }
 
             if (empty($erreurs)) {
-                $compte = $this->utilisateurModel->create($old + ['password' => $password]);
+                $compte = $this->utilisateurModel->create($payload);
                 $this->envoyerMailConfirmation($old['email'], $old['prenom'], $compte['token']);
                 $_SESSION['flash_succes'] = 'Compte créé. Confirmez votre adresse e-mail via le lien reçu (valable 24 h) avant de vous connecter.';
                 header('Location: ' . BASE_URL . '/login');

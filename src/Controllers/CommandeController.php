@@ -32,10 +32,12 @@ class CommandeController {
         $erreurs = [];
 
         $old = [
+            'telephone'             => $utilisateur['telephone'] ?? '',
             'adresse_livraison'     => $utilisateur['adresse_postale'] ?? '',
             'code_postal_livraison' => $utilisateur['code_postal'] ?? '',
             'ville_livraison'       => $utilisateur['ville'] ?? '',
             'mode_paiement'         => 'carte',
+            'date_livraison'        => '',
         ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,6 +47,9 @@ class CommandeController {
 
             if (!Csrf::verifier()) {
                 $erreurs[] = 'Session expirée, veuillez renvoyer le formulaire.';
+            }
+            if ($old['telephone'] === '') {
+                $erreurs[] = 'Le téléphone est obligatoire.';
             }
             if ($old['adresse_livraison'] === '') {
                 $erreurs[] = 'L\'adresse de livraison est obligatoire.';
@@ -98,12 +103,23 @@ class CommandeController {
                         'mode_paiement'          => $old['mode_paiement'],
                     ], $lignesSql);
 
+                    // Mémorise les coordonnées sur le profil pour les prochaines commandes
+                    (new UtilisateurModel())->updateProfil((int) $_SESSION['utilisateur']['id'], [
+                        'prenom'          => $utilisateur['prenom'] ?? ($_SESSION['utilisateur']['prenom'] ?? ''),
+                        'nom'             => $utilisateur['nom'] ?? ($_SESSION['utilisateur']['nom'] ?? ''),
+                        'telephone'       => $old['telephone'],
+                        'adresse_postale' => $old['adresse_livraison'],
+                        'code_postal'     => $old['code_postal_livraison'],
+                        'ville'           => $old['ville_livraison'],
+                    ]);
+
                     PanierService::vider();
 
                     $commandeCreee = $commandeModel->getByNumero($numero);
                     $lignesMail = $commandeModel->getLignes($numero);
-                    if ($commandeCreee && $utilisateur) {
-                        (new SmtpMailer())->envoyerConfirmationCommande($commandeCreee, $lignesMail, $utilisateur);
+                    $utilisateurMail = (new UtilisateurModel())->findById((int) $_SESSION['utilisateur']['id']) ?: $utilisateur;
+                    if ($commandeCreee && $utilisateurMail) {
+                        (new SmtpMailer())->envoyerConfirmationCommande($commandeCreee, $lignesMail, $utilisateurMail);
                     }
 
                     $_SESSION['flash_succes'] = 'Commande ' . $numero . ' enregistrée. Un e-mail de confirmation vous a été envoyé (si SMTP configuré).';
