@@ -1283,24 +1283,21 @@ body.modal-open { overflow: hidden; }
 /* Pages légales */
 .legal-checkout-bar {
   position: sticky;
-  top: 0;
-  z-index: 40;
+  /* Sous la navbar sticky pour rester visible au scroll */
+  top: 4.35rem;
+  z-index: 45;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: .75rem 1rem;
-  padding: .85rem 1.25rem;
+  justify-content: center;
+  padding: .75rem 1.25rem;
   background: rgba(247, 242, 236, 0.96);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(8px);
 }
-.legal-checkout-bar p {
-  margin: 0;
-  color: var(--ink);
-  font-weight: 600;
+.legal-checkout-bar .btn {
+  white-space: nowrap;
+  min-width: 12rem;
 }
-.legal-checkout-bar .btn { white-space: nowrap; }
 
 .legal-hero {
   padding: 2.75rem 1.25rem 1.25rem;

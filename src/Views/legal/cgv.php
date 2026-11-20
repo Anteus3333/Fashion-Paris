@@ -4,7 +4,6 @@ $retourPaiement = !empty($retourPaiement);
 ?>
 <?php if ($retourPaiement): ?>
     <div class="legal-checkout-bar" role="region" aria-label="Retour à la commande">
-        <p>Vous consultez les CGV pendant votre commande.</p>
         <a class="btn btn-primary" href="<?= BASE_URL ?>/commande?etape=paiement">Retour au paiement</a>
     </div>
 <?php endif; ?>
