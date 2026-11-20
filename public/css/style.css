@@ -453,7 +453,10 @@ main { min-height: 60vh; }
 }
 .checkout-cgv input { margin-top: .2rem; }
 .checkout-secure { margin: 0 0 1rem; }
-.checkout-form .btn-primary { width: 100%; }
+.checkout-form .btn-primary {
+  width: 100%;
+  margin-top: 1rem;
+}
 
 /* Auth — pavé centré (connexion, inscription, reset) */
 .auth-page {
