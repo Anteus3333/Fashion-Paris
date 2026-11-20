@@ -329,8 +329,7 @@ main { min-height: 60vh; }
   height: 2px;
   background: var(--line);
 }
-.checkout-steps__item.is-done:not(:last-child)::after,
-.checkout-steps__item.is-current:not(:last-child)::after {
+.checkout-steps__item.is-done:not(:last-child)::after {
   background: rgba(139, 41, 66, 0.35);
 }
 .checkout-steps__link {
@@ -367,6 +366,13 @@ main { min-height: 60vh; }
 }
 .checkout-steps__item.is-current .checkout-steps__label {
   color: var(--accent);
+}
+.checkout-steps__item.is-reachable .checkout-steps__link:hover .checkout-steps__num {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.checkout-steps__item.is-reachable .checkout-steps__link:hover .checkout-steps__label {
+  color: var(--ink);
 }
 
 .checkout-header {

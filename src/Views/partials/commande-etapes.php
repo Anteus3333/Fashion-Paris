@@ -29,8 +29,10 @@ $indexAtteint = max($indexAtteint, $indexCourant);
             $classe = 'checkout-steps__item';
             if ($i === $indexCourant) {
                 $classe .= ' is-current';
-            } elseif ($i <= $indexAtteint) {
+            } elseif ($i < $indexCourant) {
                 $classe .= ' is-done';
+            } elseif ($i <= $indexAtteint) {
+                $classe .= ' is-reachable';
             }
             $cliquable = ($i !== $indexCourant) && ($i <= $indexAtteint);
             ?>
