@@ -9,7 +9,7 @@ class HomeController {
     public function index() {
         $titrePage = 'Accueil — Fashion Paris';
         $produitModel = new ProduitModel();
-        $produitsVedette = $produitModel->getMisEnAvant(4);
+        $produitsVedette = $produitModel->getMisEnAvant(3);
         $categories = (new CategorieModel())->getAll();
         require __DIR__ . '/../Views/home.php';
     }
