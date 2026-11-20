@@ -1290,9 +1290,9 @@ body.modal-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
   padding: .75rem 1.25rem;
-  background: rgba(247, 242, 236, 0.96);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 16px rgba(26, 21, 32, 0.06);
 }
 .legal-checkout-bar .btn {
   white-space: nowrap;
