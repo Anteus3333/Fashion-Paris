@@ -1,7 +1,11 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow">
+<section class="section page-narrow checkout-page">
+    <?php
+    $etapeCourante = 'panier';
+    require __DIR__ . '/partials/commande-etapes.php';
+    ?>
     <h1>Panier</h1>
 
     <?php if (empty($lignes)): ?>
