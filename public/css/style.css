@@ -51,6 +51,7 @@ header[role="banner"] {
   position: sticky;
   top: 0;
   z-index: 50;
+  background: #f7f2ec;
 }
 
 .navbar {
@@ -61,8 +62,7 @@ header[role="banner"] {
   gap: 1rem;
   padding: .9rem 1.25rem;
   border-bottom: 1px solid var(--line);
-  background: rgba(247, 242, 236, 0.92);
-  backdrop-filter: blur(8px);
+  background: #f7f2ec;
 }
 
 .logo {
@@ -1281,27 +1281,20 @@ body.modal-open { overflow: hidden; }
 .admin-chart-wrap { position: relative; height: 240px; }
 
 /* Pages légales */
+header:has(.legal-checkout-bar) .navbar {
+  border-bottom: 0;
+}
 .legal-checkout-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 4.35rem;
-  z-index: 49;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .85rem 1.25rem;
+  padding: .15rem 1.25rem .9rem;
   background: #f7f2ec;
   border-bottom: 1px solid var(--line);
-  box-shadow: 0 8px 20px rgba(26, 21, 32, 0.08);
 }
 .legal-checkout-bar .btn {
   white-space: nowrap;
   min-width: 12rem;
-}
-/* Espace sous la barre fixe CGV */
-body.has-cgv-checkout-bar {
-  padding-top: 4.1rem;
 }
 
 .legal-hero {

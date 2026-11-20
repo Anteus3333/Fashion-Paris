@@ -3,11 +3,6 @@ ob_start();
 $retourPaiement = !empty($retourPaiement);
 $barreCheckoutCgv = $retourPaiement;
 ?>
-<?php if ($retourPaiement): ?>
-    <div class="legal-checkout-bar" role="region" aria-label="Retour à la commande">
-        <a class="btn btn-primary" href="<?= BASE_URL ?>/commande?etape=paiement">Retour au paiement</a>
-    </div>
-<?php endif; ?>
 <section class="legal-hero">
     <h1>Conditions générales de vente</h1>
     <p>Conditions applicables aux commandes passées sur Fashion Paris.</p>

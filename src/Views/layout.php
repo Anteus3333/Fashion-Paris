@@ -11,7 +11,7 @@
     <?php $cssVersion = @filemtime(__DIR__ . '/../../public/css/style.css') ?: time(); ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css?v=<?= $cssVersion ?>">
 </head>
-<body<?= !empty($barreCheckoutCgv) ? ' class="has-cgv-checkout-bar"' : '' ?>>
+<body>
     <a class="skip-link" href="#contenu-principal">Aller au contenu principal</a>
     <header role="banner">
         <nav class="navbar" aria-label="Navigation principale">
@@ -59,6 +59,11 @@
                 <?php endif; ?>
             </ul>
         </nav>
+        <?php if (!empty($barreCheckoutCgv)): ?>
+            <div class="legal-checkout-bar" role="region" aria-label="Retour à la commande">
+                <a class="btn btn-primary" href="<?= BASE_URL ?>/commande?etape=paiement">Retour au paiement</a>
+            </div>
+        <?php endif; ?>
     </header>
 
     <main id="contenu-principal" tabindex="-1">
