@@ -53,11 +53,6 @@ $etapeCourante = $etape;
                     <input type="text" id="ville_livraison" name="ville_livraison" required autocomplete="address-level2"
                            value="<?= htmlspecialchars($old['ville_livraison']) ?>">
 
-                    <p class="muted checkout-delai">
-                        Livraison forfaitaire <?= ViewHelper::prix((float) ($config['frais_livraison'] ?? 10)) ?>
-                        — délai estimé <?= htmlspecialchars((string) ($config['delai_livraison'] ?? '7 jours ouvrés')) ?>.
-                    </p>
-
                     <button type="submit" class="btn btn-primary">Continuer vers le paiement</button>
                 </form>
             <?php else: ?>
