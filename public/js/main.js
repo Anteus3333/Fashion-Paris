@@ -124,6 +124,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.FashionModal = { ouvrir: ouvrirModaleConfirm, fermer: fermerModaleConfirm };
 
+  // Boutons ViewHelper::btnNav (data-navigate) — navigation hors garde d’abandon
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-navigate]');
+    if (!btn) return;
+    // Si un formulaire sale existe, la garde d’abandon (capture) gère déjà le clic
+    if (document.querySelector(
+      'form[data-abandon-guard][data-abandon-dirty="1"], form[data-abandon-watch][data-abandon-dirty="1"]'
+    )) {
+      return;
+    }
+    const url = btn.getAttribute('data-navigate');
+    if (url) window.location.href = url;
+  });
+
   document.querySelectorAll('form[data-confirm]').forEach((form) => {
     form.addEventListener('submit', (e) => {
       if (form.dataset.confirmReady === '1') {
