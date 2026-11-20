@@ -4,10 +4,10 @@ ob_start();
 <section class="section page-narrow checkout-page">
     <?php
     $etapeCourante = 'panier';
-    $etapeAtteinte = 'panier';
     if (!empty($_SESSION['checkout']['adresse_livraison'])) {
-        $etapeAtteinte = (($_SESSION['checkout']['etape'] ?? '') === 'paiement') ? 'paiement' : 'livraison';
+        $etapeCourante = (($_SESSION['checkout']['etape'] ?? '') === 'paiement') ? 'paiement' : 'livraison';
     }
+    $etapeAtteinte = $etapeCourante;
     $urlRepriseCommande = ($etapeAtteinte === 'paiement')
         ? BASE_URL . '/commande?etape=paiement'
         : BASE_URL . '/commande';
