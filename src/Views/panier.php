@@ -4,6 +4,13 @@ ob_start();
 <section class="section page-narrow checkout-page">
     <?php
     $etapeCourante = 'panier';
+    $etapeAtteinte = 'panier';
+    if (!empty($_SESSION['checkout']['adresse_livraison'])) {
+        $etapeAtteinte = (($_SESSION['checkout']['etape'] ?? '') === 'paiement') ? 'paiement' : 'livraison';
+    }
+    $urlRepriseCommande = ($etapeAtteinte === 'paiement')
+        ? BASE_URL . '/commande?etape=paiement'
+        : BASE_URL . '/commande';
     require __DIR__ . '/partials/commande-etapes.php';
     ?>
     <h1>Panier</h1>
@@ -53,7 +60,11 @@ ob_start();
 
         <div class="hero-actions">
             <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Continuer ses achats', 'btn btn-secondary') ?>
-            <?= ViewHelper::btnNav(BASE_URL . '/commande', 'Passer commande', 'btn btn-primary') ?>
+            <?= ViewHelper::btnNav(
+                $urlRepriseCommande,
+                $etapeAtteinte === 'paiement' ? 'Reprendre le paiement' : 'Passer commande',
+                'btn btn-primary'
+            ) ?>
         </div>
     <?php endif; ?>
 </section>

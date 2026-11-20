@@ -1,6 +1,7 @@
 <?php
 ob_start();
 $retourPaiement = !empty($retourPaiement);
+$barreCheckoutCgv = $retourPaiement;
 ?>
 <?php if ($retourPaiement): ?>
     <div class="legal-checkout-bar" role="region" aria-label="Retour à la commande">

@@ -1282,21 +1282,26 @@ body.modal-open { overflow: hidden; }
 
 /* Pages légales */
 .legal-checkout-bar {
-  position: sticky;
-  /* Sous la navbar sticky pour rester visible au scroll */
+  position: fixed;
+  left: 0;
+  right: 0;
   top: 4.35rem;
-  z-index: 45;
+  z-index: 49;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .75rem 1.25rem;
-  background: var(--paper);
+  padding: .85rem 1.25rem;
+  background: #f7f2ec;
   border-bottom: 1px solid var(--line);
-  box-shadow: 0 6px 16px rgba(26, 21, 32, 0.06);
+  box-shadow: 0 8px 20px rgba(26, 21, 32, 0.08);
 }
 .legal-checkout-bar .btn {
   white-space: nowrap;
   min-width: 12rem;
+}
+/* Espace sous la barre fixe CGV */
+body.has-cgv-checkout-bar {
+  padding-top: 4.1rem;
 }
 
 .legal-hero {

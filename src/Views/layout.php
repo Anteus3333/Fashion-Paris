@@ -11,7 +11,7 @@
     <?php $cssVersion = @filemtime(__DIR__ . '/../../public/css/style.css') ?: time(); ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css?v=<?= $cssVersion ?>">
 </head>
-<body>
+<body<?= !empty($barreCheckoutCgv) ? ' class="has-cgv-checkout-bar"' : '' ?>>
     <a class="skip-link" href="#contenu-principal">Aller au contenu principal</a>
     <header role="banner">
         <nav class="navbar" aria-label="Navigation principale">

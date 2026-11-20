@@ -43,9 +43,17 @@ class CommandeController {
             'accepte_cgv'           => !empty($brouillon['accepte_cgv']),
         ];
 
-        $etape = (string) ($_GET['etape'] ?? 'livraison');
-        if ($etape !== 'paiement') {
+        $etapeGet = (string) ($_GET['etape'] ?? '');
+        if ($etapeGet === 'paiement') {
+            $etape = 'paiement';
+        } elseif ($etapeGet === 'livraison') {
             $etape = 'livraison';
+        } else {
+            // Reprise : mémorise la dernière étape atteinte (après un détour panier / CGV)
+            $etapeMemoire = (string) ($_SESSION['checkout']['etape'] ?? 'livraison');
+            $etape = ($etapeMemoire === 'paiement' && !empty($_SESSION['checkout']['adresse_livraison']))
+                ? 'paiement'
+                : 'livraison';
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -169,13 +177,23 @@ class CommandeController {
         }
 
         if ($etape === 'paiement' && empty($_SESSION['checkout']['adresse_livraison'])) {
-            header('Location: ' . BASE_URL . '/commande');
+            if (!isset($_SESSION['checkout']) || !is_array($_SESSION['checkout'])) {
+                $_SESSION['checkout'] = [];
+            }
+            $_SESSION['checkout']['etape'] = 'livraison';
+            header('Location: ' . BASE_URL . '/commande?etape=livraison');
             exit;
         }
 
         if ($etape === 'paiement') {
-            $old = array_merge($old, $_SESSION['checkout']);
+            $old = array_merge($old, $_SESSION['checkout'] ?? []);
         }
+
+        if (!isset($_SESSION['checkout']) || !is_array($_SESSION['checkout'])) {
+            $_SESSION['checkout'] = [];
+        }
+        $_SESSION['checkout']['etape'] = $etape;
+        $etapeAtteinte = $etape;
 
         require __DIR__ . '/../Views/commande.php';
     }

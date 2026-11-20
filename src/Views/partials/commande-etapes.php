@@ -1,16 +1,25 @@
 <?php
-/** Fil conducteur checkout. Variable : $etapeCourante = panier|livraison|paiement */
+/** Fil conducteur checkout.
+ *  $etapeCourante = panier|livraison|paiement
+ *  $etapeAtteinte = étape la plus avancée mémorisée (reprise)
+ */
 $etapeCourante = $etapeCourante ?? 'panier';
+$etapeAtteinte = $etapeAtteinte ?? $etapeCourante;
 $etapes = [
     'panier'    => ['label' => 'Panier', 'href' => BASE_URL . '/panier'],
-    'livraison' => ['label' => 'Livraison', 'href' => BASE_URL . '/commande'],
+    'livraison' => ['label' => 'Livraison', 'href' => BASE_URL . '/commande?etape=livraison'],
     'paiement'  => ['label' => 'Paiement', 'href' => BASE_URL . '/commande?etape=paiement'],
 ];
 $ordre = array_keys($etapes);
 $indexCourant = array_search($etapeCourante, $ordre, true);
+$indexAtteint = array_search($etapeAtteinte, $ordre, true);
 if ($indexCourant === false) {
     $indexCourant = 0;
 }
+if ($indexAtteint === false) {
+    $indexAtteint = $indexCourant;
+}
+$indexAtteint = max($indexAtteint, $indexCourant);
 ?>
 <nav class="checkout-steps" aria-label="Étapes de commande">
     <ol class="checkout-steps__list">
@@ -18,12 +27,12 @@ if ($indexCourant === false) {
             <?php
             $i = array_search($cle, $ordre, true);
             $classe = 'checkout-steps__item';
-            if ($i < $indexCourant) {
-                $classe .= ' is-done';
-            } elseif ($i === $indexCourant) {
+            if ($i === $indexCourant) {
                 $classe .= ' is-current';
+            } elseif ($i <= $indexAtteint) {
+                $classe .= ' is-done';
             }
-            $cliquable = $i < $indexCourant;
+            $cliquable = ($i !== $indexCourant) && ($i <= $indexAtteint);
             ?>
             <li class="<?= $classe ?>">
                 <?php if ($cliquable): ?>
