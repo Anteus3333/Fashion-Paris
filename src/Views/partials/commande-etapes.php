@@ -14,7 +14,7 @@ if ($indexCourant === false) {
 ?>
 <nav class="checkout-steps" aria-label="Étapes de commande">
     <ol class="checkout-steps__list">
-        <?php foreach ($etapes as $cle => $etape): ?>
+        <?php foreach ($etapes as $cle => $etapeInfo): ?>
             <?php
             $i = array_search($cle, $ordre, true);
             $classe = 'checkout-steps__item';
@@ -27,17 +27,18 @@ if ($indexCourant === false) {
             ?>
             <li class="<?= $classe ?>">
                 <?php if ($cliquable): ?>
-                    <a class="checkout-steps__link" href="<?= htmlspecialchars($etape['href']) ?>">
+                    <a class="checkout-steps__link" href="<?= htmlspecialchars($etapeInfo['href']) ?>">
                         <span class="checkout-steps__num" aria-hidden="true"><?= $i + 1 ?></span>
-                        <span class="checkout-steps__label"><?= htmlspecialchars($etape['label']) ?></span>
+                        <span class="checkout-steps__label"><?= htmlspecialchars($etapeInfo['label']) ?></span>
                     </a>
                 <?php else: ?>
                     <span class="checkout-steps__link" <?= $i === $indexCourant ? 'aria-current="step"' : '' ?>>
                         <span class="checkout-steps__num" aria-hidden="true"><?= $i + 1 ?></span>
-                        <span class="checkout-steps__label"><?= htmlspecialchars($etape['label']) ?></span>
+                        <span class="checkout-steps__label"><?= htmlspecialchars($etapeInfo['label']) ?></span>
                     </span>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
+        <?php unset($etapeInfo, $cle, $i, $classe, $cliquable); ?>
     </ol>
 </nav>
