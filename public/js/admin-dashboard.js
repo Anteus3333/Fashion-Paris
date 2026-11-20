@@ -20,7 +20,7 @@
     if (!data.labels || !data.labels.length) return;
 
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var palette = ['#8b2942', '#1a1520', '#5c5566', '#6a1e32', '#2c3340', '#6b3e2e', '#c4a4b0', '#4a5568'];
+    var palette = ['#6b1428', '#1a1520', '#5c5566', '#4a0d1a', '#2c3340', '#6b3e2e', '#c4a4b0', '#4a5568'];
 
     function buildOptions(titleY) {
       return {
