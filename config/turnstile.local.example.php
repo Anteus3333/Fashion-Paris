@@ -1,7 +1,8 @@
 <?php
 // config/turnstile.local.example.php — copier vers turnstile.local.php
 // Créer les clés : https://dash.cloudflare.com/ → Turnstile
-// En local Fashion = mêmes clés que Vite & Gourmand (domaine localhost).
+// En local, turnstile.php ignore ces clés et utilise les clés de test Cloudflare.
+// Ici : clés du widget autorisé pour fashion.anteusweb.com.
 
 return [
     'enabled'    => true,
