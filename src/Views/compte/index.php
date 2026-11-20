@@ -42,7 +42,7 @@ $telephone = trim((string) ($utilisateur['telephone'] ?? ''));
             </div>
         </dl>
         <p class="compte-profil__actions">
-            <?= ViewHelper::btnNav(BASE_URL . '/mon-compte/profil', 'Modifier mon profil', 'btn btn-outline') ?>
+            <?= ViewHelper::btnNav(BASE_URL . '/mon-compte/profil', 'Modifier mon profil', 'btn btn-primary') ?>
         </p>
     </div>
 
