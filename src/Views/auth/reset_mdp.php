@@ -1,7 +1,7 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow">
+<section class="section page-narrow auth-page">
     <h1>Nouveau mot de passe</h1>
     <?php if (!empty($erreurs)): ?>
         <ul class="form-error" role="alert">

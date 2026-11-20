@@ -1,7 +1,7 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow">
+<section class="section page-narrow auth-page">
     <h1>Mot de passe oublié</h1>
     <p class="section-intro">
         Indiquez votre adresse e-mail : nous vous enverrons un lien pour choisir un nouveau mot de passe.

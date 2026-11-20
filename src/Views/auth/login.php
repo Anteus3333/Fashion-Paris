@@ -1,7 +1,7 @@
 <?php
 ob_start();
 ?>
-<section class="section page-narrow">
+<section class="section page-narrow auth-page">
     <h1>Connexion</h1>
     <?php if (!empty($erreur)): ?>
         <p class="form-error" role="alert"><?= htmlspecialchars($erreur) ?></p>
