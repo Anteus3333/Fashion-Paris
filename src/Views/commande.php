@@ -78,10 +78,11 @@ $etapeCourante = $etape;
 
                     <label class="checkout-cgv">
                         <input type="checkbox" name="accepte_cgv" value="1" <?= !empty($old['accepte_cgv']) ? 'checked' : '' ?> required>
-                        <span>J’ai lu et j’accepte les <a href="<?= BASE_URL ?>/cgv" target="_blank" rel="noopener">CGV</a>.</span>
+                        <span>J’ai lu et j’accepte les
+                            <a href="<?= BASE_URL ?>/cgv?retour=paiement"
+                               data-abandon-skip="1">CGV</a>.
+                        </span>
                     </label>
-
-                    <p class="checkout-secure muted">Paiement simulé — aucune carte n’est débitée.</p>
 
                     <button type="submit" class="btn btn-primary" id="btn-confirmer-commande">
                         Payer <?= ViewHelper::prix($total) ?>
@@ -110,9 +111,17 @@ $etapeCourante = $etape;
                 <p class="cart-total">Total : <strong id="recap-total"><?= ViewHelper::prix($total) ?></strong></p>
             </div>
             <?php if ($etape === 'paiement' && !empty($old['adresse_livraison'])): ?>
+                <?php
+                $clientPrenom = trim((string) ($_SESSION['utilisateur']['prenom'] ?? ($utilisateur['prenom'] ?? '')));
+                $clientNom = trim((string) ($_SESSION['utilisateur']['nom'] ?? ($utilisateur['nom'] ?? '')));
+                $clientNomComplet = trim($clientPrenom . ' ' . $clientNom);
+                ?>
                 <div class="checkout-aside__info">
                     <h3>Livraison</h3>
                     <p>
+                        <?php if ($clientNomComplet !== ''): ?>
+                            <?= htmlspecialchars($clientNomComplet) ?><br>
+                        <?php endif; ?>
                         <?= htmlspecialchars($old['adresse_livraison']) ?><br>
                         <?= htmlspecialchars($old['code_postal_livraison']) ?> <?= htmlspecialchars($old['ville_livraison']) ?><br>
                         <?= htmlspecialchars($old['telephone']) ?>

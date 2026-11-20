@@ -1281,6 +1281,27 @@ body.modal-open { overflow: hidden; }
 .admin-chart-wrap { position: relative; height: 240px; }
 
 /* Pages légales */
+.legal-checkout-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem 1rem;
+  padding: .85rem 1.25rem;
+  background: rgba(247, 242, 236, 0.96);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+.legal-checkout-bar p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+}
+.legal-checkout-bar .btn { white-space: nowrap; }
+
 .legal-hero {
   padding: 2.75rem 1.25rem 1.25rem;
   max-width: 820px;

@@ -1,6 +1,13 @@
 <?php
 ob_start();
+$retourPaiement = !empty($retourPaiement);
 ?>
+<?php if ($retourPaiement): ?>
+    <div class="legal-checkout-bar" role="region" aria-label="Retour à la commande">
+        <p>Vous consultez les CGV pendant votre commande.</p>
+        <a class="btn btn-primary" href="<?= BASE_URL ?>/commande?etape=paiement">Retour au paiement</a>
+    </div>
+<?php endif; ?>
 <section class="legal-hero">
     <h1>Conditions générales de vente</h1>
     <p>Conditions applicables aux commandes passées sur Fashion Paris.</p>
@@ -76,7 +83,13 @@ ob_start();
         </p>
 
         <p class="legal-meta">Dernière mise à jour : novembre 2026</p>
-        <p class="legal-back"><a href="<?= BASE_URL ?>/">← Retour à l’accueil</a></p>
+        <?php if ($retourPaiement): ?>
+            <p class="legal-back">
+                <a class="btn btn-primary" href="<?= BASE_URL ?>/commande?etape=paiement">← Retour au paiement</a>
+            </p>
+        <?php else: ?>
+            <p class="legal-back"><a href="<?= BASE_URL ?>/">← Retour à l’accueil</a></p>
+        <?php endif; ?>
     </article>
 </section>
 <?php

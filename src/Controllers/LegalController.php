@@ -10,6 +10,7 @@ class LegalController {
 
     public function cgv() {
         $titrePage = 'Conditions générales de vente — Fashion Paris';
+        $retourPaiement = (string) ($_GET['retour'] ?? '') === 'paiement';
         require __DIR__ . '/../Views/legal/cgv.php';
     }
 
