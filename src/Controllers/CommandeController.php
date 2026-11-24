@@ -159,7 +159,7 @@ class CommandeController {
                             (new SmtpMailer())->envoyerConfirmationCommande($commandeCreee, $lignesMail, $utilisateurMail);
                         }
 
-                        $_SESSION['flash_succes'] = 'Commande ' . $numero . ' enregistrée. Un e-mail de confirmation vous a été envoyé (si SMTP configuré).';
+                        $_SESSION['flash_succes'] = 'Commande ' . $numero . ' enregistrée. Un e-mail de confirmation vous a été envoyé.';
                         header('Location: ' . BASE_URL . '/mon-compte/commande/' . rawurlencode($numero));
                         exit;
                     } catch (Throwable $e) {
