@@ -40,4 +40,8 @@ class MongoStatsModel {
     public function caParVille(): array {
         return $this->repository->caParVille();
     }
+
+    public function seriesMensuelles(int $nbMois = 12): array {
+        return $this->repository->seriesMensuelles($nbMois);
+    }
 }

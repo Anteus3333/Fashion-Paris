@@ -1063,6 +1063,13 @@ main { min-height: 60vh; }
 .admin-page-head h1 { margin-bottom: .25rem; }
 .admin-page-sub { margin: 0 0 .5rem; }
 .admin-toolbar { margin: 0 0 1rem; }
+.admin-stats-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem 1rem;
+}
 
 .admin-filters {
   margin: 0 0 1.25rem;

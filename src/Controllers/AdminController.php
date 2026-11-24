@@ -22,7 +22,6 @@ class AdminController {
         $titrePage = 'Administration — Fashion Paris';
         $statsModel = new MysqlStatsModel();
         $stats = $statsModel->resume();
-        $series = $statsModel->seriesMensuelles(12);
         $commandesRecentes = (new CommandeModel())->getAll();
         $commandesRecentes = array_slice($commandesRecentes, 0, 5);
         $config = require __DIR__ . '/../../config/commandeconfig.php';
@@ -191,7 +190,7 @@ class AdminController {
         $mongo = new MongoStatsModel();
         $mongoOk = $mongo->estDisponible();
         $nbDocs = 0;
-        $parVille = [];
+        $series = ['labels' => [], 'commandes' => [], 'ca' => []];
 
         if ($mongoOk && $_SERVER['REQUEST_METHOD'] === 'POST' && Csrf::verifier() && isset($_POST['sync'])) {
             try {
@@ -207,7 +206,7 @@ class AdminController {
         if ($mongoOk) {
             try {
                 $nbDocs = $mongo->compter();
-                $parVille = $mongo->caParVille();
+                $series = $mongo->seriesMensuelles(12);
             } catch (Throwable $e) {
                 $mongoOk = false;
                 $_SESSION['flash_erreur'] = 'Mongo : ' . $e->getMessage();
