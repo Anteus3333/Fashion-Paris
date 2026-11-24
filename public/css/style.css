@@ -1193,8 +1193,46 @@ main { min-height: 60vh; }
   text-align: left;
   padding: .55rem .4rem;
   border-bottom: 1px solid var(--line);
+  vertical-align: middle;
 }
 .data-table tr.is-warning { background: #fff3e8; }
+.data-table .col-visibilite {
+  width: 4.5rem;
+  text-align: center;
+}
+
+.statut-visibilite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  font-size: .95rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.statut-visibilite.is-on {
+  color: var(--ok);
+  background: rgba(31, 107, 74, 0.12);
+}
+.statut-visibilite.is-off {
+  color: var(--muted);
+  background: rgba(26, 21, 32, 0.08);
+}
+.tag-vedette {
+  display: inline-block;
+  margin-left: .4rem;
+  padding: .1rem .4rem;
+  border-radius: var(--radius);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+  vertical-align: middle;
+}
 
 .compte-profil {
   margin: 1.25rem 0 2rem;
