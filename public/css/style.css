@@ -560,9 +560,22 @@ main { min-height: 60vh; }
   display: flex;
   flex-wrap: wrap;
   gap: .5rem;
+  /* Mobile : boutons au-dessus (évite le clavier qui les cache) */
+  order: -1;
+}
+@media (min-width: 720px) {
+  .catalogue-filters__actions {
+    order: 0;
+  }
 }
 .catalogue-filters__actions .btn {
   min-height: 2.65rem;
+  flex: 1 1 auto;
+}
+@media (min-width: 720px) {
+  .catalogue-filters__actions .btn {
+    flex: 0 0 auto;
+  }
 }
 .catalogue-filters__count {
   margin: .9rem 0 0;
