@@ -6,6 +6,45 @@ $filtreActif = ($filtres['q'] ?? '') !== ''
     || ($filtres['categorie_id'] ?? null) !== null
     || ($filtres['actif'] ?? '') !== ''
     || ($filtres['vedette'] ?? '') !== '';
+
+$renduStock = static function (array $p): string {
+    $stock = (int) $p['stock'];
+    $stockClasse = $stock <= 0 ? 'is-rupture' : ($stock <= ProduitModel::STOCK_BAS ? 'is-low' : '');
+    ob_start();
+    ?>
+    <span class="stock-badge<?= $stockClasse !== '' ? ' ' . $stockClasse : '' ?>"
+          <?php if ($stock <= 0): ?>
+              title="Rupture de stock"
+          <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
+              title="Stock bas (≤ <?= (int) ProduitModel::STOCK_BAS ?>)"
+          <?php endif; ?>>
+        <?= $stock ?>
+        <?php if ($stock <= 0): ?>
+            <span class="stock-badge__label">Rupture</span>
+        <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
+            <span class="stock-badge__label">Bas</span>
+        <?php endif; ?>
+    </span>
+    <?php
+    return (string) ob_get_clean();
+};
+
+$renduVisibilite = static function (array $p): string {
+    $estActif = (int) $p['actif'] === 1;
+    ob_start();
+    if ($estActif): ?>
+        <span class="statut-visibilite is-on" title="Visible dans le catalogue">
+            <span class="statut-visibilite__icon" aria-hidden="true">✓</span>
+            <span class="sr-only">Visible</span>
+        </span>
+    <?php else: ?>
+        <span class="statut-visibilite is-off" title="Masqué du catalogue">
+            <span class="statut-visibilite__icon" aria-hidden="true">–</span>
+            <span class="sr-only">Masqué</span>
+        </span>
+    <?php endif;
+    return (string) ob_get_clean();
+};
 ?>
 <section class="section admin-page">
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin">Admin</a></p>
@@ -70,66 +109,78 @@ $filtreActif = ($filtres['q'] ?? '') !== ''
     <?php if ($nb === 0): ?>
         <p class="empty-state">Aucun produit ne correspond à ces critères.</p>
     <?php else: ?>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Catégorie</th>
-                    <th>Prix</th>
-                    <th>Stock</th>
-                    <th scope="col" class="col-visibilite">Visible</th>
-                    <th scope="col"><span class="sr-only">Actions</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($produits as $p): ?>
-                    <?php
-                    $estActif = (int) $p['actif'] === 1;
-                    $stock = (int) $p['stock'];
-                    $stockClasse = $stock <= 0 ? 'is-rupture' : ($stock <= ProduitModel::STOCK_BAS ? 'is-low' : '');
-                    ?>
-                    <tr class="<?= $stock <= 0 ? 'is-warning' : ($stock <= ProduitModel::STOCK_BAS ? 'is-stock-bas' : '') ?>">
-                        <td>
-                            <?= htmlspecialchars($p['nom']) ?>
+        <ul class="admin-produit-list">
+            <?php foreach ($produits as $p): ?>
+                <?php
+                $stock = (int) $p['stock'];
+                $cardClass = $stock <= 0 ? 'is-warning' : ($stock <= ProduitModel::STOCK_BAS ? 'is-stock-bas' : '');
+                ?>
+                <li class="admin-produit-card<?= $cardClass !== '' ? ' ' . $cardClass : '' ?>">
+                    <div class="admin-produit-card__head">
+                        <div class="admin-produit-card__title">
+                            <span class="admin-produit-card__name"><?= htmlspecialchars($p['nom']) ?></span>
                             <?php if (!empty($p['mis_en_avant'])): ?>
                                 <span class="tag-vedette" title="Mis en avant sur l’accueil">Vedette</span>
                             <?php endif; ?>
-                        </td>
-                        <td><?= htmlspecialchars($p['categorie_libelle']) ?></td>
-                        <td><?= ViewHelper::prix($p['prix']) ?></td>
-                        <td>
-                            <span class="stock-badge<?= $stockClasse !== '' ? ' ' . $stockClasse : '' ?>"
-                                  <?php if ($stock <= 0): ?>
-                                      title="Rupture de stock"
-                                  <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
-                                      title="Stock bas (≤ <?= (int) ProduitModel::STOCK_BAS ?>)"
-                                  <?php endif; ?>>
-                                <?= $stock ?>
-                                <?php if ($stock <= 0): ?>
-                                    <span class="stock-badge__label">Rupture</span>
-                                <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
-                                    <span class="stock-badge__label">Bas</span>
-                                <?php endif; ?>
-                            </span>
-                        </td>
-                        <td class="col-visibilite">
-                            <?php if ($estActif): ?>
-                                <span class="statut-visibilite is-on" title="Visible dans le catalogue">
-                                    <span class="statut-visibilite__icon" aria-hidden="true">✓</span>
-                                    <span class="sr-only">Visible</span>
-                                </span>
-                            <?php else: ?>
-                                <span class="statut-visibilite is-off" title="Masqué du catalogue">
-                                    <span class="statut-visibilite__icon" aria-hidden="true">–</span>
-                                    <span class="sr-only">Masqué</span>
-                                </span>
-                            <?php endif; ?>
-                        </td>
-                        <td><a href="<?= BASE_URL ?>/admin/produit/<?= (int) $p['produit_id'] ?>">Modifier</a></td>
+                        </div>
+                        <a class="admin-produit-card__edit" href="<?= BASE_URL ?>/admin/produit/<?= (int) $p['produit_id'] ?>">Modifier</a>
+                    </div>
+                    <dl class="admin-produit-card__meta">
+                        <div>
+                            <dt>Catégorie</dt>
+                            <dd><?= htmlspecialchars($p['categorie_libelle']) ?></dd>
+                        </div>
+                        <div>
+                            <dt>Prix</dt>
+                            <dd><?= ViewHelper::prix($p['prix']) ?></dd>
+                        </div>
+                        <div>
+                            <dt>Stock</dt>
+                            <dd><?= $renduStock($p) ?></dd>
+                        </div>
+                        <div>
+                            <dt>Visible</dt>
+                            <dd><?= $renduVisibilite($p) ?></dd>
+                        </div>
+                    </dl>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
+        <div class="admin-produits-table-wrap">
+            <table class="data-table admin-produits-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th scope="col" class="col-visibilite">Visible</th>
+                        <th scope="col"><span class="sr-only">Actions</span></th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($produits as $p): ?>
+                        <?php
+                        $stock = (int) $p['stock'];
+                        ?>
+                        <tr class="<?= $stock <= 0 ? 'is-warning' : ($stock <= ProduitModel::STOCK_BAS ? 'is-stock-bas' : '') ?>">
+                            <td>
+                                <?= htmlspecialchars($p['nom']) ?>
+                                <?php if (!empty($p['mis_en_avant'])): ?>
+                                    <span class="tag-vedette" title="Mis en avant sur l’accueil">Vedette</span>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= htmlspecialchars($p['categorie_libelle']) ?></td>
+                            <td><?= ViewHelper::prix($p['prix']) ?></td>
+                            <td><?= $renduStock($p) ?></td>
+                            <td class="col-visibilite"><?= $renduVisibilite($p) ?></td>
+                            <td><a href="<?= BASE_URL ?>/admin/produit/<?= (int) $p['produit_id'] ?>">Modifier</a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php endif; ?>
 </section>
 <?php
