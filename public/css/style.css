@@ -942,12 +942,41 @@ main { min-height: 60vh; }
 }
 .contact-horaires h2 { margin: 0 0 .4rem; font-size: 1.05rem; }
 .contact-horaires p { margin: .15rem 0; color: var(--muted); }
+.horaires-form {
+  max-width: 28rem;
+  margin: 1.25rem auto 0;
+  display: grid;
+  gap: 1rem;
+}
 .admin-horaire-row {
   border: 1px solid var(--line);
-  padding: .75rem 1rem 1rem;
-  margin: 0 0 .85rem;
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.15rem;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.55);
+  display: grid;
+  gap: .75rem;
 }
-.admin-horaire-row legend { padding: 0 .35rem; font-weight: 600; }
+.admin-horaire-row legend {
+  padding: 0 .4rem;
+  font-weight: 700;
+  font-size: .95rem;
+}
+.admin-horaire-times {
+  display: grid;
+  gap: .75rem;
+}
+@media (min-width: 480px) {
+  .admin-horaire-times {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.horaires-form .admin-form-actions {
+  justify-content: center;
+}
+.horaires-form .admin-form-actions .btn-primary {
+  min-width: 12rem;
+}
 
 .sr-only {
   position: absolute;

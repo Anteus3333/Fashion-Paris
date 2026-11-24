@@ -223,23 +223,30 @@ class AdminController {
         $model = new HoraireModel();
         $horaires = $model->getAll();
         $erreurs = [];
+        $groupes = $model->groupesEdition($horaires);
+        $semaine = $groupes['semaine'];
+        $samedi = $groupes['samedi'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Csrf::verifier()) {
                 $erreurs[] = 'Session expirée.';
             } else {
-                $lignes = [];
-                foreach ($_POST['horaire_id'] ?? [] as $i => $hid) {
-                    $lignes[] = [
-                        'horaire_id'      => (int) $hid,
-                        'heure_ouverture' => trim((string) ($_POST['heure_ouverture'][$i] ?? '')),
-                        'heure_fermeture' => trim((string) ($_POST['heure_fermeture'][$i] ?? '')),
-                    ];
+                $semaine = [
+                    'ouverture' => trim((string) ($_POST['ouverture_semaine'] ?? '')),
+                    'fermeture' => trim((string) ($_POST['fermeture_semaine'] ?? '')),
+                ];
+                $samedi = [
+                    'ouverture' => trim((string) ($_POST['ouverture_samedi'] ?? '')),
+                    'fermeture' => trim((string) ($_POST['fermeture_samedi'] ?? '')),
+                ];
+                if (!$model->horairesValides($semaine) || !$model->horairesValides($samedi)) {
+                    $erreurs[] = 'Horaires invalides (format HH:MM).';
+                } else {
+                    $model->enregistrerGroupes($semaine, $samedi);
+                    $_SESSION['flash_succes'] = 'Horaires mis à jour (pied de page et page Contact).';
+                    header('Location: ' . BASE_URL . '/admin/horaires');
+                    exit;
                 }
-                $model->enregistrer($lignes);
-                $_SESSION['flash_succes'] = 'Horaires mis à jour (pied de page et page Contact).';
-                header('Location: ' . BASE_URL . '/admin/horaires');
-                exit;
             }
         }
 
