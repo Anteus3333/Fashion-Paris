@@ -1106,16 +1106,29 @@ main { min-height: 60vh; }
 .personnel-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: .65rem 1rem;
-  margin: .75rem 0 1.25rem;
+  gap: .5rem 1rem;
+  margin: .5rem 0 .85rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--line);
 }
-.personnel-nav a { font-weight: 600; text-decoration: none; }
-.personnel-nav a.is-active { text-decoration: underline; }
+.personnel-nav a { font-weight: 600; text-decoration: none; color: var(--ink); }
+.personnel-nav a.is-active { text-decoration: underline; color: var(--accent); }
 .personnel-kpis {
   display: flex;
-  flex-wrap: wrap;
-  gap: .75rem 1.5rem;
-  margin: 0 0 1.5rem;
+  flex-direction: column;
+  gap: .35rem;
+  margin: 0 0 1.25rem;
+}
+.personnel-kpis p {
+  margin: 0;
+  line-height: 1.35;
+}
+@media (min-width: 720px) {
+  .personnel-kpis {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .35rem 1.5rem;
+  }
 }
 .contact-horaires {
   margin: 0 0 1.25rem;
