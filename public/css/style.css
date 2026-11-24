@@ -1286,9 +1286,16 @@ main { min-height: 60vh; }
   gap: .75rem 1rem;
   grid-template-columns: 1fr 1fr;
 }
-.admin-filters__field--search,
+.admin-filters__field--search {
+  grid-column: 1 / -1;
+  order: 0;
+}
 .admin-filters__actions {
   grid-column: 1 / -1;
+  order: 1;
+}
+.admin-filters__field:not(.admin-filters__field--search) {
+  order: 2;
 }
 @media (min-width: 720px) {
   .admin-filters__grid {
@@ -1296,8 +1303,10 @@ main { min-height: 60vh; }
     align-items: end;
   }
   .admin-filters__field--search,
-  .admin-filters__actions {
+  .admin-filters__actions,
+  .admin-filters__field:not(.admin-filters__field--search) {
     grid-column: auto;
+    order: 0;
   }
 }
 .admin-filters__field {
