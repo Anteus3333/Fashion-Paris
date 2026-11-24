@@ -56,7 +56,7 @@ $commandesListUrl = $commandesListUrl ?? ($gestionBase ?? BASE_URL);
         <?php foreach ($suivi as $s): ?>
             <li>
                 <strong><?= htmlspecialchars($config['statuts'][$s['statut']] ?? $s['statut']) ?></strong>
-                <span class="muted"><?= htmlspecialchars($s['date_modification']) ?></span>
+                <span class="muted"><?= htmlspecialchars(ViewHelper::formatDateHeure($s['date_modification'] ?? '')) ?></span>
                 <?php if ($s['commentaire']): ?> — <?= htmlspecialchars($s['commentaire']) ?><?php endif; ?>
             </li>
         <?php endforeach; ?>

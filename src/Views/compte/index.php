@@ -59,7 +59,7 @@ $telephone = trim((string) ($utilisateur['telephone'] ?? ''));
                     </a>
                     — <?= htmlspecialchars($config['statuts'][$c['statut']] ?? $c['statut']) ?>
                     — <?= ViewHelper::prix($c['montant_total']) ?>
-                    <span class="muted">(<?= htmlspecialchars($c['date_commande']) ?>)</span>
+                    <span class="muted">(<?= htmlspecialchars(ViewHelper::formatDateHeure($c['date_commande'] ?? '')) ?>)</span>
                 </li>
             <?php endforeach; ?>
         </ul>

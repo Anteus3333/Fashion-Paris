@@ -55,7 +55,7 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
                         </div>
                         <div>
                             <dt>Date</dt>
-                            <dd><?= htmlspecialchars($c['date_commande']) ?></dd>
+                            <dd><?= htmlspecialchars(ViewHelper::formatDateHeure($c['date_commande'] ?? '')) ?></dd>
                         </div>
                         <div class="commande-card__statut">
                             <dt>Statut</dt>
@@ -81,7 +81,7 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
                                 </a>
                             </td>
                             <td><?= htmlspecialchars($clientNom) ?></td>
-                            <td><?= htmlspecialchars($c['date_commande']) ?></td>
+                            <td><?= htmlspecialchars(ViewHelper::formatDateHeure($c['date_commande'] ?? '')) ?></td>
                             <td><?= htmlspecialchars($config['statuts'][$c['statut']] ?? $c['statut']) ?></td>
                             <td><?= ViewHelper::prix($c['montant_total']) ?></td>
                         </tr>

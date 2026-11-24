@@ -7,7 +7,7 @@ ob_start();
     <p>
         Statut :
         <strong><?= htmlspecialchars($config['statuts'][$commande['statut']] ?? $commande['statut']) ?></strong>
-        · <?= htmlspecialchars($commande['date_commande']) ?>
+        · <?= htmlspecialchars(ViewHelper::formatDateHeure($commande['date_commande'] ?? '')) ?>
     </p>
     <p class="muted">
         Livraison : <?= htmlspecialchars($commande['adresse_livraison']) ?>,

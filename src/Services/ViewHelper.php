@@ -28,6 +28,19 @@ class ViewHelper {
         return number_format((float) $montant, 2, ',', ' ') . ' €';
     }
 
+    /** Affiche une date/heure MySQL en JJ/MM/AAAA HH:MM. */
+    public static function formatDateHeure(?string $datetime): string {
+        $datetime = trim((string) $datetime);
+        if ($datetime === '') {
+            return '';
+        }
+        $ts = strtotime($datetime);
+        if ($ts === false) {
+            return $datetime;
+        }
+        return date('d/m/Y H:i', $ts);
+    }
+
     public static function btnNav(string $url, string $label, string $classes = 'btn', array $attrs = []): string {
         $action = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $labelEsc = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
