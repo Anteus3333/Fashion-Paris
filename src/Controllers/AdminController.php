@@ -256,7 +256,7 @@ class AdminController {
     public function personnels(): void {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
         $personnels = (new UtilisateurModel())->getPersonnels();
-        $titrePage = 'Comptes personnel — Admin';
+        $titrePage = 'Gestion du personnel — Admin';
         require __DIR__ . '/../Views/admin/personnels.php';
     }
 
