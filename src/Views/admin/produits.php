@@ -83,8 +83,12 @@ $filtreActif = ($filtres['q'] ?? '') !== ''
             </thead>
             <tbody>
                 <?php foreach ($produits as $p): ?>
-                    <?php $estActif = (int) $p['actif'] === 1; ?>
-                    <tr class="<?= (int) $p['stock'] <= 0 ? 'is-warning' : '' ?>">
+                    <?php
+                    $estActif = (int) $p['actif'] === 1;
+                    $stock = (int) $p['stock'];
+                    $stockClasse = $stock <= 0 ? 'is-rupture' : ($stock <= ProduitModel::STOCK_BAS ? 'is-low' : '');
+                    ?>
+                    <tr class="<?= $stock <= 0 ? 'is-warning' : ($stock <= ProduitModel::STOCK_BAS ? 'is-stock-bas' : '') ?>">
                         <td>
                             <?= htmlspecialchars($p['nom']) ?>
                             <?php if (!empty($p['mis_en_avant'])): ?>
@@ -93,7 +97,21 @@ $filtreActif = ($filtres['q'] ?? '') !== ''
                         </td>
                         <td><?= htmlspecialchars($p['categorie_libelle']) ?></td>
                         <td><?= ViewHelper::prix($p['prix']) ?></td>
-                        <td><?= (int) $p['stock'] ?></td>
+                        <td>
+                            <span class="stock-badge<?= $stockClasse !== '' ? ' ' . $stockClasse : '' ?>"
+                                  <?php if ($stock <= 0): ?>
+                                      title="Rupture de stock"
+                                  <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
+                                      title="Stock bas (≤ <?= (int) ProduitModel::STOCK_BAS ?>)"
+                                  <?php endif; ?>>
+                                <?= $stock ?>
+                                <?php if ($stock <= 0): ?>
+                                    <span class="stock-badge__label">Rupture</span>
+                                <?php elseif ($stock <= ProduitModel::STOCK_BAS): ?>
+                                    <span class="stock-badge__label">Bas</span>
+                                <?php endif; ?>
+                            </span>
+                        </td>
                         <td class="col-visibilite">
                             <?php if ($estActif): ?>
                                 <span class="statut-visibilite is-on" title="Visible dans le catalogue">

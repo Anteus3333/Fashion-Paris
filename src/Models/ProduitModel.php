@@ -7,6 +7,9 @@ class ProduitModel {
     /** Places max sur l’accueil (Sélection du moment). */
     public const MAX_MIS_EN_AVANT = 3;
 
+    /** Seuil d’alerte stock bas (inclus). */
+    public const STOCK_BAS = 5;
+
     private ProduitRepository $repository;
 
     public function __construct() {

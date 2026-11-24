@@ -1249,9 +1249,41 @@ main { min-height: 60vh; }
   vertical-align: middle;
 }
 .data-table tr.is-warning { background: #fff3e8; }
+.data-table tr.is-stock-bas { background: rgba(180, 110, 20, 0.08); }
 .data-table .col-visibilite {
   width: 4.5rem;
   text-align: center;
+}
+
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.stock-badge.is-low {
+  color: #8a4b00;
+}
+.stock-badge.is-rupture {
+  color: var(--err);
+}
+.stock-badge__label {
+  display: inline-block;
+  padding: .1rem .4rem;
+  border-radius: var(--radius);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.stock-badge.is-low .stock-badge__label {
+  color: #8a4b00;
+  background: rgba(180, 110, 20, 0.16);
+}
+.stock-badge.is-rupture .stock-badge__label {
+  color: var(--err);
+  background: rgba(139, 30, 30, 0.12);
 }
 
 .statut-visibilite {

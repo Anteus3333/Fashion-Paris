@@ -56,12 +56,12 @@ INSERT INTO `produit` (`produit_id`, `categorie_id`, `nom`, `slug`, `description
 (14, 2, 'Pantalon chino', 'pantalon-chino', 'Chino coton sergé, coupe slim.', 95.00, 16, 'FP-H-004', 1, 0),
 (15, 2, 'Veste bomber', 'veste-bomber', 'Bomber matelassé léger, finitions contrastées.', 189.00, 8, 'FP-H-005', 1, 0),
 (16, 2, 'Polo piqué', 'polo-pique', 'Polo piqué coton, col boutonné.', 69.00, 22, 'FP-H-006', 1, 0),
-(17, 2, 'Manteau loden', 'manteau-loden', 'Manteau loden mi-long, col chemise.', 350.00, 4, 'FP-H-007', 1, 0),
+(17, 2, 'Manteau loden', 'manteau-loden', 'Manteau loden mi-long, col chemise.', 350.00, 1, 'FP-H-007', 1, 0),
 (18, 3, 'Ceinture cuir fine', 'ceinture-cuir-fine', 'Ceinture fine en cuir lisse, boucle dorée.', 65.00, 25, 'FP-A-002', 1, 0),
-(19, 3, 'Écharpe mérinos', 'echarpe-merinos', 'Écharpe mérinos tissée, finitions franges.', 85.00, 14, 'FP-A-003', 1, 0),
+(19, 3, 'Écharpe mérinos', 'echarpe-merinos', 'Écharpe mérinos tissée, finitions franges.', 85.00, 2, 'FP-A-003', 1, 0),
 (20, 3, 'Pochette soie', 'pochette-soie', 'Pochette de costume en soie imprimée.', 45.00, 30, 'FP-A-004', 1, 0),
 (21, 3, 'Lunettes monture acétate', 'lunettes-monture', 'Monture acétate façon écaille, verres neutres.', 140.00, 10, 'FP-A-005', 1, 0),
-(22, 3, 'Bottines chelsea', 'bottines-chelsea', 'Chelsea boots cuir, semelle Goodyear.', 229.00, 7, 'FP-A-006', 1, 0);
+(22, 3, 'Bottines chelsea', 'bottines-chelsea', 'Chelsea boots cuir, semelle Goodyear.', 229.00, 3, 'FP-A-006', 1, 0);
 
 INSERT INTO `produit_image` (`produit_id`, `chemin`, `alt`, `ordre`) VALUES
 (1, 'produits/robe-midi-soie.jpg', 'Robe midi soie', 0),
