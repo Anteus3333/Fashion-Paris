@@ -283,8 +283,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const link = e.target.closest('a[href]');
       if (!link) return;
 
-      // Liens explicitement exclus (ex. lecture CGV pendant le checkout)
+      // Liens exclus (ex. CGV) : pas de modale Fashion ni d’alerte navigateur
       if (link.getAttribute('data-abandon-skip') === '1') {
+        formGuards.forEach(markClean);
         return;
       }
 
