@@ -314,6 +314,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true);
   })();
 
+  // Admin produit — aperçu immédiat du fichier image choisi
+  (function initApercuProduit() {
+    const input = document.getElementById('image');
+    const preview = document.getElementById('produit-preview');
+    const img = document.getElementById('produit-preview-img');
+    if (!input || !preview || !img) return;
+
+    const emptyMsg = document.getElementById('produit-preview-empty');
+    let objectUrl = null;
+
+    input.addEventListener('change', () => {
+      const file = input.files && input.files[0];
+      if (!file || !file.type.startsWith('image/')) {
+        return;
+      }
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+      objectUrl = URL.createObjectURL(file);
+      img.src = objectUrl;
+      img.alt = file.name || 'Aperçu';
+      img.hidden = false;
+      img.classList.remove('is-hidden');
+      preview.classList.remove('is-empty');
+      if (emptyMsg) {
+        emptyMsg.classList.add('is-hidden');
+      }
+    });
+  })();
+
   // Admin produit — mise en avant liée à « actif » + remplacement si places pleines
   (function initPublicationProduit() {
     const actif = document.getElementById('produit-actif');

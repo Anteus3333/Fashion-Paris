@@ -1135,10 +1135,20 @@ main { min-height: 60vh; }
   background: rgba(var(--accent-rgb), 0.04);
 }
 .admin-hint { margin: 0; font-size: .85rem; }
+.admin-product-upload {
+  display: grid;
+  gap: .45rem;
+}
+.admin-product-upload label {
+  font-weight: 600;
+  font-size: .92rem;
+}
 .admin-product-media input[type="file"] {
   font: inherit;
   font-size: .9rem;
+  width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-product-fields {

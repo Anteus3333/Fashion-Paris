@@ -24,17 +24,21 @@ $edition = !empty($produit);
         <aside class="admin-product-media" aria-labelledby="media-titre">
             <h2 id="media-titre" class="admin-panel-title">Visuel</h2>
             <?php $aImage = !empty($produit['image']); ?>
-            <div class="admin-product-preview<?= $aImage ? '' : ' is-empty' ?>">
+            <div class="admin-product-preview<?= $aImage ? '' : ' is-empty' ?>" id="produit-preview">
                 <?php if ($aImage): ?>
                     <img src="<?= AssetHelper::imageUrl($produit['image']) ?>"
-                         alt="<?= htmlspecialchars($old['nom'] !== '' ? $old['nom'] : 'Produit') ?>">
+                         alt="<?= htmlspecialchars($old['nom'] !== '' ? $old['nom'] : 'Produit') ?>"
+                         id="produit-preview-img">
                 <?php else: ?>
-                    <p class="muted">Aucune image</p>
+                    <p class="muted" id="produit-preview-empty">Aucune image</p>
+                    <img src="" alt="" id="produit-preview-img" class="is-hidden" hidden>
                 <?php endif; ?>
             </div>
-            <label for="image">Remplacer la photo</label>
-            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
-            <p class="muted admin-hint">JPEG, PNG ou WebP — 5 Mo max</p>
+            <div class="admin-product-upload">
+                <label for="image">Remplacer la photo</label>
+                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+                <p class="muted admin-hint">JPEG, PNG ou WebP — 5 Mo max</p>
+            </div>
         </aside>
 
         <div class="admin-product-fields">
