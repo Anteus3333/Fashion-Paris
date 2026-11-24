@@ -44,6 +44,35 @@ class ProduitRepository {
         return $stmt->fetchAll();
     }
 
+    /** Produits marqués mis en avant (admin), hors éventuel produit en cours d’édition. */
+    public function findMisEnAvantAdmin(?int $exclureId = null): array {
+        if (!$this->conn) {
+            return [];
+        }
+        $sql = 'SELECT produit_id, nom, actif, mis_en_avant
+                FROM produit
+                WHERE mis_en_avant = 1';
+        $params = [];
+        if ($exclureId !== null) {
+            $sql .= ' AND produit_id <> :id';
+            $params[':id'] = $exclureId;
+        }
+        $sql .= ' ORDER BY nom ASC';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public function retirerMisEnAvant(int $produitId): void {
+        if (!$this->conn) {
+            return;
+        }
+        $stmt = $this->conn->prepare(
+            'UPDATE produit SET mis_en_avant = 0 WHERE produit_id = :id'
+        );
+        $stmt->execute([':id' => $produitId]);
+    }
+
     public function findAllActifs(?int $categorieId = null): array {
         if (!$this->conn) {
             return [];

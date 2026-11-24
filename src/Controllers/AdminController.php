@@ -67,6 +67,7 @@ class AdminController {
             }
             $old['actif'] = isset($_POST['actif']) ? '1' : '0';
             $old['mis_en_avant'] = isset($_POST['mis_en_avant']) ? '1' : '0';
+            $remplaceId = (int) ($_POST['remplace_mis_en_avant'] ?? 0);
             // Slug / SKU hors formulaire : slug auto à la création, conservation à l’édition
             if ($old['slug'] === '') {
                 $old['slug'] = ProduitModel::slugifier($old['nom']);
@@ -86,6 +87,22 @@ class AdminController {
             }
             if ($model->slugExiste($old['slug'], $id)) {
                 $erreurs[] = 'Ce slug existe déjà.';
+            }
+
+            // Mise en avant : uniquement si actif, max 3 places (remplacement explicite)
+            if ($old['actif'] !== '1') {
+                $old['mis_en_avant'] = '0';
+            }
+            $dejaEnAvant = $id && !empty($produit['mis_en_avant']);
+            $autresVedettes = $model->getMisEnAvantAdmin($id ?: null);
+            $idsVedettes = array_map(static fn(array $p): int => (int) $p['produit_id'], $autresVedettes);
+            if ($old['mis_en_avant'] === '1' && !$dejaEnAvant && count($autresVedettes) >= ProduitModel::MAX_MIS_EN_AVANT) {
+                if ($remplaceId <= 0 || !in_array($remplaceId, $idsVedettes, true)) {
+                    $erreurs[] = 'L’accueil n’affiche que ' . ProduitModel::MAX_MIS_EN_AVANT
+                        . ' mises en avant : choisissez le produit à remplacer.';
+                }
+            } else {
+                $remplaceId = 0;
             }
 
             $uploader = new ImageUploadService();
@@ -109,16 +126,28 @@ class AdminController {
                 if ($upload['relatif']) {
                     $payload['image'] = $upload['relatif'];
                 }
+                if ($remplaceId > 0) {
+                    $model->retirerMisEnAvant($remplaceId);
+                }
                 if ($id) {
                     $model->update($id, $payload);
                     if ($upload['relatif']) {
                         $ancien = $model->remplacerImagePrincipale($id, $upload['relatif'], $old['nom']);
                         $uploader->supprimerSiUpload($ancien);
                     }
+                    $savedId = $id;
                     $_SESSION['flash_succes'] = 'Produit mis à jour.';
                 } else {
-                    $model->create($payload);
+                    $savedId = $model->create($payload);
                     $_SESSION['flash_succes'] = 'Produit créé.';
+                }
+                // Garde-fou : au plus MAX vedettes au total (ce produit + MAX-1 autres)
+                if ((int) $payload['mis_en_avant'] === 1 && $savedId) {
+                    $autres = $model->getMisEnAvantAdmin((int) $savedId);
+                    while (count($autres) > ProduitModel::MAX_MIS_EN_AVANT - 1) {
+                        $model->retirerMisEnAvant((int) $autres[0]['produit_id']);
+                        $autres = $model->getMisEnAvantAdmin((int) $savedId);
+                    }
                 }
                 header('Location: ' . BASE_URL . '/admin/produits');
                 exit;
@@ -129,6 +158,11 @@ class AdminController {
             }
         }
 
+        $vedettesAutres = $model->getMisEnAvantAdmin($id ?: null);
+        $placesVedettesPleines = count($vedettesAutres) >= ProduitModel::MAX_MIS_EN_AVANT;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $remplaceId = 0;
+        }
         require __DIR__ . '/../Views/admin/produit-form.php';
     }
 

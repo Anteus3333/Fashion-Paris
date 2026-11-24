@@ -1149,6 +1149,9 @@ main { min-height: 60vh; }
   display: grid;
   gap: .55rem;
 }
+.admin-replace-vedette.is-hidden,
+.is-hidden { display: none !important; }
+.admin-replace-vedette { margin-top: .35rem; }
 .admin-form-actions {
   display: flex;
   flex-wrap: wrap;

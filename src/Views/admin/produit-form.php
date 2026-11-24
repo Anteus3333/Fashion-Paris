@@ -74,11 +74,45 @@ $edition = !empty($produit);
                 </div>
             </fieldset>
 
-            <fieldset class="admin-fieldset">
+            <fieldset class="admin-fieldset" data-publication>
                 <legend>Publication</legend>
+                <p class="muted admin-hint">
+                    L’accueil affiche jusqu’à <?= (int) ProduitModel::MAX_MIS_EN_AVANT ?> pièces mises en avant.
+                    La mise en avant n’est possible que si le produit est actif.
+                </p>
                 <div class="admin-checks">
-                    <label class="checkbox"><input type="checkbox" name="actif" value="1" <?= $old['actif'] === '1' ? 'checked' : '' ?>> Actif (visible catalogue)</label>
-                    <label class="checkbox"><input type="checkbox" name="mis_en_avant" value="1" <?= $old['mis_en_avant'] === '1' ? 'checked' : '' ?>> Mis en avant (accueil)</label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="actif" id="produit-actif" value="1"
+                               <?= $old['actif'] === '1' ? 'checked' : '' ?>>
+                        Actif (visible catalogue)
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="mis_en_avant" id="produit-mis-en-avant" value="1"
+                               <?= $old['mis_en_avant'] === '1' ? 'checked' : '' ?>
+                               <?= $old['actif'] !== '1' ? 'disabled' : '' ?>>
+                        Mis en avant (accueil)
+                    </label>
+                </div>
+                <?php
+                $dejaEnAvant = $edition && !empty($produit['mis_en_avant']) && $old['mis_en_avant'] === '1';
+                $afficherRemplacement = !empty($placesVedettesPleines) && !$dejaEnAvant;
+                ?>
+                <div class="admin-field admin-replace-vedette<?= $afficherRemplacement ? '' : ' is-hidden' ?>"
+                     id="bloc-remplace-vedette"
+                     data-places-pleines="<?= !empty($placesVedettesPleines) ? '1' : '0' ?>"
+                     data-deja-en-avant="<?= $edition && !empty($produit['mis_en_avant']) ? '1' : '0' ?>">
+                    <label for="remplace_mis_en_avant">À la place de</label>
+                    <select id="remplace_mis_en_avant" name="remplace_mis_en_avant"
+                            <?= $afficherRemplacement ? 'required' : '' ?>>
+                        <option value="">Choisir le produit à retirer…</option>
+                        <?php foreach ($vedettesAutres ?? [] as $v): ?>
+                            <option value="<?= (int) $v['produit_id'] ?>"
+                                <?= (int) ($remplaceId ?? 0) === (int) $v['produit_id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($v['nom']) ?>
+                                <?= empty($v['actif']) ? ' (inactif)' : '' ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </fieldset>
 

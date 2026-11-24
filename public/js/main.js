@@ -313,4 +313,35 @@ document.addEventListener('DOMContentLoaded', () => {
       confirmerDepart(link.href);
     }, true);
   })();
+
+  // Admin produit — mise en avant liée à « actif » + remplacement si places pleines
+  (function initPublicationProduit() {
+    const actif = document.getElementById('produit-actif');
+    const vedette = document.getElementById('produit-mis-en-avant');
+    const blocRemplace = document.getElementById('bloc-remplace-vedette');
+    const selectRemplace = document.getElementById('remplace_mis_en_avant');
+    if (!actif || !vedette) return;
+
+    function syncPublication() {
+      const estActif = actif.checked;
+      vedette.disabled = !estActif;
+      if (!estActif) {
+        vedette.checked = false;
+      }
+
+      if (!blocRemplace || !selectRemplace) return;
+      const placesPleines = blocRemplace.dataset.placesPleines === '1';
+      const dejaEnAvant = blocRemplace.dataset.dejaEnAvant === '1';
+      const besoinRemplacement = placesPleines && vedette.checked && !dejaEnAvant;
+      blocRemplace.classList.toggle('is-hidden', !besoinRemplacement);
+      selectRemplace.required = besoinRemplacement;
+      if (!besoinRemplacement) {
+        selectRemplace.value = '';
+      }
+    }
+
+    actif.addEventListener('change', syncPublication);
+    vedette.addEventListener('change', syncPublication);
+    syncPublication();
+  })();
 });

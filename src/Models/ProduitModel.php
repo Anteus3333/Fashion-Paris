@@ -4,6 +4,9 @@
 require_once __DIR__ . '/../Repositories/ProduitRepository.php';
 
 class ProduitModel {
+    /** Places max sur l’accueil (Sélection du moment). */
+    public const MAX_MIS_EN_AVANT = 3;
+
     private ProduitRepository $repository;
 
     public function __construct() {
@@ -16,6 +19,14 @@ class ProduitModel {
 
     public function getMisEnAvant(int $limit = 6): array {
         return $this->repository->findMisEnAvant($limit);
+    }
+
+    public function getMisEnAvantAdmin(?int $exclureId = null): array {
+        return $this->repository->findMisEnAvantAdmin($exclureId);
+    }
+
+    public function retirerMisEnAvant(int $produitId): void {
+        $this->repository->retirerMisEnAvant($produitId);
     }
 
     public function getCatalogue(?int $categorieId = null): array {
