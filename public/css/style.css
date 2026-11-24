@@ -157,6 +157,7 @@ header[role="banner"] {
     gap: 1.1rem;
     border: 0;
     background: transparent;
+    box-shadow: none;
     padding: 0;
   }
 }
