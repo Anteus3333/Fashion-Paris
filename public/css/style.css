@@ -1137,18 +1137,21 @@ main { min-height: 60vh; }
 .admin-hint { margin: 0; font-size: .85rem; }
 .admin-product-upload {
   display: grid;
-  gap: .45rem;
+  gap: .4rem;
 }
-.admin-product-upload label {
+.admin-product-upload__title {
   font-weight: 600;
   font-size: .92rem;
 }
-.admin-product-media input[type="file"] {
-  font: inherit;
-  font-size: .9rem;
+.admin-product-upload__btn {
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  justify-content: center;
+}
+.admin-product-upload__name {
+  margin: 0;
+  font-size: .88rem;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 .admin-product-fields {
@@ -1180,8 +1183,7 @@ main { min-height: 60vh; }
 }
 .admin-field input,
 .admin-field select,
-.admin-field textarea,
-.admin-product-media input[type="file"] {
+.admin-field textarea {
   padding: .65rem .75rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);

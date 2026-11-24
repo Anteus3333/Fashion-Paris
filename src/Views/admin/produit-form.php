@@ -35,8 +35,16 @@ $edition = !empty($produit);
                 <?php endif; ?>
             </div>
             <div class="admin-product-upload">
-                <label for="image">Remplacer la photo</label>
-                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+                <span class="admin-product-upload__title" id="upload-titre">Remplacer la photo</span>
+                <input type="file" id="image" name="image" class="sr-only"
+                       accept="image/jpeg,image/png,image/webp"
+                       aria-labelledby="upload-titre">
+                <button type="button" class="btn btn-secondary admin-product-upload__btn" id="image-pick">
+                    Choisir un fichier
+                </button>
+                <p class="admin-product-upload__name muted" id="image-filename" aria-live="polite">
+                    Aucun fichier choisi
+                </p>
                 <p class="muted admin-hint">JPEG, PNG ou WebP — 5 Mo max</p>
             </div>
         </aside>

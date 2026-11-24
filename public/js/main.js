@@ -314,9 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true);
   })();
 
-  // Admin produit — aperçu immédiat du fichier image choisi
+  // Admin produit — bouton fichier custom + aperçu immédiat
   (function initApercuProduit() {
     const input = document.getElementById('image');
+    const pickBtn = document.getElementById('image-pick');
+    const fileName = document.getElementById('image-filename');
     const preview = document.getElementById('produit-preview');
     const img = document.getElementById('produit-preview-img');
     if (!input || !preview || !img) return;
@@ -324,9 +326,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyMsg = document.getElementById('produit-preview-empty');
     let objectUrl = null;
 
+    if (pickBtn) {
+      pickBtn.addEventListener('click', () => input.click());
+    }
+
     input.addEventListener('change', () => {
       const file = input.files && input.files[0];
-      if (!file || !file.type.startsWith('image/')) {
+      if (!file) {
+        if (fileName) fileName.textContent = 'Aucun fichier choisi';
+        return;
+      }
+      if (fileName) {
+        fileName.textContent = file.name;
+      }
+      if (!file.type.startsWith('image/')) {
         return;
       }
       if (objectUrl) {
