@@ -30,7 +30,7 @@ $prenom = $_SESSION['utilisateur']['prenom'] ?? '';
                 </li>
             <?php endforeach; ?>
         </ul>
-        <p><?= ViewHelper::btnNav(BASE_URL . '/espace-personnel/commandes?statut=en_attente', 'Voir les commandes', 'btn btn-ghost') ?></p>
+        <p><?= ViewHelper::btnNav(BASE_URL . '/espace-personnel/commandes?statut=en_attente', 'Voir les commandes', 'btn btn-primary') ?></p>
     <?php endif; ?>
 </section>
 <?php
