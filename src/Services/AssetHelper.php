@@ -11,8 +11,19 @@ class AssetHelper {
         $rel = trim($cheminRelatif ?? '');
         if ($rel !== '' && is_file(self::cheminAbsolu($rel))) {
             $parts = array_map('rawurlencode', explode('/', str_replace('\\', '/', $rel)));
-            return BASE_URL . '/images/' . implode('/', $parts);
+            $url = BASE_URL . '/images/' . implode('/', $parts);
+            $mtime = @filemtime(self::cheminAbsolu($rel));
+            if ($mtime) {
+                $url .= '?v=' . $mtime;
+            }
+            return $url;
         }
-        return BASE_URL . '/images/' . ltrim($defaut, '/');
+        $defaut = ltrim($defaut, '/');
+        $url = BASE_URL . '/images/' . $defaut;
+        $mtime = @filemtime(self::cheminAbsolu($defaut));
+        if ($mtime) {
+            $url .= '?v=' . $mtime;
+        }
+        return $url;
     }
 }
