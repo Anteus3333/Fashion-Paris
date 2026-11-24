@@ -394,43 +394,83 @@ main { min-height: 60vh; }
 }
 .checkout-form { max-width: none; width: 100%; }
 .checkout-aside {
-  padding: 1.1rem 1.15rem;
+  padding: .85rem 1rem;
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
+@media (min-width: 860px) {
+  .checkout-aside {
+    padding: 1.1rem 1.15rem;
+  }
+}
 .checkout-aside h2 {
-  margin: 0 0 .85rem;
-  font-size: 1.15rem;
+  margin: 0 0 .55rem;
+  font-size: 1.05rem;
+}
+@media (min-width: 860px) {
+  .checkout-aside h2 {
+    margin-bottom: .85rem;
+    font-size: 1.15rem;
+  }
 }
 .checkout-aside__lines {
   list-style: none;
-  margin: 0 0 .85rem;
+  margin: 0 0 .55rem;
   padding: 0;
 }
 .checkout-aside__lines li {
   display: flex;
   justify-content: space-between;
   gap: .75rem;
-  padding: .45rem 0;
+  padding: .35rem 0;
   border-bottom: 1px solid var(--line);
-  font-size: .95rem;
+  font-size: .9rem;
 }
-.checkout-aside .cart-totals { margin: 0; }
+@media (min-width: 860px) {
+  .checkout-aside__lines {
+    margin-bottom: .85rem;
+  }
+  .checkout-aside__lines li {
+    padding: .45rem 0;
+    font-size: .95rem;
+  }
+}
+/* Évite le double cadre (aside + cart-totals) */
+.checkout-aside .cart-totals {
+  margin: 0;
+  padding: .55rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  gap: .3rem;
+}
+.checkout-aside .cart-totals__row {
+  font-size: .9rem;
+}
+.checkout-aside .cart-totals__row--total {
+  margin-top: .15rem;
+  padding-top: .4rem;
+  font-size: 1rem;
+}
+.checkout-aside .cart-totals__delay {
+  font-size: .78rem;
+}
 .checkout-aside__info {
-  margin-top: 1rem;
-  padding-top: .85rem;
+  margin-top: .75rem;
+  padding-top: .65rem;
   border-top: 1px solid var(--line);
 }
 .checkout-aside__info h3 {
-  margin: 0 0 .4rem;
-  font-size: .95rem;
+  margin: 0 0 .3rem;
+  font-size: .9rem;
 }
 .checkout-aside__info p {
   margin: 0;
   color: var(--muted);
-  font-size: .92rem;
-  line-height: 1.45;
+  font-size: .88rem;
+  line-height: 1.4;
 }
 
 .checkout-pay-method {

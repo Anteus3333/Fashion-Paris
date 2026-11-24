@@ -103,12 +103,21 @@ $etapeCourante = $etape;
             </ul>
             <div class="cart-totals" id="recap-content"
                  data-sous-total="<?= htmlspecialchars((string) $sousTotal) ?>">
-                <p>Sous-total : <strong id="recap-sous-total"><?= ViewHelper::prix($sousTotal) ?></strong></p>
-                <p>Livraison (forfait) : <strong id="recap-frais"><?= ViewHelper::prix($frais) ?></strong></p>
-                <p class="muted" id="recap-delai">
-                    Délai estimé : <?= htmlspecialchars((string) ($config['delai_livraison'] ?? '7 jours ouvrés')) ?>.
+                <div class="cart-totals__row">
+                    <span>Sous-total</span>
+                    <strong id="recap-sous-total"><?= ViewHelper::prix($sousTotal) ?></strong>
+                </div>
+                <div class="cart-totals__row">
+                    <span>Livraison (forfait)</span>
+                    <strong id="recap-frais"><?= ViewHelper::prix($frais) ?></strong>
+                </div>
+                <p class="cart-totals__delay muted" id="recap-delai">
+                    Délai estimé : <?= htmlspecialchars((string) ($config['delai_livraison'] ?? '7 jours ouvrés')) ?>
                 </p>
-                <p class="cart-total">Total : <strong id="recap-total"><?= ViewHelper::prix($total) ?></strong></p>
+                <div class="cart-totals__row cart-totals__row--total">
+                    <span>Total</span>
+                    <strong id="recap-total"><?= ViewHelper::prix($total) ?></strong>
+                </div>
             </div>
             <?php if ($etape === 'paiement' && !empty($old['adresse_livraison'])): ?>
                 <?php
