@@ -1,6 +1,11 @@
--- schema.sql — Fashion Paris (e-commerce) — source de vérité BDD
--- Import Docker / réinstall complète : exécuter puis donnees_test.sql
--- Prod Infomaniak déjà peuplée : préférer mise_a_jour_infomaniak.sql
+-- schema.sql — Fashion Paris (e-commerce) — structure complète
+--
+-- Infomaniak (réinstall propre) :
+--   1) Vider / supprimer toutes les tables de la BDD
+--   2) Importer ce fichier
+--   3) Importer ensuite sql/donnees_test.sql
+--
+-- Docker : monté en 01-schema.sql au premier démarrage du volume.
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;

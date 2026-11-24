@@ -1,6 +1,13 @@
--- donnees_test.sql — jeu de démonstration Fashion Paris
--- À importer après schema.sql (Docker / réinstall).
+-- donnees_test.sql — jeu de données complet Fashion Paris
+--
+-- Infomaniak : importer APRÈS schema.sql (réinstall complète).
+-- Docker : monté en 02-donnees.sql au premier démarrage du volume.
+--
+-- Contenu : comptes démo, 3 catégories, 22 produits + photos JPG,
+--           horaires boutique, commandes / suivi / newsletter.
 -- Mot de passe de tous les comptes : Password1!
+--
+-- Photos à déployer aussi : public/images/produits/*.jpg (22 fichiers).
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 SET @pwd = '$2y$10$IIO6gazxesXrkEt8AjTMZu06ZzjstaYNV5Ir4HHFi4CjR7KhOT1Pm';
@@ -31,6 +38,7 @@ INSERT INTO `categorie` (`categorie_id`, `libelle`, `slug`, `description`, `ordr
 (3, 'Accessoires', 'accessoires', 'Sacs, ceintures, bijoux', 3, 1);
 
 -- 22 produits (9 femme, 7 homme, 6 accessoires)
+-- mis_en_avant : l’accueil n’affiche que les 3 plus récents (ids 12, 5, 4)
 INSERT INTO `produit` (`produit_id`, `categorie_id`, `nom`, `slug`, `description`, `prix`, `stock`, `sku`, `actif`, `mis_en_avant`) VALUES
 (1, 1, 'Robe midi soie', 'robe-midi-soie', 'Robe midi fluide en soie, coupe élégante.', 189.00, 12, 'FP-F-001', 1, 1),
 (2, 1, 'Blazer structuring', 'blazer-structuring', 'Blazer structuré, épaulettes discrètes.', 249.00, 8, 'FP-F-002', 1, 1),
@@ -92,6 +100,7 @@ INSERT INTO `horaire` (`jour`, `heure_ouverture`, `heure_fermeture`) VALUES
 
 -- -----------------------------------------------------
 -- Commandes démo (dashboard admin / espace personnel)
+-- frais_livraison = forfait 10 € (hors livrées anciennes à 0)
 -- -----------------------------------------------------
 INSERT INTO `commande` (
   `numero_commande`, `utilisateur_id`, `date_commande`, `statut`,
@@ -99,9 +108,9 @@ INSERT INTO `commande` (
   `ville_livraison`, `mode_paiement`
 ) VALUES
 ('FP-20261101-001', 2, '2026-11-01 14:22:00', 'livree', 189.00, 0.00, '25 Avenue Montaigne', '75008', 'Paris', 'carte'),
-('FP-20261105-002', 4, '2026-11-05 10:05:00', 'expediee', 569.00, 0.00, '14 rue de Rivoli', '75001', 'Paris', 'carte'),
-('FP-20261110-003', 5, '2026-11-10 16:40:00', 'confirmee', 89.00, 5.90, '3 avenue de l’Opéra', '75001', 'Paris', 'carte'),
-('FP-20261112-004', 2, '2026-11-12 09:15:00', 'en_attente', 249.00, 5.90, '25 Avenue Montaigne', '75008', 'Paris', 'carte');
+('FP-20261105-002', 4, '2026-11-05 10:05:00', 'expediee', 579.00, 10.00, '14 rue de Rivoli', '75001', 'Paris', 'carte'),
+('FP-20261110-003', 5, '2026-11-10 16:40:00', 'confirmee', 99.00, 10.00, '3 avenue de l’Opéra', '75001', 'Paris', 'carte'),
+('FP-20261112-004', 2, '2026-11-12 09:15:00', 'en_attente', 259.00, 10.00, '25 Avenue Montaigne', '75008', 'Paris', 'carte');
 
 INSERT INTO `commande_ligne` (`numero_commande`, `produit_id`, `quantite`, `prix_unitaire`) VALUES
 ('FP-20261101-001', 1, 1, 189.00),
