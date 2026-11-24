@@ -1,13 +1,19 @@
 -- donnees_test.sql — jeu de données complet Fashion Paris
+-- Mis à jour : 24/11/2026
 --
 -- Infomaniak : importer APRÈS schema.sql (réinstall complète).
 -- Docker : monté en 02-donnees.sql au premier démarrage du volume.
 --
--- Contenu : comptes démo, 3 catégories, 22 produits + photos JPG,
---           horaires boutique, commandes / suivi / newsletter.
--- Mot de passe de tous les comptes : Password1!
+-- Contenu :
+--   - Comptes démo (admin / personnel / clients) — mot de passe : Password1!
+--   - 3 catégories, 22 produits + images JPG
+--   - Exactement 3 mises en avant (accueil)
+--   - Stocks bas démo : manteau-loden (1), echarpe-merinos (2), bottines-chelsea (3)
+--   - Horaires lun–ven / samedi (admin = 2 dalles, footer regroupé)
+--   - Commandes / suivi / newsletter
 --
--- Photos à déployer aussi : public/images/produits/*.jpg (22 fichiers).
+-- À déployer aussi côté fichiers :
+--   public/images/produits/*.jpg (22 fichiers, dont écharpe + pochette corrigées)
 SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 SET @pwd = '$2y$10$IIO6gazxesXrkEt8AjTMZu06ZzjstaYNV5Ir4HHFi4CjR7KhOT1Pm';
@@ -37,8 +43,7 @@ INSERT INTO `categorie` (`categorie_id`, `libelle`, `slug`, `description`, `ordr
 (2, 'Homme', 'homme', 'Collection homme', 2, 1),
 (3, 'Accessoires', 'accessoires', 'Sacs, ceintures, bijoux', 3, 1);
 
--- 22 produits (9 femme, 7 homme, 6 accessoires)
--- Exactement 3 mis_en_avant (places accueil) : sac, manteau camel, costume
+-- 22 produits — 3 mis_en_avant max (accueil)
 INSERT INTO `produit` (`produit_id`, `categorie_id`, `nom`, `slug`, `description`, `prix`, `stock`, `sku`, `actif`, `mis_en_avant`) VALUES
 (1, 1, 'Robe midi soie', 'robe-midi-soie', 'Robe midi fluide en soie, coupe élégante.', 189.00, 12, 'FP-F-001', 1, 0),
 (2, 1, 'Blazer structuring', 'blazer-structuring', 'Blazer structuré, épaulettes discrètes.', 249.00, 8, 'FP-F-002', 1, 0),

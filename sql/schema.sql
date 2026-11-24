@@ -1,4 +1,5 @@
 -- schema.sql — Fashion Paris (e-commerce) — structure complète
+-- Mis à jour : 24/11/2026
 --
 -- Infomaniak (réinstall propre) :
 --   1) Vider / supprimer toutes les tables de la BDD
