@@ -34,6 +34,38 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
     <?php if (empty($commandes)): ?>
         <p class="muted">Aucune commande.</p>
     <?php else: ?>
+        <ul class="commandes-cards" id="commandes-cards">
+            <?php foreach ($commandes as $c): ?>
+                <?php
+                $clientNom = trim(($c['prenom'] ?? '') . ' ' . ($c['nom'] ?? ''));
+                $statutLibelle = $config['statuts'][$c['statut']] ?? $c['statut'];
+                $detailUrl = $gestionBase . '/commande/' . rawurlencode($c['numero_commande']);
+                ?>
+                <li class="commande-card" data-client="<?= htmlspecialchars($clientNom) ?>">
+                    <div class="commande-card__head">
+                        <a class="commande-card__numero" href="<?= htmlspecialchars($detailUrl) ?>">
+                            <?= htmlspecialchars($c['numero_commande']) ?>
+                        </a>
+                        <span class="commande-card__total"><?= ViewHelper::prix($c['montant_total']) ?></span>
+                    </div>
+                    <dl class="commande-card__meta">
+                        <div>
+                            <dt>Client</dt>
+                            <dd><?= htmlspecialchars($clientNom) ?></dd>
+                        </div>
+                        <div>
+                            <dt>Date</dt>
+                            <dd><?= htmlspecialchars($c['date_commande']) ?></dd>
+                        </div>
+                        <div class="commande-card__statut">
+                            <dt>Statut</dt>
+                            <dd><?= htmlspecialchars($statutLibelle) ?></dd>
+                        </div>
+                    </dl>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
         <div class="commandes-table-wrap">
             <table class="data-table">
                 <thead>

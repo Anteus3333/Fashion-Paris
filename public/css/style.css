@@ -947,6 +947,82 @@ main { min-height: 60vh; }
 .search-row { display: flex; flex-wrap: wrap; gap: .5rem; }
 .commandes-search { margin: 1rem 0 1.25rem; }
 .commandes-search input[type="search"] { flex: 1; min-width: 12rem; }
+
+.commandes-cards {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: .75rem;
+}
+.commande-card {
+  margin: 0;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.commande-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .7rem;
+}
+.commande-card__numero {
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1.3;
+  word-break: break-word;
+}
+.commande-card__total {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.commande-card__meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem .75rem;
+}
+.commande-card__meta > div {
+  display: grid;
+  gap: .15rem;
+  min-width: 0;
+}
+.commande-card__statut {
+  grid-column: 1 / -1;
+}
+.commande-card__meta dt {
+  margin: 0;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.commande-card__meta dd {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.commandes-table-wrap {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .commandes-cards {
+    display: none;
+  }
+  .commandes-table-wrap {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 .search-row input {
   flex: 1 1 200px;
   padding: .65rem .75rem;
