@@ -62,22 +62,21 @@ class AdminController {
         ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            foreach (['categorie_id', 'nom', 'slug', 'description', 'prix', 'stock', 'sku'] as $champ) {
+            foreach (['categorie_id', 'nom', 'description', 'prix', 'stock'] as $champ) {
                 $old[$champ] = trim((string) ($_POST[$champ] ?? ''));
             }
             $old['actif'] = isset($_POST['actif']) ? '1' : '0';
             $old['mis_en_avant'] = isset($_POST['mis_en_avant']) ? '1' : '0';
+            // Slug / SKU hors formulaire : slug auto à la création, conservation à l’édition
+            if ($old['slug'] === '') {
+                $old['slug'] = ProduitModel::slugifier($old['nom']);
+            }
 
             if (!Csrf::verifier()) {
                 $erreurs[] = 'Session expirée.';
             }
             if ($old['nom'] === '') {
                 $erreurs[] = 'Le nom est obligatoire.';
-            }
-            if ($old['slug'] === '') {
-                $old['slug'] = ProduitModel::slugifier($old['nom']);
-            } else {
-                $old['slug'] = ProduitModel::slugifier($old['slug']);
             }
             if (!is_numeric($old['prix']) || (float) $old['prix'] < 0) {
                 $erreurs[] = 'Prix invalide.';

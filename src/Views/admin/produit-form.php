@@ -6,13 +6,8 @@ $edition = !empty($produit);
     <p class="breadcrumb"><a href="<?= BASE_URL ?>/admin/produits">Produits</a></p>
     <header class="admin-page-head">
         <h1><?= $edition ? 'Modifier un produit' : 'Ajouter un produit' ?></h1>
-        <?php if ($edition): ?>
-            <p class="muted admin-page-sub">
-                <?= htmlspecialchars($old['nom'] !== '' ? $old['nom'] : 'Produit') ?>
-                <?php if ($old['sku'] !== ''): ?>
-                    · SKU <?= htmlspecialchars($old['sku']) ?>
-                <?php endif; ?>
-            </p>
+        <?php if ($edition && $old['nom'] !== ''): ?>
+            <p class="muted admin-page-sub"><?= htmlspecialchars($old['nom']) ?></p>
         <?php endif; ?>
     </header>
     <?php require __DIR__ . '/_nav.php'; ?>
@@ -50,10 +45,6 @@ $edition = !empty($produit);
                     <input type="text" id="nom" name="nom" required value="<?= htmlspecialchars($old['nom']) ?>">
                 </div>
                 <div class="admin-field">
-                    <label for="slug">Slug (URL)</label>
-                    <input type="text" id="slug" name="slug" value="<?= htmlspecialchars($old['slug']) ?>" placeholder="Généré automatiquement si vide">
-                </div>
-                <div class="admin-field">
                     <label for="categorie_id">Catégorie</label>
                     <select id="categorie_id" name="categorie_id" required>
                         <?php foreach ($categories as $cat): ?>
@@ -71,7 +62,7 @@ $edition = !empty($produit);
 
             <fieldset class="admin-fieldset">
                 <legend>Tarif & stock</legend>
-                <div class="admin-field-row">
+                <div class="admin-field-row admin-field-row--2">
                     <div class="admin-field">
                         <label for="prix">Prix (€)</label>
                         <input type="number" id="prix" name="prix" step="0.01" min="0" required value="<?= htmlspecialchars((string) $old['prix']) ?>">
@@ -79,10 +70,6 @@ $edition = !empty($produit);
                     <div class="admin-field">
                         <label for="stock">Stock</label>
                         <input type="number" id="stock" name="stock" min="0" required value="<?= htmlspecialchars((string) $old['stock']) ?>">
-                    </div>
-                    <div class="admin-field">
-                        <label for="sku">SKU</label>
-                        <input type="text" id="sku" name="sku" value="<?= htmlspecialchars($old['sku']) ?>">
                     </div>
                 </div>
             </fieldset>

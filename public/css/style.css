@@ -1141,6 +1141,9 @@ main { min-height: 60vh; }
   .admin-field-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  .admin-field-row--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .admin-checks {
   display: grid;
