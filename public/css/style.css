@@ -1851,6 +1851,19 @@ main { min-height: 60vh; }
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+  .admin-personnel-table .admin-actions {
+    gap: .45rem;
+  }
+  .admin-personnel-table .admin-actions .btn {
+    background: rgba(var(--accent-rgb), 0.1);
+    border-color: rgba(var(--accent-rgb), 0.32);
+    color: var(--accent);
+  }
+  .admin-personnel-table .admin-actions .btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
 }
 
 .compte-profil {
