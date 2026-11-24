@@ -1154,9 +1154,14 @@ main { min-height: 60vh; }
   line-height: 1.35;
 }
 
-.admin-product-fields {
+.admin-product-fields,
+.admin-staff-form {
   display: grid;
   gap: 1.15rem;
+}
+.admin-staff-form {
+  max-width: 40rem;
+  margin-top: 1rem;
 }
 .admin-fieldset {
   margin: 0;
