@@ -32,7 +32,20 @@ class AdminController {
     public function produits() {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
         $titrePage = 'Produits — Admin';
-        $produits = (new ProduitModel())->getAllAdmin();
+        $categories = (new CategorieModel())->getAll();
+        $filtres = [
+            'q'            => trim((string) ($_GET['q'] ?? '')),
+            'categorie_id' => ($_GET['categorie_id'] ?? '') !== '' ? (int) $_GET['categorie_id'] : null,
+            'actif'        => (string) ($_GET['actif'] ?? ''),
+            'vedette'      => (string) ($_GET['vedette'] ?? ''),
+        ];
+        if (!in_array($filtres['actif'], ['', '0', '1'], true)) {
+            $filtres['actif'] = '';
+        }
+        if (!in_array($filtres['vedette'], ['', '0', '1'], true)) {
+            $filtres['vedette'] = '';
+        }
+        $produits = (new ProduitModel())->filtrerAdmin($filtres);
         require __DIR__ . '/../Views/admin/produits.php';
     }
 

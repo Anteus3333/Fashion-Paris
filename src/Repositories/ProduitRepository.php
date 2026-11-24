@@ -163,15 +163,55 @@ class ProduitRepository {
     }
 
     public function findAllAdmin(): array {
+        return $this->findAdminFiltres();
+    }
+
+    /**
+     * Listing admin : recherche, catégorie, visibilité, vedette.
+     * @param array{q?: string, categorie_id?: int|null, actif?: string, vedette?: string} $filtres
+     */
+    public function findAdminFiltres(array $filtres = []): array {
         if (!$this->conn) {
             return [];
         }
-        $stmt = $this->conn->query(
-            'SELECT p.*, c.libelle AS categorie_libelle
-             FROM produit p
-             JOIN categorie c ON c.categorie_id = p.categorie_id
-             ORDER BY p.produit_id DESC'
-        );
+        $sql = 'SELECT p.*, c.libelle AS categorie_libelle
+                FROM produit p
+                JOIN categorie c ON c.categorie_id = p.categorie_id
+                WHERE 1=1';
+        $params = [];
+
+        $q = trim((string) ($filtres['q'] ?? ''));
+        if ($q !== '') {
+            $like = '%' . $q . '%';
+            $sql .= ' AND (p.nom LIKE :q OR p.sku LIKE :q2 OR p.description LIKE :q3 OR c.libelle LIKE :q4)';
+            $params[':q'] = $like;
+            $params[':q2'] = $like;
+            $params[':q3'] = $like;
+            $params[':q4'] = $like;
+        }
+
+        $categorieId = $filtres['categorie_id'] ?? null;
+        if ($categorieId !== null && $categorieId !== '') {
+            $sql .= ' AND p.categorie_id = :cat';
+            $params[':cat'] = (int) $categorieId;
+        }
+
+        $actif = (string) ($filtres['actif'] ?? '');
+        if ($actif === '1' || $actif === '0') {
+            $sql .= ' AND p.actif = :actif';
+            $params[':actif'] = (int) $actif;
+        }
+
+        $vedette = (string) ($filtres['vedette'] ?? '');
+        if ($vedette === '1') {
+            $sql .= ' AND p.mis_en_avant = 1';
+        } elseif ($vedette === '0') {
+            $sql .= ' AND p.mis_en_avant = 0';
+        }
+
+        $sql .= ' ORDER BY p.produit_id DESC';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
         return $stmt->fetchAll() ?: [];
     }
 

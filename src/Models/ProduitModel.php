@@ -53,6 +53,10 @@ class ProduitModel {
         return $this->repository->findAllAdmin();
     }
 
+    public function filtrerAdmin(array $filtres = []): array {
+        return $this->repository->findAdminFiltres($filtres);
+    }
+
     public function create(array $data): int {
         return $this->repository->create($data);
     }
