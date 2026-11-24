@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../Services/Csrf.php';
+require_once __DIR__ . '/../Services/SmtpMailer.php';
 require_once __DIR__ . '/../Models/NewsletterModel.php';
 require_once __DIR__ . '/../Models/TentativeConnexionModel.php';
 
@@ -39,6 +40,7 @@ class NewsletterController {
 
         if ((new NewsletterModel())->inscrire($email)) {
             $tentatives->enregistrer(self::RATE_EMAIL, $ip);
+            (new SmtpMailer())->envoyerConfirmationNewsletter($email);
             $_SESSION['flash_succes'] = 'Inscription à la newsletter enregistrée.';
         } else {
             $_SESSION['flash_erreur'] = 'Impossible d\'enregistrer l\'inscription.';

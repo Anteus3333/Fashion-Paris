@@ -229,6 +229,20 @@ class SmtpMailer {
         );
     }
 
+    /** Confirmation simple d’inscription newsletter. */
+    public function envoyerConfirmationNewsletter(string $email): bool {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        $html = '<p>Bonjour,</p>'
+            . '<p>Votre inscription à la newsletter Fashion Paris est bien enregistrée.</p>'
+            . '<p>Vous recevrez bientôt nos sélections et actualités.</p>'
+            . '<p>' . UrlHelper::ancre('/catalogue', 'Découvrir le catalogue') . '</p>'
+            . '<p>L\'équipe Fashion Paris</p>';
+
+        return $this->send($email, 'Inscription newsletter — Fashion Paris', $html, null, true);
+    }
+
     /** Accueil après confirmation d’e-mail. */
     public function envoyerBienvenue(string $email, string $prenom): bool {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
