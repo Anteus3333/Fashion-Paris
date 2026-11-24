@@ -29,6 +29,15 @@ ob_start();
                         </a>
                         <p class="muted"><?= ViewHelper::prix($p['prix']) ?> · stock <?= (int) $p['stock'] ?></p>
                     </div>
+                    <form method="post" action="<?= BASE_URL ?>/panier/retirer" class="cart-item-remove">
+                        <?= Csrf::champ() ?>
+                        <input type="hidden" name="produit_id" value="<?= (int) $p['produit_id'] ?>">
+                        <button type="submit" class="cart-remove-btn" title="Retirer" aria-label="Retirer <?= htmlspecialchars($p['nom']) ?>">
+                            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M9 3h6a1 1 0 0 1 1 1v1h4v2H4V5h4V4a1 1 0 0 1 1-1zm1 2v0h4V5h-4zM6 9h2v10H6V9zm5 0h2v10h-2V9zm5 0h2v10h-2V9zM7 21a1 1 0 0 1-1-1V8h12v12a1 1 0 0 1-1 1H7z"/>
+                            </svg>
+                        </button>
+                    </form>
                     <form method="post" action="<?= BASE_URL ?>/panier/modifier" class="cart-qty-form">
                         <?= Csrf::champ() ?>
                         <input type="hidden" name="produit_id" value="<?= (int) $p['produit_id'] ?>">
@@ -37,12 +46,7 @@ ob_start();
                                value="<?= (int) $ligne['quantite'] ?>" min="1" max="<?= (int) $p['stock'] ?>">
                         <button type="submit" class="btn btn-ghost">OK</button>
                     </form>
-                    <p class="price"><?= ViewHelper::prix($ligne['ligne_total']) ?></p>
-                    <form method="post" action="<?= BASE_URL ?>/panier/retirer">
-                        <?= Csrf::champ() ?>
-                        <input type="hidden" name="produit_id" value="<?= (int) $p['produit_id'] ?>">
-                        <button type="submit" class="btn btn-ghost">Retirer</button>
-                    </form>
+                    <p class="price cart-item-line"><?= ViewHelper::prix($ligne['ligne_total']) ?></p>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -52,13 +56,22 @@ ob_start();
         $delaiLivraison = (string) ($configLivraison['delai_livraison'] ?? '7 jours ouvrés');
         ?>
         <div class="cart-totals">
-            <p>Sous-total : <strong><?= ViewHelper::prix($sousTotal) ?></strong></p>
-            <p>Livraison (forfait) : <strong><?= ViewHelper::prix($frais) ?></strong></p>
-            <p class="muted">Délai estimé : <?= htmlspecialchars($delaiLivraison) ?>.</p>
-            <p class="cart-total">Total : <strong><?= ViewHelper::prix($total) ?></strong></p>
+            <div class="cart-totals__row">
+                <span>Sous-total</span>
+                <strong><?= ViewHelper::prix($sousTotal) ?></strong>
+            </div>
+            <div class="cart-totals__row">
+                <span>Livraison (forfait)</span>
+                <strong><?= ViewHelper::prix($frais) ?></strong>
+            </div>
+            <p class="cart-totals__delay muted">Délai estimé : <?= htmlspecialchars($delaiLivraison) ?></p>
+            <div class="cart-totals__row cart-totals__row--total">
+                <span>Total</span>
+                <strong><?= ViewHelper::prix($total) ?></strong>
+            </div>
         </div>
 
-        <div class="hero-actions">
+        <div class="cart-actions">
             <?= ViewHelper::btnNav(BASE_URL . '/catalogue', 'Continuer ses achats', 'btn btn-secondary') ?>
             <?= ViewHelper::btnNav(
                 $urlRepriseCommande,
