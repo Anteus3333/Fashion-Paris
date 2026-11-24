@@ -22,7 +22,7 @@ $renduActions = static function (int $id, bool $actif): string {
     ob_start();
     ?>
     <div class="admin-actions">
-        <a href="<?= BASE_URL ?>/admin/personnel/<?= $id ?>">Modifier</a>
+        <a class="btn btn-ghost" href="<?= BASE_URL ?>/admin/personnel/<?= $id ?>">Modifier</a>
         <?php if ($actif): ?>
             <form method="post" action="<?= BASE_URL ?>/admin/personnel/<?= $id ?>/desactiver" class="inline-form" data-confirm="Désactiver ce compte personnel ?">
                 <?= Csrf::champ() ?>

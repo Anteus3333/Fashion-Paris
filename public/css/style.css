@@ -1820,8 +1820,23 @@ main { min-height: 60vh; }
   word-break: break-word;
 }
 .admin-personnel-card .admin-actions {
-  padding-top: .65rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+  align-items: stretch;
+  padding-top: .75rem;
   border-top: 1px solid var(--line);
+}
+.admin-personnel-card .admin-actions .inline-form {
+  display: block;
+  margin: 0;
+}
+.admin-personnel-card .admin-actions .btn {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: .45rem .35rem;
+  font-size: .85rem;
+  box-sizing: border-box;
 }
 .admin-personnel-table-wrap {
   display: none;
