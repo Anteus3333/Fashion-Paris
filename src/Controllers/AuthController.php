@@ -38,16 +38,25 @@ class AuthController {
                     } else {
                         $tentatives->purger($oldEmail);
                         session_regenerate_id(true);
+                        $role = $this->utilisateurModel->getRole((int) $user['utilisateur_id']) ?? 'utilisateur';
                         $_SESSION['utilisateur'] = [
                             'id'     => (int) $user['utilisateur_id'],
                             'email'  => $user['email'],
                             'prenom' => $user['prenom'],
                             'nom'    => $user['nom'],
-                            'role'   => $this->utilisateurModel->getRole((int) $user['utilisateur_id']) ?? 'utilisateur',
+                            'role'   => $role,
                         ];
-                        $redirect = (string) ($_GET['redirect'] ?? ($_POST['redirect'] ?? '/'));
+                        $redirect = (string) ($_GET['redirect'] ?? ($_POST['redirect'] ?? ''));
                         if ($redirect === '' || $redirect[0] !== '/') {
-                            $redirect = '/';
+                            $redirect = '';
+                        }
+                        // Accueil par défaut : espace métier selon le rôle
+                        if ($redirect === '' || $redirect === '/') {
+                            $redirect = match ($role) {
+                                'administrateur' => '/admin',
+                                'personnel' => '/espace-personnel',
+                                default => '/',
+                            };
                         }
                         header('Location: ' . BASE_URL . $redirect);
                         exit;
