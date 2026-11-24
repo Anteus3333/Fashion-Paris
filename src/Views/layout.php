@@ -15,7 +15,14 @@
     <a class="skip-link" href="#contenu-principal">Aller au contenu principal</a>
     <header role="banner">
         <nav class="navbar" aria-label="Navigation principale">
-            <a href="<?= BASE_URL ?>/" class="logo">Fashion Paris</a>
+            <div class="navbar-brand">
+                <a href="<?= BASE_URL ?>/" class="logo">Fashion Paris</a>
+                <?php if (isset($_SESSION['utilisateur'])): ?>
+                    <span class="nav-greeting" aria-label="Utilisateur connecté">
+                        Bonjour <?= htmlspecialchars($_SESSION['utilisateur']['prenom'] ?? '') ?>
+                    </span>
+                <?php endif; ?>
+            </div>
 
             <button type="button" class="burger" id="burger"
                 aria-expanded="false" aria-controls="nav-links"
