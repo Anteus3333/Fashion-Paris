@@ -38,10 +38,10 @@ INSERT INTO `categorie` (`categorie_id`, `libelle`, `slug`, `description`, `ordr
 (3, 'Accessoires', 'accessoires', 'Sacs, ceintures, bijoux', 3, 1);
 
 -- 22 produits (9 femme, 7 homme, 6 accessoires)
--- mis_en_avant : l’accueil n’affiche que les 3 plus récents (ids 12, 5, 4)
+-- Exactement 3 mis_en_avant (places accueil) : sac, manteau camel, costume
 INSERT INTO `produit` (`produit_id`, `categorie_id`, `nom`, `slug`, `description`, `prix`, `stock`, `sku`, `actif`, `mis_en_avant`) VALUES
-(1, 1, 'Robe midi soie', 'robe-midi-soie', 'Robe midi fluide en soie, coupe élégante.', 189.00, 12, 'FP-F-001', 1, 1),
-(2, 1, 'Blazer structuring', 'blazer-structuring', 'Blazer structuré, épaulettes discrètes.', 249.00, 8, 'FP-F-002', 1, 1),
+(1, 1, 'Robe midi soie', 'robe-midi-soie', 'Robe midi fluide en soie, coupe élégante.', 189.00, 12, 'FP-F-001', 1, 0),
+(2, 1, 'Blazer structuring', 'blazer-structuring', 'Blazer structuré, épaulettes discrètes.', 249.00, 8, 'FP-F-002', 1, 0),
 (3, 2, 'Chemise oxford', 'chemise-oxford', 'Chemise oxford classique, coton peigné.', 89.00, 20, 'FP-H-001', 1, 0),
 (4, 3, 'Sac cabas cuir', 'sac-cabas-cuir', 'Cabas en cuir pleine fleur, doublure coton.', 320.00, 5, 'FP-A-001', 1, 1),
 (5, 1, 'Manteau laine camel', 'manteau-laine-camel', 'Manteau long en laine, ceinture assortie, teinte camel.', 420.00, 6, 'FP-F-003', 1, 1),
