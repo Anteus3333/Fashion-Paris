@@ -52,9 +52,6 @@
                         <li><a href="<?= BASE_URL ?>/espace-personnel">Espace personnel</a></li>
                     <?php endif; ?>
                     <li><a href="<?= BASE_URL ?>/mon-compte">Mon compte</a></li>
-                    <li class="nav-bonjour" aria-label="Utilisateur connecté">
-                        Bonjour <?= htmlspecialchars($_SESSION['utilisateur']['prenom'] ?? '') ?>
-                    </li>
                     <li>
                         <form method="post" action="<?= BASE_URL ?>/deconnexion" class="nav-logout">
                             <?= Csrf::champ() ?>
