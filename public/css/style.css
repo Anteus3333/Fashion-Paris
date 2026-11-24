@@ -1866,6 +1866,88 @@ main { min-height: 60vh; }
   }
 }
 
+.admin-clients-list {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: .75rem;
+}
+.admin-client-card {
+  margin: 0;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.admin-client-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .35rem .65rem;
+  margin-bottom: .7rem;
+}
+.admin-client-card__name {
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.admin-client-card__role {
+  display: inline-block;
+  padding: .15rem .45rem;
+  border-radius: var(--radius);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+.admin-client-card__meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem .75rem;
+}
+.admin-client-card__email {
+  grid-column: 1 / -1;
+}
+.admin-client-card__meta > div {
+  display: grid;
+  gap: .15rem;
+  min-width: 0;
+}
+.admin-client-card__meta dt {
+  margin: 0;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.admin-client-card__meta dd {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--ink);
+  word-break: break-word;
+}
+.admin-clients-table-wrap {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .admin-clients-list {
+    display: none;
+  }
+  .admin-clients-table-wrap {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .compte-profil {
   margin: 1.25rem 0 2rem;
   padding-bottom: 1.5rem;
