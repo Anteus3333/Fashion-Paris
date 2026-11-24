@@ -2,6 +2,7 @@
 // src/Controllers/Traits/GestionCommandesTrait.php — commandes partagées admin + personnel
 
 require_once __DIR__ . '/../../Services/Csrf.php';
+require_once __DIR__ . '/../../Services/SmtpMailer.php';
 require_once __DIR__ . '/../../Models/CommandeModel.php';
 require_once __DIR__ . '/../../Models/UtilisateurModel.php';
 
@@ -66,9 +67,22 @@ trait GestionCommandesTrait {
             } else {
                 $nouveau = trim((string) ($_POST['statut'] ?? ''));
                 $commentaire = trim((string) ($_POST['commentaire'] ?? ''));
+                $ancien = (string) ($commande['statut'] ?? '');
                 if (!isset($config['statuts'][$nouveau])) {
                     $erreurs[] = 'Statut invalide.';
                 } elseif ($model->updateStatut($numero, $nouveau, $commentaire !== '' ? $commentaire : null)) {
+                    if ($nouveau !== $ancien) {
+                        $clientMail = (new UtilisateurModel())->findById((int) $commande['utilisateur_id']);
+                        if ($clientMail) {
+                            (new SmtpMailer())->envoyerChangementStatutCommande(
+                                $commande,
+                                $clientMail,
+                                $nouveau,
+                                (string) ($config['statuts'][$nouveau] ?? $nouveau),
+                                $commentaire !== '' ? $commentaire : null
+                            );
+                        }
+                    }
                     $_SESSION['flash_succes'] = 'Statut mis à jour.';
                     header('Location: ' . $this->gestionCommandeDetailUrl($numero));
                     exit;

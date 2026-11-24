@@ -229,6 +229,47 @@ class SmtpMailer {
         );
     }
 
+    /** Notification client après changement de statut de commande. */
+    public function envoyerChangementStatutCommande(
+        array $commande,
+        array $client,
+        string $statutCode,
+        string $statutLibelle,
+        ?string $commentaire = null
+    ): bool {
+        $email = trim((string) ($client['email'] ?? ''));
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $prenom = htmlspecialchars(trim((string) ($client['prenom'] ?? '')));
+        $numero = htmlspecialchars((string) ($commande['numero_commande'] ?? ''));
+        $libelle = htmlspecialchars($statutLibelle !== '' ? $statutLibelle : $statutCode);
+
+        $html = '<p>Bonjour' . ($prenom !== '' ? ' ' . $prenom : '') . ',</p>'
+            . '<p>Le statut de votre commande <strong>' . $numero . '</strong> a été mis à jour :</p>'
+            . '<p><strong>' . $libelle . '</strong></p>';
+
+        $commentaire = trim((string) $commentaire);
+        if ($commentaire !== '') {
+            $html .= '<p>Commentaire : ' . htmlspecialchars($commentaire) . '</p>';
+        }
+
+        $html .= '<p>Suivi : ' . UrlHelper::ancre(
+                '/mon-compte/commande/' . rawurlencode((string) ($commande['numero_commande'] ?? '')),
+                'voir ma commande'
+            ) . '</p>'
+            . '<p>L\'équipe Fashion Paris</p>';
+
+        return $this->send(
+            $email,
+            'Commande ' . ($commande['numero_commande'] ?? '') . ' — ' . ($statutLibelle !== '' ? $statutLibelle : $statutCode),
+            $html,
+            null,
+            true
+        );
+    }
+
     /** Confirmation simple d’inscription newsletter. */
     public function envoyerConfirmationNewsletter(string $email): bool {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
