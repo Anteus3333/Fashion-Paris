@@ -39,7 +39,8 @@ class PanierController {
         $stock = (int) $produit['stock'];
         $deja = (int) (PanierService::lignes()[$produitId] ?? 0);
         if ($deja + $quantite > $stock) {
-            $_SESSION['flash_erreur'] = 'Stock insuffisant pour « ' . $produit['nom'] . ' » (disponible : ' . $stock . ').';
+            // Point B jeu d’essai : message métier serveur (pas de blocage HTML5 max)
+            $_SESSION['flash_erreur'] = 'Stock insuffisant.';
             header('Location: ' . BASE_URL . '/produit/' . rawurlencode($produit['slug']));
             exit;
         }
@@ -68,7 +69,7 @@ class PanierController {
         }
 
         if ($quantite > (int) $produit['stock']) {
-            $_SESSION['flash_erreur'] = 'Stock insuffisant (max ' . (int) $produit['stock'] . ').';
+            $_SESSION['flash_erreur'] = 'Stock insuffisant.';
             header('Location: ' . BASE_URL . '/panier');
             exit;
         }

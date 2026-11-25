@@ -107,7 +107,7 @@ class CommandeController {
                 foreach (PanierService::lignes() as $pid => $qte) {
                     $p = $produitModel->getById((int) $pid);
                     if (!$p || (int) $p['actif'] !== 1 || (int) $p['stock'] < (int) $qte) {
-                        $erreurs[] = 'Stock insuffisant pour un article. Vérifiez votre panier.';
+                        $erreurs[] = 'Stock insuffisant.';
                         break;
                     }
                     $lignesSql[] = [

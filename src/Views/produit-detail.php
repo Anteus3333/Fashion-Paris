@@ -25,7 +25,7 @@ ob_start();
                     <?= Csrf::champ() ?>
                     <input type="hidden" name="produit_id" value="<?= (int) $produit['produit_id'] ?>">
                     <label for="quantite">Quantité</label>
-                    <input type="number" id="quantite" name="quantite" value="1" min="1" max="<?= (int) $produit['stock'] ?>">
+                    <input type="number" id="quantite" name="quantite" value="1" min="1" inputmode="numeric">
                     <button type="submit" class="btn btn-primary">Ajouter au panier</button>
                 </form>
             <?php else: ?>

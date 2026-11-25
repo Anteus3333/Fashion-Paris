@@ -72,7 +72,7 @@ class CommandeRepository {
                     ':qte2' => $ligne['quantite'],
                 ]);
                 if ($stmtStock->rowCount() !== 1) {
-                    throw new RuntimeException('Stock insuffisant pour un article du panier.');
+                    throw new RuntimeException('Stock insuffisant.');
                 }
             }
 

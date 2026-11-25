@@ -43,7 +43,7 @@ ob_start();
                         <input type="hidden" name="produit_id" value="<?= (int) $p['produit_id'] ?>">
                         <label class="sr-only" for="qte-<?= (int) $p['produit_id'] ?>">Quantité</label>
                         <input type="number" id="qte-<?= (int) $p['produit_id'] ?>" name="quantite"
-                               value="<?= (int) $ligne['quantite'] ?>" min="1" max="<?= (int) $p['stock'] ?>">
+                               value="<?= (int) $ligne['quantite'] ?>" min="1" inputmode="numeric">
                         <button type="submit" class="btn btn-ghost">OK</button>
                     </form>
                     <p class="price cart-item-line"><?= ViewHelper::prix($ligne['ligne_total']) ?></p>
