@@ -26,8 +26,16 @@ require_once __DIR__ . '/../src/Services/AssetHelper.php';
 require_once __DIR__ . '/../src/Services/ViewHelper.php';
 require_once __DIR__ . '/../src/Services/UrlHelper.php';
 require_once __DIR__ . '/../src/Services/PanierService.php';
+require_once __DIR__ . '/../src/Services/SqlDatabase.php';
 
 define('BASE_URL', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\'));
+
+// BDD indisponible → 503 explicite (pas une page catalogue « vide » ambiguë)
+$probeBdd = (new SqlDatabase())->getConnection();
+if ($probeBdd === null) {
+    require __DIR__ . '/../src/Views/errors/bdd-indisponible.php';
+    exit;
+}
 
 $router = new Router();
 

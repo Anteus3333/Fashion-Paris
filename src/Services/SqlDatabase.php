@@ -30,7 +30,7 @@ class SqlDatabase {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
-            // Pas d'echo public : les Repositories renvoient vide / null si $conn est null.
+            // Pas d'echo public : détail journalisé ; public/index.php répond 503 si la sonde échoue.
             $line = date('c') . ' Fashion Paris BDD : ' . $exception->getMessage() . PHP_EOL;
             error_log(rtrim($line));
             $logDir = __DIR__ . '/../../logs';
