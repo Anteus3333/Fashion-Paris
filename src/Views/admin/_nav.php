@@ -14,5 +14,5 @@ $isPersonnel = ($page === 'personnel') || ($page === 'personnels');
     <a href="<?= BASE_URL ?>/admin/clients" class="<?= $page === 'clients' ? 'is-active' : '' ?>">Clients</a>
     <a href="<?= BASE_URL ?>/admin/personnel" class="<?= $isPersonnel ? 'is-active' : '' ?>">Personnel</a>
     <a href="<?= BASE_URL ?>/admin/horaires" class="<?= $page === 'horaires' ? 'is-active' : '' ?>">Horaires</a>
-    <a href="<?= BASE_URL ?>/admin/stats" class="<?= $page === 'stats' ? 'is-active' : '' ?>">Stats Mongo</a>
+    <a href="<?= BASE_URL ?>/admin/stats" class="<?= $page === 'stats' ? 'is-active' : '' ?>">Stats</a>
 </nav>

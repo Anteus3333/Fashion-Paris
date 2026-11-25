@@ -188,9 +188,13 @@ class AdminController {
     public function stats() {
         AuthGuard::exigerRole(AuthGuard::rolesAdmin(), '/admin');
         $mongo = new MongoStatsModel();
+        $mysql = new MysqlStatsModel();
         $mongoOk = $mongo->estDisponible();
         $nbDocs = 0;
         $series = ['labels' => [], 'commandes' => [], 'ca' => []];
+        // Source effective des graphiques (mongodb prioritaire, mysql en secours)
+        $statsSource = 'mysql';
+        $statsErreur = null;
 
         if ($mongoOk && $_SERVER['REQUEST_METHOD'] === 'POST' && Csrf::verifier() && isset($_POST['sync'])) {
             try {
@@ -206,14 +210,27 @@ class AdminController {
         if ($mongoOk) {
             try {
                 $nbDocs = $mongo->compter();
-                $series = $mongo->seriesMensuelles(12);
+                if ($nbDocs > 0) {
+                    $series = $mongo->seriesMensuelles(12);
+                    $statsSource = 'mongodb';
+                } else {
+                    // Mongo joignable mais collection vide → MySQL pour ne pas laisser l’admin sans graphe
+                    $series = $mysql->seriesMensuelles(12);
+                    $statsSource = 'mysql';
+                    $statsErreur = 'MongoDB synchronisé à 0 document — affichage MySQL en secours. Lancez une synchronisation.';
+                }
             } catch (Throwable $e) {
-                $mongoOk = false;
-                $_SESSION['flash_erreur'] = 'Mongo : ' . $e->getMessage();
+                $statsErreur = 'Mongo : ' . $e->getMessage() . ' — affichage MySQL en secours.';
+                $series = $mysql->seriesMensuelles(12);
+                $statsSource = 'mysql';
             }
+        } else {
+            $statsErreur = 'MongoDB non configuré ou indisponible — affichage MySQL en secours.';
+            $series = $mysql->seriesMensuelles(12);
+            $statsSource = 'mysql';
         }
 
-        $titrePage = 'Stats Mongo — Admin';
+        $titrePage = 'Stats — Admin';
         require __DIR__ . '/../Views/admin/stats.php';
     }
 
