@@ -32,7 +32,7 @@ trait GestionCommandesTrait {
     /** Liste des commandes (filtre statut + recherche client en JS). */
     public function commandes(): void {
         $this->exigerGestionAcces();
-        $titrePage = 'Commandes — ' . $this->gestionTitreEspace();
+        $titrePage = 'Gestion des commandes — ' . $this->gestionTitreEspace();
         $statut = trim((string) ($_GET['statut'] ?? ''));
         $config = require __DIR__ . '/../../../config/commandeconfig.php';
         if ($statut !== '' && !isset($config['statuts'][$statut])) {
