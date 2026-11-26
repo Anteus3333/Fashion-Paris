@@ -37,7 +37,7 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
         <ul class="commandes-cards" id="commandes-cards">
             <?php foreach ($commandes as $c): ?>
                 <?php
-                $clientNom = trim(($c['prenom'] ?? '') . ' ' . ($c['nom'] ?? ''));
+                $clientNom = ViewHelper::formatNomComplet($c['prenom'] ?? '', $c['nom'] ?? '');
                 $statutLibelle = $config['statuts'][$c['statut']] ?? $c['statut'];
                 $detailUrl = $gestionBase . '/commande/' . rawurlencode($c['numero_commande']);
                 ?>
@@ -73,7 +73,7 @@ $isAdminEspace = ($gestionBase ?? '') === (BASE_URL . '/admin');
                 </thead>
                 <tbody id="commandes-tbody">
                     <?php foreach ($commandes as $c): ?>
-                        <?php $clientNom = trim(($c['prenom'] ?? '') . ' ' . ($c['nom'] ?? '')); ?>
+                        <?php $clientNom = ViewHelper::formatNomComplet($c['prenom'] ?? '', $c['nom'] ?? ''); ?>
                         <tr data-client="<?= htmlspecialchars($clientNom) ?>">
                             <td>
                                 <a href="<?= htmlspecialchars($gestionBase) ?>/commande/<?= htmlspecialchars($c['numero_commande']) ?>">

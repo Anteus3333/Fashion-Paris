@@ -25,7 +25,7 @@ $prenom = $_SESSION['utilisateur']['prenom'] ?? '';
                     <a href="<?= BASE_URL ?>/espace-personnel/commande/<?= htmlspecialchars($c['numero_commande']) ?>">
                         <?= htmlspecialchars($c['numero_commande']) ?>
                     </a>
-                    — <?= htmlspecialchars(trim(($c['prenom'] ?? '') . ' ' . ($c['nom'] ?? ''))) ?>
+                    — <?= htmlspecialchars(ViewHelper::formatNomComplet($c['prenom'] ?? '', $c['nom'] ?? '')) ?>
                     — <?= ViewHelper::prix($c['montant_total']) ?>
                 </li>
             <?php endforeach; ?>
