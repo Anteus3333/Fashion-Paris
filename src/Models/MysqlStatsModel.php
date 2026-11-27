@@ -19,4 +19,9 @@ class MysqlStatsModel {
     public function seriesMensuelles(int $nbMois = 12): array {
         return $this->repository->seriesMensuelles($nbMois);
     }
+
+    /** @return array{nb: int, hash: string} */
+    public function empreinteSync(): array {
+        return $this->repository->empreinteSync();
+    }
 }

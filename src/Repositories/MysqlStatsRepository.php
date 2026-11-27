@@ -101,4 +101,28 @@ class MysqlStatsRepository {
         ");
         return $stmt->fetchAll() ?: [];
     }
+
+    /**
+     * Empreinte des commandes MySQL pour détecter un écart vs Mongo (sync manuelle).
+     * @return array{nb: int, hash: string}
+     */
+    public function empreinteSync(): array {
+        if (!$this->conn) {
+            return ['nb' => 0, 'hash' => hash('sha256', '')];
+        }
+        $stmt = $this->conn->query(
+            'SELECT numero_commande, statut, montant_total
+             FROM commande
+             ORDER BY numero_commande ASC'
+        );
+        $rows = $stmt->fetchAll() ?: [];
+        $lignes = [];
+        foreach ($rows as $row) {
+            $lignes[] = $row['numero_commande'] . '|' . $row['statut'] . '|' . number_format((float) $row['montant_total'], 2, '.', '');
+        }
+        return [
+            'nb'   => count($lignes),
+            'hash' => hash('sha256', implode("\n", $lignes)),
+        ];
+    }
 }

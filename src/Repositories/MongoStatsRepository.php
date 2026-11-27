@@ -26,6 +26,37 @@ class MongoStatsRepository {
         return (int) MongoDatabase::collection()->countDocuments();
     }
 
+    /**
+     * Empreinte des documents Mongo pour comparaison avec MySQL.
+     * @return array{nb: int, hash: string}
+     */
+    public function empreinteSync(): array {
+        if (!$this->estDisponible()) {
+            return ['nb' => 0, 'hash' => hash('sha256', '')];
+        }
+        $cursor = MongoDatabase::collection()->find(
+            [],
+            [
+                'projection' => [
+                    'numero_commande' => 1,
+                    'statut' => 1,
+                    'montant_total' => 1,
+                    '_id' => 0,
+                ],
+                'sort' => ['numero_commande' => 1],
+            ]
+        );
+        $lignes = [];
+        foreach ($cursor as $doc) {
+            $lignes[] = ($doc['numero_commande'] ?? '') . '|' . ($doc['statut'] ?? '') . '|'
+                . number_format((float) ($doc['montant_total'] ?? 0), 2, '.', '');
+        }
+        return [
+            'nb'   => count($lignes),
+            'hash' => hash('sha256', implode("\n", $lignes)),
+        ];
+    }
+
     public function caParVille(): array {
         if (!$this->estDisponible()) {
             return [];
