@@ -195,6 +195,7 @@ class AdminController {
         // Source effective des graphiques (mongodb prioritaire, mysql en secours)
         $statsSource = 'mysql';
         $statsErreur = null;
+        $syncNecessaire = false;
 
         if ($mongoOk && $_SERVER['REQUEST_METHOD'] === 'POST' && Csrf::verifier() && isset($_POST['sync'])) {
             try {
@@ -210,6 +211,7 @@ class AdminController {
         if ($mongoOk) {
             try {
                 $nbDocs = $mongo->compter();
+                $syncNecessaire = !$mongo->estSynchroniseAvec($mysql);
                 if ($nbDocs > 0) {
                     $series = $mongo->seriesMensuelles(12);
                     $statsSource = 'mongodb';

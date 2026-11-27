@@ -3,6 +3,7 @@ ob_start();
 $series = $series ?? ['labels' => [], 'commandes' => [], 'ca' => []];
 $statsSource = $statsSource ?? 'mysql';
 $statsErreur = $statsErreur ?? null;
+$syncNecessaire = !empty($syncNecessaire);
 $aDesSeries = !empty($series['labels']);
 ?>
 <section class="section admin-page">
@@ -19,15 +20,29 @@ $aDesSeries = !empty($series['labels']);
             <strong><?= $statsSource === 'mongodb' ? 'MongoDB' : 'MySQL (secours)' ?></strong>
             <?php if ($mongoOk): ?>
                 · Documents Mongo : <strong><?= (int) $nbDocs ?></strong>
+                <?php if ($syncNecessaire): ?>
+                    · <span class="admin-stats-sync-flag">Sync requise</span>
+                <?php endif; ?>
             <?php endif; ?>
         </p>
         <?php if ($mongoOk): ?>
             <form method="post">
                 <?= Csrf::champ() ?>
-                <button type="submit" name="sync" value="1" class="btn btn-primary">Synchroniser MySQL → Mongo</button>
+                <button type="submit" name="sync" value="1" class="btn btn-primary<?= $syncNecessaire ? ' btn-sync-needed' : '' ?>">
+                    Synchroniser MySQL → Mongo
+                </button>
             </form>
         <?php endif; ?>
     </div>
+
+    <?php if ($mongoOk && $syncNecessaire): ?>
+        <div class="flash-banner flash-banner-alerte" role="alert">
+            <p class="flash-banner-text">
+                MongoDB n’est plus à jour par rapport à MySQL (nouvelles commandes ou statuts modifiés).
+                Les graphiques peuvent être incomplets ou périmés — lancez <strong>Synchroniser MySQL → Mongo</strong>.
+            </p>
+        </div>
+    <?php endif; ?>
 
     <?php if (!empty($statsErreur)): ?>
         <p class="muted"><?= htmlspecialchars($statsErreur) ?></p>

@@ -44,4 +44,16 @@ class MongoStatsModel {
     public function seriesMensuelles(int $nbMois = 12): array {
         return $this->repository->seriesMensuelles($nbMois);
     }
+
+    /** @return array{nb: int, hash: string} */
+    public function empreinteSync(): array {
+        return $this->repository->empreinteSync();
+    }
+
+    /** True si la projection Mongo correspond encore au jeu MySQL. */
+    public function estSynchroniseAvec(MysqlStatsModel $mysql): bool {
+        $a = $this->empreinteSync();
+        $b = $mysql->empreinteSync();
+        return $a['nb'] === $b['nb'] && $a['hash'] === $b['hash'];
+    }
 }
